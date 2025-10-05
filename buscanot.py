@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 # =========================
 # Configuración general
 # =========================
-st.set_page_config(page_title="Buscador de noticias por país", layout="wide")
+st.set_page_config(page_title="BuscaNot", layout="wide")
 st.title("🌍 Buscador de noticias por país")
 
 DB_PATH = Path("media_db.json")
