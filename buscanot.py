@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 # Configuración general
 # =========================
 st.set_page_config(page_title="Buscador de noticias por país", layout="wide")
-st.title("🌍⚡ Buscador de noticias por país (con caché y paralelo)")
+st.title("🌍 Buscador de noticias por país")
 
 DB_PATH = Path("media_db.json")
 
@@ -45,8 +45,6 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
         {"name": "Europa Press (Economía)", "url": "https://www.europapress.es/economia/", "selector": "div.noticiacuerpo h2 a, article h2 a", "base_url": "https://www.europapress.es"},
     ],
     "Marruecos": [
-        # Nota: varios medios marroquíes están en francés o inglés.
-        # Ajusta las secciones de energía si conviene.
         {"name": "Morocco World News (Energy tag)", "url": "https://www.moroccoworldnews.com/tag/energy", "selector": "article h2 a, h3 a", "base_url": "https://www.moroccoworldnews.com"},
         {"name": "Hespress (Economy)", "url": "https://www.hespress.com/economie", "selector": "article h2 a, h3 a", "base_url": "https://www.hespress.com"},
         {"name": "Le Matin (Économie)", "url": "https://lematin.ma/economies", "selector": "article h2 a, h3 a, .title a", "base_url": "https://lematin.ma"},
