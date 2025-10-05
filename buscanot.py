@@ -1,4 +1,3 @@
-# app.py
 import asyncio
 import aiohttp
 import time
@@ -287,6 +286,9 @@ if "db" not in st.session_state:
     st.session_state.db = load_db()
 if "logs" not in st.session_state:
     st.session_state.logs = []
+if "search_country" not in st.session_state:
+    all_keys = sorted(st.session_state.db.keys())
+    st.session_state.search_country = "España" if "España" in all_keys else (all_keys[0] if all_keys else "")
 
 # =========================
 # Sidebar: gestión BD
@@ -314,7 +316,7 @@ with st.sidebar.form("form_add_source", clear_on_submit=True):
         use_current = st.checkbox("Usar país seleccionado", value=True)
     target_country = country if use_current or not new_country.strip() else new_country.strip()
 
-    name = st.text_input("Nombre del medio", placeholder="Ej. El Periódico de la Energía")
+    name = st.text_input("Nombre del medio", placeholder="Ej. RTVE")
     url = st.text_input("URL de portada/listado", placeholder="https://ejemplo.com/seccion")
     selector = st.text_input("Selector CSS de enlaces a noticias", placeholder="article h2 a")
     base_url = st.text_input("Base URL (opcional)", placeholder="https://ejemplo.com")
@@ -384,7 +386,7 @@ colA, colB, colC = st.columns([2, 2, 1])
 with colA:
     include_terms = st.text_input(
         "Términos a incluir (coma, punto y coma o saltos de línea):",
-        placeholder="ej.: energía, renovables, solar, eólica",
+        placeholder="Ej.: altercado, flotilla, Gobierno",
     )
 with colB:
     exclude_terms = st.text_input("Términos a excluir (opcional):", placeholder="ej.: subvención, guerra, militar")
@@ -396,8 +398,9 @@ with st.expander("⚙️ Opciones avanzadas"):
     search_country = st.selectbox(
         "País a buscar",
         sorted(st.session_state.db.keys()),
-        index=sorted(st.session_state.db.keys()).index(default_country),
+        key="search_country",  # <- mantiene la selección entre reruns
     )
+
     current_sources = st.session_state.db.get(search_country, [])
     preselect = [s["name"] for s in current_sources]
     selected_names = st.multiselect(
