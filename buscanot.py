@@ -36,24 +36,55 @@ HEADERS = {
 # =========================
 DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
     "España": [
-        {"name": "EnergyNews", "url": "https://www.energynews.es/", "selector": "article h2.entry-title a", "base_url": None},
-        {"name": "EFEVerde (Energía)", "url": "https://efeverde.com/energia/", "selector": "article h2 a", "base_url": None},
-        {"name": "El Periódico de la Energía", "url": "https://elperiodicodelaenergia.com/renovables", "selector": "h3.entry-title a", "base_url": None},
-        {"name": "Energías Renovables", "url": "https://www.energias-renovables.com/", "selector": "div.enrTitularNoticia a", "base_url": "https://www.energias-renovables.com"},
-        {"name": "Review Energy", "url": "https://www.review-energy.com/", "selector": "div.card-title a", "base_url": None},
-        {"name": "Diario de la Energía", "url": "https://www.diariodelaenergia.com/", "selector": "h3.entry-title a", "base_url": None},
-        {"name": "Europa Press (Economía)", "url": "https://www.europapress.es/economia/", "selector": "div.noticiacuerpo h2 a, article h2 a", "base_url": "https://www.europapress.es"},
+        {"name": "El País", "url": "https://elpais.com/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://elpais.com"},
+        {"name": "El Mundo", "url": "https://www.elmundo.es/", "selector": "article h2 a, h3 a, .ue-c-cover-content__link", "base_url": "https://www.elmundo.es"},
+        {"name": "ABC", "url": "https://www.abc.es/", "selector": "article h2 a, h3 a, .titular a", "base_url": "https://www.abc.es"},
+        {"name": "La Vanguardia", "url": "https://www.lavanguardia.com/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.lavanguardia.com"},
+        {"name": "El Confidencial", "url": "https://www.elconfidencial.com/", "selector": "article h2 a, h3 a, .news__title a", "base_url": "https://www.elconfidencial.com"},
+        {"name": "20minutos", "url": "https://www.20minutos.es/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.20minutos.es"},
     ],
     "Marruecos": [
-        {"name": "Morocco World News (Energy tag)", "url": "https://www.moroccoworldnews.com/tag/energy", "selector": "article h2 a, h3 a", "base_url": "https://www.moroccoworldnews.com"},
-        {"name": "Hespress (Economy)", "url": "https://www.hespress.com/economie", "selector": "article h2 a, h3 a", "base_url": "https://www.hespress.com"},
-        {"name": "Le Matin (Économie)", "url": "https://lematin.ma/economies", "selector": "article h2 a, h3 a, .title a", "base_url": "https://lematin.ma"},
-        {"name": "L'Economiste (Economie)", "url": "https://leconomiste.com/section/economie", "selector": "h2 a, .title a", "base_url": "https://leconomiste.com"},
-        {"name": "Aujourd'hui Le Maroc (Économie)", "url": "https://aujourdhui.ma/economie", "selector": "h2 a, .entry-title a", "base_url": "https://aujourdhui.ma"},
-        {"name": "TelQuel (Économie)", "url": "https://telquel.ma/rubrique/economie", "selector": "h2 a, .post-title a", "base_url": "https://telquel.ma"},
+        {"name": "Hespress (AR)", "url": "https://www.hespress.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.hespress.com"},
+        {"name": "Hespress (EN)", "url": "https://en.hespress.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://en.hespress.com"},
+        {"name": "Le Matin", "url": "https://lematin.ma/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://lematin.ma"},
+        {"name": "L'Economiste", "url": "https://leconomiste.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://leconomiste.com"},
+        {"name": "TelQuel", "url": "https://telquel.ma/", "selector": "article h2 a, h3 a, .post-title a", "base_url": "https://telquel.ma"},
+        {"name": "Aujourd'hui Le Maroc", "url": "https://aujourdhui.ma/", "selector": "article h2 a, h3 a, .entry-title a", "base_url": "https://aujourdhui.ma"},
+        {"name": "Médias24", "url": "https://medias24.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://medias24.com"},
+        {"name": "Morocco World News", "url": "https://www.moroccoworldnews.com/", "selector": "article h2 a, h3 a, .card-title a", "base_url": "https://www.moroccoworldnews.com"},
+    ],
+    "Francia": [
+        {"name": "Le Monde", "url": "https://www.lemonde.fr/", "selector": "article h2 a, h3 a, .article__title a", "base_url": "https://www.lemonde.fr"},
+        {"name": "Le Figaro", "url": "https://www.lefigaro.fr/", "selector": "article h2 a, h3 a, .fig-headline a", "base_url": "https://www.lefigaro.fr"},
+        {"name": "Libération", "url": "https://www.liberation.fr/", "selector": "article h2 a, h3 a, .article-card a", "base_url": "https://www.liberation.fr"},
+        {"name": "Le Parisien", "url": "https://www.leparisien.fr/", "selector": "article h2 a, h3 a, .article-title a", "base_url": "https://www.leparisien.fr"},
+        {"name": "Les Échos", "url": "https://www.lesechos.fr/", "selector": "article h2 a, h3 a, .teaser__title a", "base_url": "https://www.lesechos.fr"},
+        {"name": "La Croix", "url": "https://www.la-croix.com/", "selector": "article h2 a, h3 a, .article__title a", "base_url": "https://www.la-croix.com"},
+        {"name": "Ouest-France", "url": "https://www.ouest-france.fr/", "selector": "article h2 a, h3 a, .teaser-title a", "base_url": "https://www.ouest-france.fr"},
+    ],
+    "Portugal": [
+        {"name": "Público", "url": "https://www.publico.pt/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.publico.pt"},
+        {"name": "Diário de Notícias", "url": "https://www.dn.pt/", "selector": "article h2 a, h3 a, .card-title a", "base_url": "https://www.dn.pt"},
+        {"name": "Expresso", "url": "https://expresso.pt/", "selector": "article h2 a, h3 a, .article-title a", "base_url": "https://expresso.pt"},
+        {"name": "Observador", "url": "https://observador.pt/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://observador.pt"},
+        {"name": "Correio da Manhã", "url": "https://www.cmjornal.pt/", "selector": "article h2 a, h3 a, .tit a", "base_url": "https://www.cmjornal.pt"},
+        {"name": "Jornal de Notícias", "url": "https://www.jn.pt/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.jn.pt"},
+    ],
+    "Andorra": [
+        {"name": "Diari d'Andorra", "url": "https://www.diariandorra.ad/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.diariandorra.ad"},
+        {"name": "Bondia Andorra", "url": "https://www.bondia.ad/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.bondia.ad"},
+        {"name": "Altaveu", "url": "https://www.altaveu.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.altaveu.com"},
+    ],
+    "Alemania": [
+        {"name": "Frankfurter Allgemeine (FAZ)", "url": "https://www.faz.net/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.faz.net"},
+        {"name": "Süddeutsche Zeitung", "url": "https://www.sueddeutsche.de/", "selector": "article h2 a, h3 a, .sz-article__title a", "base_url": "https://www.sueddeutsche.de"},
+        {"name": "WELT", "url": "https://www.welt.de/", "selector": "article h2 a, h3 a, .c-teaser__headline a", "base_url": "https://www.welt.de"},
+        {"name": "Der Spiegel", "url": "https://www.spiegel.de/", "selector": "article h2 a, h3 a, .leading-article a", "base_url": "https://www.spiegel.de"},
+        {"name": "Die Zeit", "url": "https://www.zeit.de/index", "selector": "article h2 a, h3 a, .zon-teaser-standard__title a", "base_url": "https://www.zeit.de"},
+        {"name": "BILD", "url": "https://www.bild.de/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.bild.de"},
+        {"name": "tagesschau (ARD)", "url": "https://www.tagesschau.de/", "selector": "article h2 a, h3 a, .teaser__title a", "base_url": "https://www.tagesschau.de"},
     ],
 }
-
 # =========================
 # Persistencia BD
 # =========================
