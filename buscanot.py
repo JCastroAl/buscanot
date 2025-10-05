@@ -31,9 +31,6 @@ HEADERS = {
 }
 
 # =========================
-# BD por defecto (España + Marruecos)
-# Ajusta los selectores si cambian las webs.
-# =========================
 DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
     "España": [
         {"name": "El País", "url": "https://elpais.com/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://elpais.com"},
