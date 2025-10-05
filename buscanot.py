@@ -407,6 +407,7 @@ with st.expander("⚙️ Opciones avanzadas"):
         f"Medios de {search_country} a incluir",
         options=preselect,
         default=preselect,
+        key=f"sources_{search_country}",  # <- clave dependiente del país
     )
     timeout = st.slider("Timeout por petición (seg.)", min_value=5, max_value=40, value=15, step=1)
     concurrency = st.slider("Concurrencia (simultáneos)", min_value=2, max_value=20, value=8, step=1)
