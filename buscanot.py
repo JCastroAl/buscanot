@@ -38,6 +38,7 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
         {"name": "La Vanguardia", "url": "https://www.lavanguardia.com/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.lavanguardia.com"},
         {"name": "El Confidencial", "url": "https://www.elconfidencial.com/", "selector": "article h2 a, h3 a, .news__title a", "base_url": "https://www.elconfidencial.com"},
         {"name": "20minutos", "url": "https://www.20minutos.es/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.20minutos.es"},
+        {"name": "RTVE", "url": "https://www.rtve.es/noticias/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.rtve.es/noticias/"},
     ],
     "Marruecos": [
         {"name": "Hespress (AR)", "url": "https://www.hespress.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.hespress.com"},
