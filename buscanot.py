@@ -39,6 +39,8 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
         {"name": "El Confidencial", "url": "https://www.elconfidencial.com/", "selector": "article h2 a, h3 a, .news__title a", "base_url": "https://www.elconfidencial.com"},
         {"name": "20minutos", "url": "https://www.20minutos.es/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.20minutos.es"},
         {"name": "RTVE", "url": "https://www.rtve.es/noticias/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.rtve.es/noticias/"},
+        {"name": "La Razón", "url": "https://www.larazon.es/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.larazon.es/"},
+        {"name": "El Periodico de Catalunya", "url": "https://www.elperiodico.com/es/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.elperiodico.com/"},
     ],
     "Marruecos": [
         {"name": "Hespress (AR)", "url": "https://www.hespress.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.hespress.com"},
@@ -104,7 +106,6 @@ def load_db() -> Dict[str, List[Dict[str, Any]]]:
 
 # =========================
 # Caché en memoria con TTL
-# Guardada como recurso para durar la sesión.
 # =========================
 @st.cache_resource
 def get_html_cache() -> Dict[str, Tuple[float, str]]:
