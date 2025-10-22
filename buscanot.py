@@ -102,7 +102,7 @@ def save_db(db: Dict[str, List[Dict[str, Any]]]) -> None:
     with open(DB_PATH, "w", encoding="utf-8") as f:
         json.dump(db, f, ensure_ascii=False, indent=2)
 
-def load_db() -> Dict[str, List[Dict[str, Any]]]]:
+def load_db() -> Dict[str, List[Dict[str, Any]]]:
     if DB_PATH.exists():
         try:
             with open(DB_PATH, "r", encoding="utf-8") as f:
