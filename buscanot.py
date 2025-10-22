@@ -47,6 +47,7 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
             "name": "El País",
             "url": "https://elpais.com/",
             "selector": "article h2 a, h3 a, .headline a",
+            "archive_selector": None,  # si la hemeroteca usa otro HTML, pon aquí su selector
             "base_url": "https://elpais.com",
             "archive_pattern": "https://elpais.com/archivo/{yyyy}-{mm}-{dd}/",
         },
@@ -54,6 +55,7 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
             "name": "El Mundo",
             "url": "https://www.elmundo.es/",
             "selector": "article h2 a, h3 a, .ue-c-cover-content__link",
+            "archive_selector": None,
             "base_url": "https://www.elmundo.es",
             "archive_pattern": "https://www.elmundo.es/elmundo/hemeroteca/{yyyy}/{mm}/{dd}/",
         },
@@ -61,6 +63,7 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
             "name": "ABC",
             "url": "https://www.abc.es/",
             "selector": "article h2 a, h3 a, .titular a",
+            "archive_selector": None,
             "base_url": "https://www.abc.es",
             "archive_pattern": "https://www.abc.es/archivo/{yyyy}-{mm}-{dd}/",
         },
@@ -68,6 +71,7 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
             "name": "La Vanguardia",
             "url": "https://www.lavanguardia.com/",
             "selector": "article h2 a, h3 a, .headline a",
+            "archive_selector": None,
             "base_url": "https://www.lavanguardia.com",
             "archive_pattern": "https://www.lavanguardia.com/hemeroteca/{yyyy}/{mm}/{dd}",
         },
@@ -75,30 +79,35 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
             "name": "El Confidencial",
             "url": "https://www.elconfidencial.com/",
             "selector": "article h2 a, h3 a, .news__title a",
+            "archive_selector": None,
             "base_url": "https://www.elconfidencial.com",
         },
         {
             "name": "20minutos",
             "url": "https://www.20minutos.es/",
             "selector": "article h2 a, h3 a, .headline a",
+            "archive_selector": None,
             "base_url": "https://www.20minutos.es",
         },
         {
             "name": "RTVE",
             "url": "https://www.rtve.es/noticias/",
             "selector": "article h2 a, h3 a, .headline a",
+            "archive_selector": None,
             "base_url": "https://www.rtve.es/noticias/",
         },
         {
             "name": "La Razón",
             "url": "https://www.larazon.es/",
             "selector": "article h2 a, h3 a, .headline a",
+            "archive_selector": None,
             "base_url": "https://www.larazon.es/",
         },
         {
             "name": "El Periodico de Catalunya",
             "url": "https://www.elperiodico.com/es/",
             "selector": "article h2 a, h3 a, .headline a",
+            "archive_selector": None,
             "base_url": "https://www.elperiodico.com/",
         },
     ],
@@ -152,7 +161,9 @@ def save_db(db: Dict[str, List[Dict[str, Any]]]) -> None:
     with open(DB_PATH, "w", encoding="utf-8") as f:
         json.dump(db, f, ensure_ascii=False, indent=2)
 
-def load_db() -> Dict[str, List[Dict[str, Any]]]:
+def load_db() -> Dict[str, List[Dict[str, Any]]]]:
+    # <-- ojo: si copias desde otra versión, evita el ']]]' que rompe. Aquí es ']]' CORRECTO:
+    # def load_db() -> Dict[str, List[Dict[str, Any]]]:
     if DB_PATH.exists():
         try:
             with open(DB_PATH, "r", encoding="utf-8") as f:
@@ -331,6 +342,22 @@ def date_range_in_past(start_date: date, end_date: date) -> bool:
     today = date.today()
     return end_date < today
 
+# --- NUEVO: utilidades para dividir el rango por días
+def daterange(start: date, end: date):
+    d = start
+    while d <= end:
+        yield d
+        d += timedelta(days=1)
+
+def iter_archive_urls_for_dates(source: Dict[str, Any], dates: List[date]) -> List[str]:
+    patt = source.get("archive_pattern")
+    if not patt:
+        return []
+    urls: List[str] = []
+    for d in dates:
+        urls.append(patt.format(yyyy=d.strftime("%Y"), mm=d.strftime("%m"), dd=d.strftime("%d")))
+    return urls
+
 # =========================
 # Networking asíncrono + RSS/HTML
 # =========================
@@ -448,16 +475,17 @@ async def scrape_source_async(
     date_field: str,
     start_date: date,
     end_date: date,
-    range_is_past: bool,   # <-- NUEVO
+    range_is_past: bool,   # mantenemos la firma, pero ya no decide el flujo
 ) -> List[Dict[str, Any]]:
     """
-    Scrapea una fuente. Si el filtro temporal está activo y se filtra por
-    Fecha de publicación y hay 'archive_pattern', recorre las URLs diarias.
-    Si no hay patrón, usa portada/RSS como siempre.
+    Scrapea una fuente. Para cada día del rango:
+      - Días < hoy: usa hemeroteca si hay `archive_pattern` (y `archive_selector` si existe).
+      - Hoy (si está en el rango): usa RSS + portada.
     """
     name = source.get("name")
     url = source.get("url")
-    selector = source.get("selector")
+    selector_home = source.get("selector")
+    selector_archive = source.get("archive_selector") or selector_home
     base_url = source.get("base_url") or None
 
     if not (name and url):
@@ -465,16 +493,71 @@ async def scrape_source_async(
 
     rows: List[Dict[str, Any]] = []
 
-    # ¿Tenemos rango por publicación y patrón de archivo?
-    archive_urls: List[str] = []
-    use_archives = False
-    if use_date_filter and date_field.startswith("Fecha de publicación"):
-        archive_urls = iter_archive_urls(source, start_date, end_date)
-        # Forzamos hemeroteca SOLO si el rango es totalmente pasado y hay patrón
-        use_archives = bool(archive_urls) and range_is_past
+    # Particiona rango en pasados y hoy
+    today = date.today()
+    past_days: List[date] = []
+    include_today = False
 
-    # 1) RSS/Atom (solo si NO estamos usando hemeroteca forzada)
-    if not use_archives:
+    if use_date_filter and date_field.startswith("Fecha de publicación"):
+        for d in daterange(start_date, end_date):
+            if d < today:
+                past_days.append(d)
+            elif d == today:
+                include_today = True
+    else:
+        # sin filtro por publicación, tratamos como "hoy"
+        include_today = True
+
+    # 1) ARCHIVOS para días pasados
+    if past_days:
+        archive_urls = iter_archive_urls_for_dates(source, past_days)
+        if archive_urls and selector_archive:
+            for page in archive_urls:
+                html = await fetch_html(
+                    session, page, headers=headers, timeout=timeout,
+                    ttl_sec=ttl_sec, neg_ttl_sec=neg_ttl_sec, respect_robots=respect_robots
+                )
+                if not html:
+                    continue
+                try:
+                    soup = BeautifulSoup(html, "html.parser")
+                    elements = soup.select(selector_archive) if selector_archive else []
+                    for el in elements:
+                        title = el.get_text(strip=True)
+                        href = el.get("href")
+                        if not href or not title:
+                            continue
+                        full_url = absolutize(href, base_url or page)
+                        if not full_url:
+                            continue
+                        if is_relevant(title, include_re, exclude_re):
+                            raw_dt = extract_time_candidate(el)
+                            pub_iso = None
+                            if raw_dt:
+                                try:
+                                    dt = pd.to_datetime(raw_dt, utc=True, errors="coerce")
+                                    if pd.notnull(dt):
+                                        pub_iso = dt.isoformat()
+                                except Exception:
+                                    pub_iso = None
+                            rows.append(
+                                {
+                                    "medio": name,
+                                    "título": title,
+                                    "url": full_url,
+                                    "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                                    "publicado": pub_iso,
+                                    "fuente": "html-archivo",
+                                }
+                            )
+                except Exception as e:
+                    st.session_state.setdefault("logs", []).append(f"❌ {name} ({page}): {e}")
+                    continue
+        # si no hay patrón, no intentamos portada para días pasados (para evitar ruido)
+
+    # 2) HOY: RSS + portada
+    if include_today:
+        # RSS
         rss = await try_fetch_rss(session, url, headers, timeout)
         if rss:
             for title, href, dt in rss:
@@ -492,56 +575,46 @@ async def scrape_source_async(
                             "fuente": "rss",
                         }
                     )
-            if rows:
-                return rows
-
-    # 2) HTML (portada o páginas de archivo diarias)
-    targets = archive_urls if use_archives else [url]
-    if not selector:
-        return rows
-
-    for page in targets:
-        html = await fetch_html(
-            session, page, headers=headers, timeout=timeout,
-            ttl_sec=ttl_sec, neg_ttl_sec=neg_ttl_sec, respect_robots=respect_robots
-        )
-        if not html:
-            continue
-
-        try:
-            soup = BeautifulSoup(html, "html.parser")
-            elements = soup.select(selector) if selector else []
-            for el in elements:
-                title = el.get_text(strip=True)
-                href = el.get("href")
-                if not href or not title:
-                    continue
-                full_url = absolutize(href, base_url or page)
-                if not full_url:
-                    continue
-                if is_relevant(title, include_re, exclude_re):
-                    raw_dt = extract_time_candidate(el)
-                    pub_iso = None
-                    if raw_dt:
-                        try:
-                            dt = pd.to_datetime(raw_dt, utc=True, errors="coerce")
-                            if pd.notnull(dt):
-                                pub_iso = dt.isoformat()
-                        except Exception:
+        # Portada del día
+        if selector_home:
+            html = await fetch_html(
+                session, url, headers=headers, timeout=timeout,
+                ttl_sec=ttl_sec, neg_ttl_sec=neg_ttl_sec, respect_robots=respect_robots
+            )
+            if html:
+                try:
+                    soup = BeautifulSoup(html, "html.parser")
+                    elements = soup.select(selector_home) if selector_home else []
+                    for el in elements:
+                        title = el.get_text(strip=True)
+                        href = el.get("href")
+                        if not href or not title:
+                            continue
+                        full_url = absolutize(href, base_url or url)
+                        if not full_url:
+                            continue
+                        if is_relevant(title, include_re, exclude_re):
+                            raw_dt = extract_time_candidate(el)
                             pub_iso = None
-                    rows.append(
-                        {
-                            "medio": name,
-                            "título": title,
-                            "url": full_url,
-                            "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
-                            "publicado": pub_iso,
-                            "fuente": "html-archivo" if use_archives else "html",
-                        }
-                    )
-        except Exception as e:
-            st.session_state.setdefault("logs", []).append(f"❌ {name} ({page}): {e}")
-            continue
+                            if raw_dt:
+                                try:
+                                    dt = pd.to_datetime(raw_dt, utc=True, errors="coerce")
+                                    if pd.notnull(dt):
+                                        pub_iso = dt.isoformat()
+                                except Exception:
+                                    pub_iso = None
+                            rows.append(
+                                {
+                                    "medio": name,
+                                    "título": title,
+                                    "url": full_url,
+                                    "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                                    "publicado": pub_iso,
+                                    "fuente": "html",
+                                }
+                            )
+                except Exception as e:
+                    st.session_state.setdefault("logs", []).append(f"❌ {name} (portada): {e}")
 
     return rows
 
@@ -559,7 +632,7 @@ async def run_parallel(
     date_field: str,
     start_date: date,
     end_date: date,
-    range_is_past: bool,   # <-- NUEVO
+    range_is_past: bool,   # mantenido para compatibilidad
     progress_cb=None,
 ) -> List[Dict[str, Any]]:
     """
@@ -648,6 +721,7 @@ with st.sidebar.expander(f"📜 Medios en {country} ({len(st.session_state.db.ge
                 f"- **{s['name']}** — [{s['url']}]({s['url']})  \n  "
                 f"`selector`: `{s['selector']}`  · `base_url`: `{s.get('base_url') or ''}`"
                 + (f"  · `archive_pattern`: `{s.get('archive_pattern')}`" if s.get('archive_pattern') else "")
+                + (f"  · `archive_selector`: `{s.get('archive_selector')}`" if s.get('archive_selector') else "")
             )
 
 st.sidebar.markdown("---")
@@ -715,7 +789,7 @@ else:
     start_date, end_date = d, d
 date_field = st.session_state.get("date_field", "Fecha de publicación (recomendado)")
 include_na_pub = bool(st.session_state.get("include_na_pub", True))
-range_is_past = date_range_in_past(start_date, end_date)
+range_is_past = date_range_in_past(start_date, end_date)  # ya no controla la hemeroteca, pero se mantiene
 
 # (4) Opciones avanzadas
 with st.expander("⚙️ Opciones avanzadas"):
@@ -777,7 +851,7 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
                     date_field=date_field,
                     start_date=start_date,
                     end_date=end_date,
-                    range_is_past=range_is_past,   # <-- NUEVO
+                    range_is_past=range_is_past,   # no decide, pero se mantiene la firma
                     progress_cb=add_log_line,
                 )
             )
