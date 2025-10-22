@@ -3,13 +3,19 @@ import aiohttp
 import time
 import json
 import re
+import random
+import unicodedata
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Any, Optional, Tuple
+from urllib.parse import urljoin, urlparse, parse_qsl, urlencode, urlunparse
 
 import pandas as pd
 import streamlit as st
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, SoupStrainer
+from aiohttp import ClientTimeout
+from email.utils import parsedate_to_datetime
+import urllib.robotparser as rp
 
 # =========================
 # Configuración general
@@ -19,7 +25,7 @@ st.title("🌍 Buscador de noticias por país")
 
 DB_PATH = Path("media_db.json")
 
-HEADERS = {
+BASE_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
         "(KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
@@ -28,6 +34,10 @@ HEADERS = {
     "Accept-Language": "es-ES,es;q=0.9",
     "Connection": "keep-alive",
 }
+
+DEFAULT_TIMEOUT = ClientTimeout(total=20, connect=10, sock_connect=10, sock_read=15)
+ALLOWED_SCHEMES = {"http", "https"}
+TRACKING_PARAMS = {"utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid", "mc_cid", "mc_eid"}
 
 # =========================
 DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
@@ -84,6 +94,7 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
         {"name": "tagesschau (ARD)", "url": "https://www.tagesschau.de/", "selector": "article h2 a, h3 a, .teaser__title a", "base_url": "https://www.tagesschau.de"},
     ],
 }
+
 # =========================
 # Persistencia BD
 # =========================
@@ -101,17 +112,19 @@ def load_db() -> Dict[str, List[Dict[str, Any]]]:
         except Exception:
             st.warning("No se pudo leer media_db.json. Se carga la base por defecto.")
     save_db(DEFAULT_DB)
-    # Devolver copia profunda segura
     return json.loads(json.dumps(DEFAULT_DB))
 
 # =========================
-# Caché en memoria con TTL
+# Caché en memoria con TTL (positiva y negativa)
 # =========================
 @st.cache_resource
 def get_html_cache() -> Dict[str, Tuple[float, str]]:
-    """
-    Devuelve un dict { url: (timestamp_epoch, html_text) }
-    """
+    """Dict: url -> (timestamp_epoch, html_text)"""
+    return {}
+
+@st.cache_resource
+def get_neg_cache() -> Dict[str, float]:
+    """Dict: url -> timestamp_epoch (para caché negativa corta)"""
     return {}
 
 def cache_get(url: str, ttl_sec: int) -> Optional[str]:
@@ -122,7 +135,6 @@ def cache_get(url: str, ttl_sec: int) -> Optional[str]:
     ts, html = item
     if (time.time() - ts) <= ttl_sec:
         return html
-    # Expirado
     cache.pop(url, None)
     return None
 
@@ -130,9 +142,38 @@ def cache_put(url: str, html: str) -> None:
     cache = get_html_cache()
     cache[url] = (time.time(), html)
 
+def neg_cache_hit(url: str, neg_ttl_sec: int) -> bool:
+    neg = get_neg_cache()
+    ts = neg.get(url)
+    if not ts:
+        return False
+    if (time.time() - ts) <= neg_ttl_sec:
+        return True
+    neg.pop(url, None)
+    return False
+
+def neg_cache_put(url: str) -> None:
+    neg = get_neg_cache()
+    neg[url] = time.time()
+
 # =========================
 # Utilidades
 # =========================
+def build_headers(country: str) -> Dict[str, str]:
+    h = dict(BASE_HEADERS)
+    # Idiomas “neutros” si el país no es hispano/portugués/francés
+    if country in {"España", "Andorra"}:
+        h["Accept-Language"] = "es-ES,es;q=0.9,*;q=0.1"
+    elif country in {"Portugal"}:
+        h["Accept-Language"] = "pt-PT,pt;q=0.9,*;q=0.1"
+    elif country in {"Francia"}:
+        h["Accept-Language"] = "fr-FR,fr;q=0.9,*;q=0.1"
+    elif country in {"Alemania"}:
+        h["Accept-Language"] = "de-DE,de;q=0.9,*;q=0.1"
+    else:
+        h["Accept-Language"] = "*;q=0.1"
+    return h
+
 def build_regex(terms: str, whole_words: bool = False, ignore_case: bool = True) -> Optional[re.Pattern]:
     cleaned = [t.strip() for t in re.split(r"[,\n;]+", terms) if t.strip()]
     if not cleaned:
@@ -140,7 +181,8 @@ def build_regex(terms: str, whole_words: bool = False, ignore_case: bool = True)
     escaped = [re.escape(t) for t in cleaned]
     body = "|".join(escaped)
     if whole_words:
-        body = rf"\b(?:{body})\b"
+        # bordes de palabra “unicode-friendly”
+        body = rf"(?<!\w)(?:{body})(?!\w)"
     else:
         body = rf"(?:{body})"
     flags = re.IGNORECASE if ignore_case else 0
@@ -161,69 +203,188 @@ def is_relevant(title: str, include_re: Optional[re.Pattern], exclude_re: Option
 
 def absolutize(link: str, base_url: Optional[str]) -> str:
     if not link:
-        return link
-    if link.startswith(("http://", "https://")):
-        return link
-    if base_url:
-        if base_url.endswith("/") and link.startswith("/"):
-            return base_url.rstrip("/") + link
-        if (not base_url.endswith("/")) and (not link.startswith("/")):
-            return base_url + "/" + link
-        return base_url + link
-    return link
+        return ""
+    full = urljoin(base_url or "", link)
+    parsed = urlparse(full)
+    if parsed.scheme not in ALLOWED_SCHEMES:
+        return ""
+    # quita trackers conocidos
+    qs = [(k, v) for k, v in parse_qsl(parsed.query, keep_blank_values=True) if k not in TRACKING_PARAMS]
+    cleaned = parsed._replace(query=urlencode(qs))
+    return urlunparse(cleaned)
+
+def norm_text(s: str) -> str:
+    s = (s or "").strip().lower()
+    s = unicodedata.normalize("NFKC", s)
+    s = re.sub(r"\s+", " ", s)
+    return s
+
+def extract_time_candidate(el) -> Optional[str]:
+    t = el.find("time")
+    if t and (t.get("datetime") or t.get_text(strip=True)):
+        return t.get("datetime") or t.get_text(strip=True)
+    for attr in ("data-published", "data-date", "data-time", "aria-label"):
+        v = el.get(attr)
+        if v:
+            return v
+    return None
 
 # =========================
-# Networking asíncrono + caché
+# Respetar robots (caché parsers)
 # =========================
-async def fetch_html(session: aiohttp.ClientSession, url: str, timeout: int, ttl_sec: int) -> str:
-    """Devuelve HTML usando caché por URL con TTL."""
+@st.cache_resource
+def get_robot_cache():
+    return {}
+
+async def is_allowed(session: aiohttp.ClientSession, headers: Dict[str, str], site_url: str, path: str = "/") -> bool:
+    try:
+        parsed = urlparse(site_url)
+        base = f"{parsed.scheme}://{parsed.netloc}"
+        robots_url = urljoin(base, "/robots.txt")
+        cache = get_robot_cache()
+        parser = cache.get(robots_url)
+        if not parser:
+            async with session.get(robots_url, headers=headers, timeout=DEFAULT_TIMEOUT, ssl=True) as r:
+                if r.status != 200:
+                    return True
+                txt = await r.text()
+            parser = rp.RobotFileParser()
+            parser.parse(txt.splitlines())
+            cache[robots_url] = parser
+        return parser.can_fetch(headers.get("User-Agent", BASE_HEADERS["User-Agent"]), path)
+    except Exception:
+        return True  # en caso de duda, permitir
+
+# =========================
+# Networking asíncrono + RSS
+# =========================
+async def fetch_html(
+    session: aiohttp.ClientSession,
+    url: str,
+    headers: Dict[str, str],
+    timeout: ClientTimeout,
+    ttl_sec: int,
+    neg_ttl_sec: int,
+    respect_robots: bool,
+) -> str:
+    """Devuelve HTML usando caché por URL con TTL y caché negativa corta."""
+    if neg_cache_hit(url, neg_ttl_sec):
+        return ""
+
     cached = cache_get(url, ttl_sec)
     if cached is not None:
         return cached
 
-    # No está en caché -> descargar
+    if respect_robots:
+        if not await is_allowed(session, headers, url, "/"):
+            st.session_state.setdefault("logs", []).append(f"🤖 Robots bloquea {url}")
+            neg_cache_put(url)
+            return ""
+
+    tries = 3
+    for attempt in range(1, tries + 1):
+        try:
+            async with session.get(url, headers=headers, timeout=timeout, ssl=True) as resp:
+                resp.raise_for_status()
+                html = await resp.text()
+                cache_put(url, html)
+                return html
+        except Exception as e:
+            if attempt == tries:
+                neg_cache_put(url)
+                st.session_state.setdefault("logs", []).append(f"❌ GET {url}: {e}")
+                return ""
+            await asyncio.sleep((2 ** (attempt - 1)) + random.random())
+
+async def try_fetch_rss(
+    session: aiohttp.ClientSession,
+    page_url: str,
+    headers: Dict[str, str],
+    timeout: ClientTimeout,
+) -> Optional[List[Tuple[str, str, Optional[datetime]]]]:
+    """Intenta localizar y descargar un feed RSS/Atom desde la portada."""
     try:
-        async with session.get(url, headers=HEADERS, timeout=timeout) as resp:
+        async with session.get(page_url, headers=headers, timeout=timeout, ssl=True) as resp:
             resp.raise_for_status()
             html = await resp.text()
-            cache_put(url, html)
-            return html
-    except Exception as e:
-        # Guarda en caché negativa muy corta para evitar bucles (opcional)
-        cache_put(url, "")
-        raise e
+        only_head = SoupStrainer("link")
+        soup = BeautifulSoup(html, "html.parser", parse_only=only_head)
+        rss_links = [
+            l.get("href")
+            for l in soup.find_all(
+                "link",
+                rel=lambda v: v and "alternate" in v,
+                type=lambda t: t and ("rss" in t or "atom" in t or "xml" in t),
+            )
+            if l.get("href")
+        ]
+        candidates = rss_links + [urljoin(page_url, path) for path in ("/rss", "/feed", "/feeds", "/index.xml")]
+        for feed_url in candidates:
+            if not feed_url:
+                continue
+            try:
+                async with session.get(feed_url, headers=headers, timeout=timeout, ssl=True) as r2:
+                    if r2.status != 200:
+                        continue
+                    xml = await r2.text()
+                feed = BeautifulSoup(xml, "xml")
+                items = feed.find_all(["item", "entry"])
+                out: List[Tuple[str, str, Optional[datetime]]] = []
+                for it in items:
+                    title = (it.title.get_text(strip=True) if it.title else "").strip()
+                    link = (
+                        it.link.get("href")
+                        if it.link and it.link.has_attr("href")
+                        else (it.link.get_text(strip=True) if it.link else "")
+                    ).strip()
+                    pub = None
+                    if it.find("pubDate"):
+                        try:
+                            pub = parsedate_to_datetime(it.find("pubDate").get_text(strip=True))
+                        except Exception:
+                            pub = None
+                    elif it.find("updated"):
+                        try:
+                            pub = pd.to_datetime(it.find("updated").get_text(strip=True), utc=True, errors="coerce").to_pydatetime()
+                        except Exception:
+                            pub = None
+                    out.append((title, link, pub))
+                if out:
+                    return out
+            except Exception:
+                continue
+    except Exception:
+        pass
+    return None
 
 async def scrape_source_async(
     session: aiohttp.ClientSession,
     source: Dict[str, Any],
     include_re: Optional[re.Pattern],
     exclude_re: Optional[re.Pattern],
-    timeout: int,
+    timeout: ClientTimeout,
     ttl_sec: int,
+    neg_ttl_sec: int,
+    headers: Dict[str, str],
+    respect_robots: bool,
 ) -> List[Dict[str, Any]]:
     name = source.get("name")
     url = source.get("url")
     selector = source.get("selector")
     base_url = source.get("base_url") or None
 
-    if not (name and url and selector):
+    if not (name and url):
         return []
 
-    try:
-        html = await fetch_html(session, url, timeout=timeout, ttl_sec=ttl_sec)
-        if not html:
-            return []
+    rows: List[Dict[str, Any]] = []
 
-        soup = BeautifulSoup(html, "html.parser")
-        elements = soup.select(selector) if selector else []
-        rows: List[Dict[str, Any]] = []
-
-        for el in elements:
-            title = el.get_text(strip=True)
-            href = el.get("href")
-            if not href or not title:
+    # 1) Intento RSS/Atom
+    rss = await try_fetch_rss(session, url, headers, timeout)
+    if rss:
+        for title, href, dt in rss:
+            full_url = absolutize(href, base_url or url)
+            if not full_url or not title:
                 continue
-            full_url = absolutize(href, base_url)
             if is_relevant(title, include_re, exclude_re):
                 rows.append(
                     {
@@ -231,6 +392,50 @@ async def scrape_source_async(
                         "título": title,
                         "url": full_url,
                         "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                        "publicado": (dt.isoformat() if dt else None),
+                        "fuente": "rss",
+                    }
+                )
+        if rows:
+            return rows
+
+    # 2) Fallback HTML + selectores
+    if not selector:
+        return []
+
+    html = await fetch_html(session, url, headers=headers, timeout=timeout, ttl_sec=ttl_sec, neg_ttl_sec=neg_ttl_sec, respect_robots=respect_robots)
+    if not html:
+        return []
+
+    try:
+        soup = BeautifulSoup(html, "html.parser")
+        elements = soup.select(selector) if selector else []
+        for el in elements:
+            title = el.get_text(strip=True)
+            href = el.get("href")
+            if not href or not title:
+                continue
+            full_url = absolutize(href, base_url or url)
+            if not full_url:
+                continue
+            if is_relevant(title, include_re, exclude_re):
+                raw_dt = extract_time_candidate(el)
+                pub_iso = None
+                if raw_dt:
+                    try:
+                        dt = pd.to_datetime(raw_dt, utc=True, errors="coerce")
+                        if pd.notnull(dt):
+                            pub_iso = dt.isoformat()
+                    except Exception:
+                        pub_iso = None
+                rows.append(
+                    {
+                        "medio": name,
+                        "título": title,
+                        "url": full_url,
+                        "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                        "publicado": pub_iso,
+                        "fuente": "html",
                     }
                 )
         return rows
@@ -242,15 +447,18 @@ async def run_parallel(
     sources: List[Dict[str, Any]],
     include_re: Optional[re.Pattern],
     exclude_re: Optional[re.Pattern],
-    timeout: int,
+    timeout: ClientTimeout,
     concurrency: int,
     ttl_sec: int,
+    neg_ttl_sec: int,
+    headers: Dict[str, str],
+    respect_robots: bool,
     progress_cb=None,
 ) -> List[Dict[str, Any]]:
     """
     Ejecuta scraping en paralelo con límite de concurrencia.
     """
-    connector = aiohttp.TCPConnector(limit_per_host=concurrency, ssl=False)
+    connector = aiohttp.TCPConnector(limit_per_host=concurrency, ssl=None)  # verificación TLS por defecto
     sem = asyncio.Semaphore(concurrency)
     results: List[Dict[str, Any]] = []
 
@@ -258,7 +466,9 @@ async def run_parallel(
 
         async def wrapped(src):
             async with sem:
-                out = await scrape_source_async(session, src, include_re, exclude_re, timeout, ttl_sec)
+                out = await scrape_source_async(
+                    session, src, include_re, exclude_re, timeout, ttl_sec, neg_ttl_sec, headers, respect_robots
+                )
                 if progress_cb:
                     progress_cb(src.get("name", "¿medio?"), len(out))
                 return out
@@ -271,15 +481,25 @@ async def run_parallel(
     return results
 
 def dedupe_news(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    # 1) de-dup exactos por (titulo normalizado, url)
     seen = set()
-    out = []
+    uniq: List[Dict[str, Any]] = []
     for r in rows:
-        key = (r.get("medio"), r.get("título"))
+        key = (norm_text(r.get("título", "")), r.get("url"))
         if key in seen:
             continue
         seen.add(key)
-        out.append(r)
-    return out
+        uniq.append(r)
+
+    # 2) Agrupa por título y elige el mejor (RSS y/o con fecha gana)
+    by_title: Dict[str, Tuple[int, Dict[str, Any]]] = {}
+    for r in uniq:
+        t = norm_text(r.get("título", ""))
+        score = (1 if r.get("fuente") == "rss" else 0) + (1 if r.get("publicado") else 0)
+        cur = by_title.get(t)
+        if (not cur) or (score > cur[0]):
+            by_title[t] = (score, r)
+    return [v[1] for v in by_title.values()]
 
 # =========================
 # Estado inicial
@@ -400,7 +620,7 @@ with st.expander("⚙️ Opciones avanzadas"):
     search_country = st.selectbox(
         "País a buscar",
         sorted(st.session_state.db.keys()),
-        key="search_country",  # <- mantiene la selección entre reruns
+        key="search_country",
     )
 
     current_sources = st.session_state.db.get(search_country, [])
@@ -409,11 +629,13 @@ with st.expander("⚙️ Opciones avanzadas"):
         f"Medios de {search_country} a incluir",
         options=preselect,
         default=preselect,
-        key=f"sources_{search_country}",  # <- clave dependiente del país
+        key=f"sources_{search_country}",
     )
-    timeout = st.slider("Timeout por petición (seg.)", min_value=5, max_value=40, value=15, step=1)
+    timeout_sec = st.slider("Timeout por petición (seg.)", min_value=5, max_value=40, value=20, step=1)
     concurrency = st.slider("Concurrencia (simultáneos)", min_value=2, max_value=20, value=8, step=1)
-    ttl_sec = st.slider("TTL caché (seg.)", min_value=60, max_value=3600, value=900, step=30)
+    ttl_sec = st.slider("TTL caché positiva (seg.)", min_value=60, max_value=3600, value=900, step=30)
+    neg_ttl_sec = st.slider("TTL caché negativa (seg.)", min_value=5, max_value=120, value=30, step=5)
+    respect_robots = st.checkbox("Respetar robots.txt (beta)", value=True)
     show_log = st.checkbox("Mostrar LOG al finalizar", value=True)
 
 # =========================
@@ -435,8 +657,15 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
         st.warning(f"No hay medios seleccionados para {search_country}.")
     else:
         start = time.time()
+        headers = build_headers(search_country)
+        # timeout personalizado
+        timeout = ClientTimeout(
+            total=timeout_sec,
+            connect=min(10, timeout_sec),
+            sock_connect=min(10, timeout_sec),
+            sock_read=min(max(5, timeout_sec - 5), timeout_sec),
+        )
         with st.spinner("Buscando en paralelo…"):
-            # Ejecutamos el scraping en paralelo
             rows_all: List[Dict[str, Any]] = asyncio.run(
                 run_parallel(
                     sources=sources,
@@ -445,7 +674,10 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
                     timeout=timeout,
                     concurrency=concurrency,
                     ttl_sec=ttl_sec,
-                    progress_cb=add_log_line,  # acumula en logs
+                    neg_ttl_sec=neg_ttl_sec,
+                    headers=headers,
+                    respect_robots=respect_robots,
+                    progress_cb=add_log_line,
                 )
             )
 
@@ -456,21 +688,31 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
             st.warning("🚫 No se encontraron noticias con los criterios dados.")
         else:
             df = pd.DataFrame(rows_all)
+
+            # Ordenar por fecha publicada (RSS primero) y luego por extracción
+            if "publicado" in df.columns:
+                df["sort_key"] = df["publicado"].fillna("")
+            else:
+                df["sort_key"] = ""
+            df = df.sort_values(["sort_key"], ascending=False).drop(columns=["sort_key"])
+
             st.success(f"✅ {len(df)} noticias encontradas en {search_country} (en {elapsed:.1f}s).")
             st.dataframe(df, use_container_width=True, hide_index=True)
 
             st.write("### Resultados")
             for _, row in df.iterrows():
+                fuente = row.get("fuente") or "-"
+                publicado = row.get("publicado") or "—"
                 st.markdown(
                     f"""
                     <div style="border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:10px;">
-                      <p style="margin:0;color:#6b7280;font-size:13px;">📰 <strong>{row['medio']}</strong></p>
+                      <p style="margin:0;color:#6b7280;font-size:13px;">📰 <strong>{row['medio']}</strong> · <span style="background:#eef2ff;padding:2px 6px;border-radius:6px;">{fuente.upper()}</span></p>
                       <p style="margin:6px 0;">
-                        <a href="{row['url']}" target="_blank" style="font-size:16px;text-decoration:none;">
+                        <a href="{row['url']}" target="_blank" rel="noopener" style="font-size:16px;text-decoration:none;">
                           {row['título']}
                         </a>
                       </p>
-                      <p style="margin:0;color:#6b7280;font-size:12px;">📅 {row['fecha_extraccion']}</p>
+                      <p style="margin:0;color:#6b7280;font-size:12px;">📅 Publicado: {publicado} · Extraído: {row['fecha_extraccion']}</p>
                     </div>
                     """,
                     unsafe_allow_html=True,
