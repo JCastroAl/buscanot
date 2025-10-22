@@ -545,24 +545,38 @@ with colC:
     whole_words = st.checkbox("Coincidencia por palabra", value=False)
     ignore_case = st.checkbox("Ignorar mayúsc./minúsc.", value=True)
 
-# --- NUEVO: filtro temporal con calendario ---
-with st.expander("🗓️ Filtro temporal"):
-    use_date_filter = st.checkbox("Filtrar por periodo de fechas", value=False)
-    if use_date_filter:
-        default_start = date.today() - timedelta(days=7)
-        default_end = date.today()
-        start_date, end_date = st.date_input(
-            "Periodo (inicio y fin)",
-            value=(default_start, default_end),
-            format="YYYY-MM-DD",
-        )
-        date_field = st.selectbox(
-            "Campo de fecha a usar",
-            ["Fecha de publicación (recomendado)", "Fecha de extracción"],
-            index=0,
-        )
-        include_na_pub = st.checkbox("Incluir noticias sin fecha de publicación", value=True,
-                                     help="Sólo aplica cuando filtras por 'Fecha de publicación'.")
+# --- Filtrado temporal ---
+if use_date_filter:
+    # Normaliza a datetimes
+    df["_pub_dt"] = pd.to_datetime(df.get("publicado"), utc=True, errors="coerce")   # tz-aware (UTC)
+    df["_ext_dt"] = pd.to_datetime(df.get("fecha_extraccion"), format="%Y-%m-%d", errors="coerce")  # naive
+
+    # Asegura que tenemos (inicio, fin) aunque el widget devuelva 1 fecha
+    if isinstance(start_date, (list, tuple)):
+        start_d, end_d = start_date
+    else:
+        start_d, end_d = start_date, end_date
+
+    # Rango inclusivo por día completo
+    # Para 'publicado' (tz-aware en UTC): crea límites tz-aware
+    start_ts_utc = pd.Timestamp(start_d).tz_localize("UTC")
+    end_ts_utc = (pd.Timestamp(end_d).tz_localize("UTC")
+                  + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1))
+
+    # Para 'fecha_extraccion' (naive): crea límites naive
+    start_ts_naive = pd.Timestamp(start_d)
+    end_ts_naive = (pd.Timestamp(end_d)
+                    + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1))
+
+    if date_field.startswith("Fecha de publicación"):
+        mask_pub = df["_pub_dt"].between(start_ts_utc, end_ts_utc, inclusive="both")
+        if include_na_pub:
+            df = df[mask_pub | df["_pub_dt"].isna()].copy()
+        else:
+            df = df[mask_pub].copy()
+    else:
+        mask_ext = df["_ext_dt"].between(start_ts_naive, end_ts_naive, inclusive="both")
+        df = df[mask_ext].copy()
 
 with st.expander("⚙️ Opciones avanzadas"):
     search_country = st.selectbox(
