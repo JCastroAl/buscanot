@@ -161,7 +161,7 @@ def save_db(db: Dict[str, List[Dict[str, Any]]]) -> None:
     with open(DB_PATH, "w", encoding="utf-8") as f:
         json.dump(db, f, ensure_ascii=False, indent=2)
 
-def load_db() -> Dict[str, List[Dict[str, Any]]]]:
+def load_db() -> Dict[str, List[Dict[str, Any]]]:
     # <-- ojo: si copias desde otra versión, evita el ']]]' que rompe. Aquí es ']]' CORRECTO:
     # def load_db() -> Dict[str, List[Dict[str, Any]]]:
     if DB_PATH.exists():
