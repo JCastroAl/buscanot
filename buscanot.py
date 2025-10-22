@@ -40,17 +40,73 @@ ALLOWED_SCHEMES = {"http", "https"}
 TRACKING_PARAMS = {"utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid", "mc_cid", "mc_eid"}
 
 # =========================
+# Base por defecto con patrones de hemeroteca donde se conocen
+# (puedes ir ampliando según cada medio)
 DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
     "España": [
-        {"name": "El País", "url": "https://elpais.com/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://elpais.com"},
-        {"name": "El Mundo", "url": "https://www.elmundo.es/", "selector": "article h2 a, h3 a, .ue-c-cover-content__link", "base_url": "https://www.elmundo.es"},
-        {"name": "ABC", "url": "https://www.abc.es/", "selector": "article h2 a, h3 a, .titular a", "base_url": "https://www.abc.es"},
-        {"name": "La Vanguardia", "url": "https://www.lavanguardia.com/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.lavanguardia.com"},
-        {"name": "El Confidencial", "url": "https://www.elconfidencial.com/", "selector": "article h2 a, h3 a, .news__title a", "base_url": "https://www.elconfidencial.com"},
-        {"name": "20minutos", "url": "https://www.20minutos.es/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.20minutos.es"},
-        {"name": "RTVE", "url": "https://www.rtve.es/noticias/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.rtve.es/noticias/"},
-        {"name": "La Razón", "url": "https://www.larazon.es/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.larazon.es/"},
-        {"name": "El Periodico de Catalunya", "url": "https://www.elperiodico.com/es/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.elperiodico.com/"},
+        {
+            "name": "El País",
+            "url": "https://elpais.com/",
+            "selector": "article h2 a, h3 a, .headline a",
+            "base_url": "https://elpais.com",
+            "archive_pattern": "https://elpais.com/archivo/{yyyy}-{mm}-{dd}/",
+        },
+        {
+            "name": "El Mundo",
+            "url": "https://www.elmundo.es/",
+            "selector": "article h2 a, h3 a, .ue-c-cover-content__link",
+            "base_url": "https://www.elmundo.es",
+            "archive_pattern": "https://www.elmundo.es/elmundo/hemeroteca/{yyyy}/{mm}/{dd}/",
+        },
+        {
+            "name": "ABC",
+            "url": "https://www.abc.es/",
+            "selector": "article h2 a, h3 a, .titular a",
+            "base_url": "https://www.abc.es",
+            "archive_pattern": "https://www.abc.es/archivo/{yyyy}-{mm}-{dd}/",
+        },
+        {
+            "name": "La Vanguardia",
+            "url": "https://www.lavanguardia.com/",
+            "selector": "article h2 a, h3 a, .headline a",
+            "base_url": "https://www.lavanguardia.com",
+            "archive_pattern": "https://www.lavanguardia.com/hemeroteca/{yyyy}/{mm}/{dd}",
+        },
+        {
+            "name": "El Confidencial",
+            "url": "https://www.elconfidencial.com/",
+            "selector": "article h2 a, h3 a, .news__title a",
+            "base_url": "https://www.elconfidencial.com",
+            # sin hemeroteca pública por fecha conocida
+        },
+        {
+            "name": "20minutos",
+            "url": "https://www.20minutos.es/",
+            "selector": "article h2 a, h3 a, .headline a",
+            "base_url": "https://www.20minutos.es",
+            # sin patrón estable público
+        },
+        {
+            "name": "RTVE",
+            "url": "https://www.rtve.es/noticias/",
+            "selector": "article h2 a, h3 a, .headline a",
+            "base_url": "https://www.rtve.es/noticias/",
+            # sin patrón estable público
+        },
+        {
+            "name": "La Razón",
+            "url": "https://www.larazon.es/",
+            "selector": "article h2 a, h3 a, .headline a",
+            "base_url": "https://www.larazon.es/",
+            # sin patrón estable público
+        },
+        {
+            "name": "El Periodico de Catalunya",
+            "url": "https://www.elperiodico.com/es/",
+            "selector": "article h2 a, h3 a, .headline a",
+            "base_url": "https://www.elperiodico.com/",
+            # sin patrón estable público
+        },
     ],
     "Marruecos": [
         {"name": "Hespress (AR)", "url": "https://www.hespress.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.hespress.com"},
@@ -253,7 +309,35 @@ async def is_allowed(session: aiohttp.ClientSession, headers: Dict[str, str], si
         return True  # en caso de duda, permitir
 
 # =========================
-# Networking asíncrono + RSS
+# Ayuda hemeroteca
+# =========================
+def iter_archive_urls(source: Dict[str, Any], start_date: date, end_date: date, day_cap: int = 31) -> List[str]:
+    """
+    Genera URLs diarias usando source['archive_pattern'] si existe.
+    Limita a 'day_cap' días para evitar abusos accidentales.
+    """
+    patt = source.get("archive_pattern")
+    if not patt:
+        return []
+    urls: List[str] = []
+    d = start_date
+    count = 0
+    while d <= end_date and count < day_cap:
+        urls.append(
+            patt.format(
+                yyyy=d.strftime("%Y"), mm=d.strftime("%m"), dd=d.strftime("%d")
+            )
+        )
+        d += timedelta(days=1)
+        count += 1
+    return urls
+
+def date_range_includes_today(start_date: date, end_date: date) -> bool:
+    today = date.today()
+    return start_date <= today <= end_date
+
+# =========================
+# Networking asíncrono + RSS/HTML
 # =========================
 async def fetch_html(
     session: aiohttp.ClientSession,
@@ -365,7 +449,16 @@ async def scrape_source_async(
     neg_ttl_sec: int,
     headers: Dict[str, str],
     respect_robots: bool,
+    use_date_filter: bool,
+    date_field: str,
+    start_date: date,
+    end_date: date,
 ) -> List[Dict[str, Any]]:
+    """
+    Scrapea una fuente. Si el filtro temporal está activo y se filtra por
+    Fecha de publicación y hay 'archive_pattern', recorre las URLs diarias.
+    Si no hay patrón, usa portada/RSS como siempre.
+    """
     name = source.get("name")
     url = source.get("url")
     selector = source.get("selector")
@@ -376,70 +469,84 @@ async def scrape_source_async(
 
     rows: List[Dict[str, Any]] = []
 
-    # 1) Intento RSS/Atom
-    rss = await try_fetch_rss(session, url, headers, timeout)
-    if rss:
-        for title, href, dt in rss:
-            full_url = absolutize(href, base_url or url)
-            if not full_url or not title:
-                continue
-            if is_relevant(title, include_re, exclude_re):
-                rows.append(
-                    {
-                        "medio": name,
-                        "título": title,
-                        "url": full_url,
-                        "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
-                        "publicado": (dt.isoformat() if dt else None),
-                        "fuente": "rss",
-                    }
-                )
-        if rows:
-            return rows
+    # ¿Tenemos rango por publicación y patrón de archivo?
+    use_archives = False
+    archive_urls: List[str] = []
+    if use_date_filter and date_field.startswith("Fecha de publicación"):
+        archive_urls = iter_archive_urls(source, start_date, end_date)
+        use_archives = len(archive_urls) > 0
 
-    # 2) Fallback HTML + selectores
+    # 1) RSS/Atom (si NO estamos usando páginas de archivo por día)
+    if not use_archives:
+        rss = await try_fetch_rss(session, url, headers, timeout)
+        if rss:
+            for title, href, dt in rss:
+                full_url = absolutize(href, base_url or url)
+                if not full_url or not title:
+                    continue
+                if is_relevant(title, include_re, exclude_re):
+                    rows.append(
+                        {
+                            "medio": name,
+                            "título": title,
+                            "url": full_url,
+                            "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                            "publicado": (dt.isoformat() if dt else None),
+                            "fuente": "rss",
+                        }
+                    )
+            if rows:
+                return rows
+
+    # 2) HTML (portada o páginas de archivo diarias)
+    targets = archive_urls if use_archives else [url]
     if not selector:
-        return []
+        return rows  # si veníamos de RSS puede haber filas; si no, vacío
 
-    html = await fetch_html(session, url, headers=headers, timeout=timeout, ttl_sec=ttl_sec, neg_ttl_sec=neg_ttl_sec, respect_robots=respect_robots)
-    if not html:
-        return []
+    for page in targets:
+        html = await fetch_html(
+            session, page, headers=headers, timeout=timeout,
+            ttl_sec=ttl_sec, neg_ttl_sec=neg_ttl_sec, respect_robots=respect_robots
+        )
+        if not html:
+            continue
 
-    try:
-        soup = BeautifulSoup(html, "html.parser")
-        elements = soup.select(selector) if selector else []
-        for el in elements:
-            title = el.get_text(strip=True)
-            href = el.get("href")
-            if not href or not title:
-                continue
-            full_url = absolutize(href, base_url or url)
-            if not full_url:
-                continue
-            if is_relevant(title, include_re, exclude_re):
-                raw_dt = extract_time_candidate(el)
-                pub_iso = None
-                if raw_dt:
-                    try:
-                        dt = pd.to_datetime(raw_dt, utc=True, errors="coerce")
-                        if pd.notnull(dt):
-                            pub_iso = dt.isoformat()
-                    except Exception:
-                        pub_iso = None
-                rows.append(
-                    {
-                        "medio": name,
-                        "título": title,
-                        "url": full_url,
-                        "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
-                        "publicado": pub_iso,
-                        "fuente": "html",
-                    }
-                )
-        return rows
-    except Exception as e:
-        st.session_state.setdefault("logs", []).append(f"❌ {name}: {e}")
-        return []
+        try:
+            soup = BeautifulSoup(html, "html.parser")
+            elements = soup.select(selector) if selector else []
+            for el in elements:
+                title = el.get_text(strip=True)
+                href = el.get("href")
+                if not href or not title:
+                    continue
+                full_url = absolutize(href, base_url or page)
+                if not full_url:
+                    continue
+                if is_relevant(title, include_re, exclude_re):
+                    raw_dt = extract_time_candidate(el)
+                    pub_iso = None
+                    if raw_dt:
+                        try:
+                            dt = pd.to_datetime(raw_dt, utc=True, errors="coerce")
+                            if pd.notnull(dt):
+                                pub_iso = dt.isoformat()
+                        except Exception:
+                            pub_iso = None
+                    rows.append(
+                        {
+                            "medio": name,
+                            "título": title,
+                            "url": full_url,
+                            "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                            "publicado": pub_iso,
+                            "fuente": "html-archivo" if use_archives else "html",
+                        }
+                    )
+        except Exception as e:
+            st.session_state.setdefault("logs", []).append(f"❌ {name} ({page}): {e}")
+            continue
+
+    return rows
 
 async def run_parallel(
     sources: List[Dict[str, Any]],
@@ -451,6 +558,10 @@ async def run_parallel(
     neg_ttl_sec: int,
     headers: Dict[str, str],
     respect_robots: bool,
+    use_date_filter: bool,
+    date_field: str,
+    start_date: date,
+    end_date: date,
     progress_cb=None,
 ) -> List[Dict[str, Any]]:
     """
@@ -465,7 +576,8 @@ async def run_parallel(
         async def wrapped(src):
             async with sem:
                 out = await scrape_source_async(
-                    session, src, include_re, exclude_re, timeout, ttl_sec, neg_ttl_sec, headers, respect_robots
+                    session, src, include_re, exclude_re, timeout, ttl_sec, neg_ttl_sec, headers, respect_robots,
+                    use_date_filter, date_field, start_date, end_date
                 )
                 if progress_cb:
                     progress_cb(src.get("name", "¿medio?"), len(out))
@@ -493,7 +605,7 @@ def dedupe_news(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     by_title: Dict[str, Tuple[int, Dict[str, Any]]] = {}
     for r in uniq:
         t = norm_text(r.get("título", ""))
-        score = (1 if r.get("fuente") == "rss" else 0) + (1 if r.get("publicado") else 0)
+        score = (1 if r.get("fuente", "").startswith("rss") else 0) + (1 if r.get("publicado") else 0)
         cur = by_title.get(t)
         if (not cur) or (score > cur[0]):
             by_title[t] = (score, r)
@@ -534,7 +646,7 @@ with st.sidebar.expander(f"📜 Medios en {country} ({len(st.session_state.db.ge
         st.caption("Sin medios registrados.")
     else:
         for s in st.session_state.db[country]:
-            st.markdown(f"- **{s['name']}** — [{s['url']}]({s['url']})  \n  `selector`: `{s['selector']}`  · `base_url`: `{s.get('base_url') or ''}`")
+            st.markdown(f"- **{s['name']}** — [{s['url']}]({s['url']})  \n  `selector`: `{s['selector']}`  · `base_url`: `{s.get('base_url') or ''}`" + (f"  · `archive_pattern`: `{s.get('archive_pattern')}`" if s.get("archive_pattern") else ""))
 
 st.sidebar.markdown("---")
 
@@ -590,6 +702,27 @@ with st.expander("🗓️ Filtro temporal"):
             help="Sólo aplica cuando filtras por 'Fecha de publicación'.",
         )
 
+# UX: aviso sobre hemerotecas faltantes si aplica
+use_date_filter = bool(st.session_state.get("use_date_filter", False))
+dr = st.session_state.get("date_range", None)
+if isinstance(dr, (list, tuple)) and len(dr) == 2:
+    start_date, end_date = dr
+else:
+    d = dr or (date.today(),)
+    d = d[0] if isinstance(d, (list, tuple)) else d
+    start_date, end_date = d, d
+date_field = st.session_state.get("date_field", "Fecha de publicación (recomendado)")
+include_na_pub = bool(st.session_state.get("include_na_pub", True))
+
+if use_date_filter and date_field.startswith("Fecha de publicación"):
+    # lista medios del país actual sin archive_pattern
+    missing = [s["name"] for s in st.session_state.db.get(search_country, []) if s.get("name") and not s.get("archive_pattern")]
+    if missing and not date_range_includes_today(start_date, end_date):
+        st.info(
+            "ℹ️ Para fechas **anteriores** a hoy, algunos medios no tienen `archive_pattern` y pueden no devolver resultados: "
+            + ", ".join(missing)
+        )
+
 # (4) Opciones avanzadas
 with st.expander("⚙️ Opciones avanzadas"):
     current_sources = st.session_state.db.get(search_country, [])
@@ -606,18 +739,6 @@ with st.expander("⚙️ Opciones avanzadas"):
     neg_ttl_sec = st.slider("TTL caché negativa (seg.)", min_value=5, max_value=120, value=30, step=5)
     respect_robots = st.checkbox("Respetar robots.txt (beta)", value=True)
     show_log = st.checkbox("Mostrar LOG al finalizar", value=True)
-
-# Lee valores seguros del filtro temporal desde session_state
-use_date_filter = bool(st.session_state.get("use_date_filter", False))
-dr = st.session_state.get("date_range", None)
-if isinstance(dr, (list, tuple)) and len(dr) == 2:
-    start_date, end_date = dr
-else:
-    d = dr or (date.today(),)
-    d = d[0] if isinstance(d, (list, tuple)) else d
-    start_date, end_date = d, d
-date_field = st.session_state.get("date_field", "Fecha de publicación (recomendado)")
-include_na_pub = bool(st.session_state.get("include_na_pub", True))
 
 # =========================
 # Acción: Buscar
@@ -658,6 +779,10 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
                     neg_ttl_sec=neg_ttl_sec,
                     headers=headers,
                     respect_robots=respect_robots,
+                    use_date_filter=use_date_filter,
+                    date_field=date_field,
+                    start_date=start_date,
+                    end_date=end_date,
                     progress_cb=add_log_line,
                 )
             )
