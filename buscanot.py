@@ -102,7 +102,7 @@ def save_db(db: Dict[str, List[Dict[str, Any]]]) -> None:
     with open(DB_PATH, "w", encoding="utf-8") as f:
         json.dump(db, f, ensure_ascii=False, indent=2)
 
-def load_db() -> Dict[str, List[Dict[str, Any]]]:
+def load_db() -> Dict[str, List[Dict[str, Any]]]]:
     if DB_PATH.exists():
         try:
             with open(DB_PATH, "r", encoding="utf-8") as f:
@@ -510,6 +510,16 @@ if "search_country" not in st.session_state:
     all_keys = sorted(st.session_state.db.keys())
     st.session_state.search_country = "España" if "España" in all_keys else (all_keys[0] if all_keys else "")
 
+# Defaults seguros para filtro temporal (en session_state)
+if "use_date_filter" not in st.session_state:
+    st.session_state.use_date_filter = False
+if "date_range" not in st.session_state:
+    st.session_state.date_range = (date.today() - timedelta(days=7), date.today())
+if "date_field" not in st.session_state:
+    st.session_state.date_field = "Fecha de publicación (recomendado)"
+if "include_na_pub" not in st.session_state:
+    st.session_state.include_na_pub = True
+
 # =========================
 # Sidebar: gestión BD
 # =========================
@@ -533,6 +543,14 @@ st.sidebar.markdown("---")
 # =========================
 st.header("🔍 Búsqueda")
 
+# (1) País a buscar — FUERA del expandible
+search_country = st.selectbox(
+    "País a buscar",
+    sorted(st.session_state.db.keys()),
+    key="search_country",  # mantiene valor entre reruns
+)
+
+# (2) Texto y opciones básicas
 colA, colB, colC = st.columns([2, 2, 1])
 with colA:
     include_terms = st.text_input(
@@ -545,46 +563,35 @@ with colC:
     whole_words = st.checkbox("Coincidencia por palabra", value=False)
     ignore_case = st.checkbox("Ignorar mayúsc./minúsc.", value=True)
 
-# --- Filtrado temporal ---
-if use_date_filter:
-    # Normaliza a datetimes
-    df["_pub_dt"] = pd.to_datetime(df.get("publicado"), utc=True, errors="coerce")   # tz-aware (UTC)
-    df["_ext_dt"] = pd.to_datetime(df.get("fecha_extraccion"), format="%Y-%m-%d", errors="coerce")  # naive
-
-    # Asegura que tenemos (inicio, fin) aunque el widget devuelva 1 fecha
-    if isinstance(start_date, (list, tuple)):
-        start_d, end_d = start_date
-    else:
-        start_d, end_d = start_date, end_date
-
-    # Rango inclusivo por día completo
-    # Para 'publicado' (tz-aware en UTC): crea límites tz-aware
-    start_ts_utc = pd.Timestamp(start_d).tz_localize("UTC")
-    end_ts_utc = (pd.Timestamp(end_d).tz_localize("UTC")
-                  + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1))
-
-    # Para 'fecha_extraccion' (naive): crea límites naive
-    start_ts_naive = pd.Timestamp(start_d)
-    end_ts_naive = (pd.Timestamp(end_d)
-                    + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1))
-
-    if date_field.startswith("Fecha de publicación"):
-        mask_pub = df["_pub_dt"].between(start_ts_utc, end_ts_utc, inclusive="both")
-        if include_na_pub:
-            df = df[mask_pub | df["_pub_dt"].isna()].copy()
-        else:
-            df = df[mask_pub].copy()
-    else:
-        mask_ext = df["_ext_dt"].between(start_ts_naive, end_ts_naive, inclusive="both")
-        df = df[mask_ext].copy()
-
-with st.expander("⚙️ Opciones avanzadas"):
-    search_country = st.selectbox(
-        "País a buscar",
-        sorted(st.session_state.db.keys()),
-        key="search_country",
+# (3) Filtro temporal (widgets con key)
+with st.expander("🗓️ Filtro temporal"):
+    st.checkbox(
+        "Filtrar por periodo de fechas",
+        key="use_date_filter",
+        value=st.session_state.use_date_filter,
     )
+    if st.session_state.use_date_filter:
+        st.date_input(
+            "Periodo (inicio y fin)",
+            key="date_range",
+            value=st.session_state.date_range,
+            format="YYYY-MM-DD",
+        )
+        st.selectbox(
+            "Campo de fecha a usar",
+            ["Fecha de publicación (recomendado)", "Fecha de extracción"],
+            key="date_field",
+            index=0 if st.session_state.date_field.startswith("Fecha de publicación") else 1,
+        )
+        st.checkbox(
+            "Incluir noticias sin fecha de publicación",
+            key="include_na_pub",
+            value=st.session_state.include_na_pub,
+            help="Sólo aplica cuando filtras por 'Fecha de publicación'.",
+        )
 
+# (4) Opciones avanzadas
+with st.expander("⚙️ Opciones avanzadas"):
     current_sources = st.session_state.db.get(search_country, [])
     preselect = [s["name"] for s in current_sources]
     selected_names = st.multiselect(
@@ -599,6 +606,18 @@ with st.expander("⚙️ Opciones avanzadas"):
     neg_ttl_sec = st.slider("TTL caché negativa (seg.)", min_value=5, max_value=120, value=30, step=5)
     respect_robots = st.checkbox("Respetar robots.txt (beta)", value=True)
     show_log = st.checkbox("Mostrar LOG al finalizar", value=True)
+
+# Lee valores seguros del filtro temporal desde session_state
+use_date_filter = bool(st.session_state.get("use_date_filter", False))
+dr = st.session_state.get("date_range", None)
+if isinstance(dr, (list, tuple)) and len(dr) == 2:
+    start_date, end_date = dr
+else:
+    d = dr or (date.today(),)
+    d = d[0] if isinstance(d, (list, tuple)) else d
+    start_date, end_date = d, d
+date_field = st.session_state.get("date_field", "Fecha de publicación (recomendado)")
+include_na_pub = bool(st.session_state.get("include_na_pub", True))
 
 # =========================
 # Acción: Buscar
@@ -651,27 +670,30 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
         else:
             df = pd.DataFrame(rows_all)
 
-            # --- NUEVO: filtrado temporal ---
+            # --- Filtrado temporal (aplicado tras construir df) ---
             if use_date_filter:
                 # Normaliza a datetimes
-                df["_pub_dt"] = pd.to_datetime(df.get("publicado"), utc=True, errors="coerce")
-                df["_ext_dt"] = pd.to_datetime(df.get("fecha_extraccion"), format="%Y-%m-%d", errors="coerce")
+                df["_pub_dt"] = pd.to_datetime(df.get("publicado"), utc=True, errors="coerce")   # tz-aware UTC
+                df["_ext_dt"] = pd.to_datetime(df.get("fecha_extraccion"), format="%Y-%m-%d", errors="coerce")  # naive
 
-                # Rango inclusivo [inicio, fin] a nivel de día
-                start_ts = pd.Timestamp(start_date)  # 00:00
-                end_ts = pd.Timestamp(end_date) + pd.Timedelta(days=1) - pd.Timedelta(milliseconds=1)  # 23:59:59.999
+                # Límites inclusivos por día completo
+                start_ts_utc = pd.Timestamp(start_date).tz_localize("UTC")
+                end_ts_utc = (pd.Timestamp(end_date).tz_localize("UTC") + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1))
+
+                start_ts_naive = pd.Timestamp(start_date)
+                end_ts_naive = (pd.Timestamp(end_date) + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1))
 
                 if date_field.startswith("Fecha de publicación"):
-                    mask_pub = df["_pub_dt"].between(start_ts, end_ts, inclusive="both")
+                    mask_pub = df["_pub_dt"].between(start_ts_utc, end_ts_utc, inclusive="both")
                     if include_na_pub:
                         df = df[mask_pub | df["_pub_dt"].isna()].copy()
                     else:
                         df = df[mask_pub].copy()
                 else:
-                    mask_ext = df["_ext_dt"].between(start_ts, end_ts, inclusive="both")
+                    mask_ext = df["_ext_dt"].between(start_ts_naive, end_ts_naive, inclusive="both")
                     df = df[mask_ext].copy()
 
-            # Ordenar por fecha publicada (ISO) y luego por extracción
+            # Ordenar por fecha publicada y luego por extracción
             if "publicado" in df.columns:
                 df["_dt"] = pd.to_datetime(df["publicado"], utc=True, errors="coerce")
             else:
