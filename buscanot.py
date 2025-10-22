@@ -714,15 +714,6 @@ else:
 date_field = st.session_state.get("date_field", "Fecha de publicación (recomendado)")
 include_na_pub = bool(st.session_state.get("include_na_pub", True))
 
-if use_date_filter and date_field.startswith("Fecha de publicación"):
-    # lista medios del país actual sin archive_pattern
-    missing = [s["name"] for s in st.session_state.db.get(search_country, []) if s.get("name") and not s.get("archive_pattern")]
-    if missing and not date_range_includes_today(start_date, end_date):
-        st.info(
-            "ℹ️ Para fechas **anteriores** a hoy, algunos medios no tienen `archive_pattern` y pueden no devolver resultados: "
-            + ", ".join(missing)
-        )
-
 # (4) Opciones avanzadas
 with st.expander("⚙️ Opciones avanzadas"):
     current_sources = st.session_state.db.get(search_country, [])
