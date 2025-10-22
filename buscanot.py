@@ -6,7 +6,7 @@ import re
 import random
 import unicodedata
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from typing import Dict, List, Any, Optional, Tuple
 from urllib.parse import urljoin, urlparse, parse_qsl, urlencode, urlunparse
 
@@ -161,7 +161,6 @@ def neg_cache_put(url: str) -> None:
 # =========================
 def build_headers(country: str) -> Dict[str, str]:
     h = dict(BASE_HEADERS)
-    # Idiomas “neutros” si el país no es hispano/portugués/francés
     if country in {"España", "Andorra"}:
         h["Accept-Language"] = "es-ES,es;q=0.9,*;q=0.1"
     elif country in {"Portugal"}:
@@ -181,7 +180,6 @@ def build_regex(terms: str, whole_words: bool = False, ignore_case: bool = True)
     escaped = [re.escape(t) for t in cleaned]
     body = "|".join(escaped)
     if whole_words:
-        # bordes de palabra “unicode-friendly”
         body = rf"(?<!\w)(?:{body})(?!\w)"
     else:
         body = rf"(?:{body})"
@@ -208,7 +206,6 @@ def absolutize(link: str, base_url: Optional[str]) -> str:
     parsed = urlparse(full)
     if parsed.scheme not in ALLOWED_SCHEMES:
         return ""
-    # quita trackers conocidos
     qs = [(k, v) for k, v in parse_qsl(parsed.query, keep_blank_values=True) if k not in TRACKING_PARAMS]
     cleaned = parsed._replace(query=urlencode(qs))
     return urlunparse(cleaned)
@@ -251,7 +248,7 @@ async def is_allowed(session: aiohttp.ClientSession, headers: Dict[str, str], si
             parser = rp.RobotFileParser()
             parser.parse(txt.splitlines())
             cache[robots_url] = parser
-        return parser.can_fetch(headers.get("User-Agent", BASE_HEADERS["User-Agent"]), path)
+        return parser.can_fetch(headers.get("User-Agent", BASE_HEADERS["User-Agent"]), path or "/")
     except Exception:
         return True  # en caso de duda, permitir
 
@@ -276,7 +273,8 @@ async def fetch_html(
         return cached
 
     if respect_robots:
-        if not await is_allowed(session, headers, url, "/"):
+        parsed = urlparse(url)
+        if not await is_allowed(session, headers, f"{parsed.scheme}://{parsed.netloc}", parsed.path):
             st.session_state.setdefault("logs", []).append(f"🤖 Robots bloquea {url}")
             neg_cache_put(url)
             return ""
@@ -547,6 +545,25 @@ with colC:
     whole_words = st.checkbox("Coincidencia por palabra", value=False)
     ignore_case = st.checkbox("Ignorar mayúsc./minúsc.", value=True)
 
+# --- NUEVO: filtro temporal con calendario ---
+with st.expander("🗓️ Filtro temporal"):
+    use_date_filter = st.checkbox("Filtrar por periodo de fechas", value=False)
+    if use_date_filter:
+        default_start = date.today() - timedelta(days=7)
+        default_end = date.today()
+        start_date, end_date = st.date_input(
+            "Periodo (inicio y fin)",
+            value=(default_start, default_end),
+            format="YYYY-MM-DD",
+        )
+        date_field = st.selectbox(
+            "Campo de fecha a usar",
+            ["Fecha de publicación (recomendado)", "Fecha de extracción"],
+            index=0,
+        )
+        include_na_pub = st.checkbox("Incluir noticias sin fecha de publicación", value=True,
+                                     help="Sólo aplica cuando filtras por 'Fecha de publicación'.")
+
 with st.expander("⚙️ Opciones avanzadas"):
     search_country = st.selectbox(
         "País a buscar",
@@ -620,12 +637,32 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
         else:
             df = pd.DataFrame(rows_all)
 
-            # Ordenar por fecha publicada (RSS primero) y luego por extracción
+            # --- NUEVO: filtrado temporal ---
+            if use_date_filter:
+                # Normaliza a datetimes
+                df["_pub_dt"] = pd.to_datetime(df.get("publicado"), utc=True, errors="coerce")
+                df["_ext_dt"] = pd.to_datetime(df.get("fecha_extraccion"), format="%Y-%m-%d", errors="coerce")
+
+                # Rango inclusivo [inicio, fin] a nivel de día
+                start_ts = pd.Timestamp(start_date)  # 00:00
+                end_ts = pd.Timestamp(end_date) + pd.Timedelta(days=1) - pd.Timedelta(milliseconds=1)  # 23:59:59.999
+
+                if date_field.startswith("Fecha de publicación"):
+                    mask_pub = df["_pub_dt"].between(start_ts, end_ts, inclusive="both")
+                    if include_na_pub:
+                        df = df[mask_pub | df["_pub_dt"].isna()].copy()
+                    else:
+                        df = df[mask_pub].copy()
+                else:
+                    mask_ext = df["_ext_dt"].between(start_ts, end_ts, inclusive="both")
+                    df = df[mask_ext].copy()
+
+            # Ordenar por fecha publicada (ISO) y luego por extracción
             if "publicado" in df.columns:
-                df["sort_key"] = df["publicado"].fillna("")
+                df["_dt"] = pd.to_datetime(df["publicado"], utc=True, errors="coerce")
             else:
-                df["sort_key"] = ""
-            df = df.sort_values(["sort_key"], ascending=False).drop(columns=["sort_key"])
+                df["_dt"] = pd.NaT
+            df = df.sort_values(["_dt", "fecha_extraccion"], ascending=[False, False]).drop(columns=["_dt"], errors="ignore")
 
             st.success(f"✅ {len(df)} noticias encontradas en {search_country} (en {elapsed:.1f}s).")
             st.dataframe(df, use_container_width=True, hide_index=True)
@@ -639,7 +676,7 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
                     <div style="border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:10px;">
                       <p style="margin:0;color:#6b7280;font-size:13px;">📰 <strong>{row['medio']}</strong> · <span style="background:#eef2ff;padding:2px 6px;border-radius:6px;">{fuente.upper()}</span></p>
                       <p style="margin:6px 0;">
-                        <a href="{row['url']}" target="_blank" rel="noopener" style="font-size:16px;text-decoration:none;">
+                        <a href="{row['url']}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" style="font-size:16px;text-decoration:none;">
                           {row['título']}
                         </a>
                       </p>
