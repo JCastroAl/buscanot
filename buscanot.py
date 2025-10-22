@@ -515,7 +515,7 @@ if "search_country" not in st.session_state:
 # =========================
 # Sidebar: gestión BD
 # =========================
-st.sidebar.header("🗂️ Base de medios por país")
+st.sidebar.header("🗂️ Listado de medios por país")
 
 all_countries = sorted(st.session_state.db.keys())
 default_country = "España" if "España" in all_countries else (all_countries[0] if all_countries else "España")
