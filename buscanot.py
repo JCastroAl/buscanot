@@ -41,7 +41,6 @@ TRACKING_PARAMS = {"utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_
 
 # =========================
 # Base por defecto con patrones de hemeroteca donde se conocen
-# (puedes ir ampliando según cada medio)
 DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
     "España": [
         {
@@ -77,35 +76,30 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
             "url": "https://www.elconfidencial.com/",
             "selector": "article h2 a, h3 a, .news__title a",
             "base_url": "https://www.elconfidencial.com",
-            # sin hemeroteca pública por fecha conocida
         },
         {
             "name": "20minutos",
             "url": "https://www.20minutos.es/",
             "selector": "article h2 a, h3 a, .headline a",
             "base_url": "https://www.20minutos.es",
-            # sin patrón estable público
         },
         {
             "name": "RTVE",
             "url": "https://www.rtve.es/noticias/",
             "selector": "article h2 a, h3 a, .headline a",
             "base_url": "https://www.rtve.es/noticias/",
-            # sin patrón estable público
         },
         {
             "name": "La Razón",
             "url": "https://www.larazon.es/",
             "selector": "article h2 a, h3 a, .headline a",
             "base_url": "https://www.larazon.es/",
-            # sin patrón estable público
         },
         {
             "name": "El Periodico de Catalunya",
             "url": "https://www.elperiodico.com/es/",
             "selector": "article h2 a, h3 a, .headline a",
             "base_url": "https://www.elperiodico.com/",
-            # sin patrón estable público
         },
     ],
     "Marruecos": [
@@ -332,9 +326,10 @@ def iter_archive_urls(source: Dict[str, Any], start_date: date, end_date: date, 
         count += 1
     return urls
 
-def date_range_includes_today(start_date: date, end_date: date) -> bool:
+def date_range_in_past(start_date: date, end_date: date) -> bool:
+    """True si el rango está completamente en el pasado (no incluye hoy)."""
     today = date.today()
-    return start_date <= today <= end_date
+    return end_date < today
 
 # =========================
 # Networking asíncrono + RSS/HTML
@@ -453,6 +448,7 @@ async def scrape_source_async(
     date_field: str,
     start_date: date,
     end_date: date,
+    range_is_past: bool,   # <-- NUEVO
 ) -> List[Dict[str, Any]]:
     """
     Scrapea una fuente. Si el filtro temporal está activo y se filtra por
@@ -470,13 +466,14 @@ async def scrape_source_async(
     rows: List[Dict[str, Any]] = []
 
     # ¿Tenemos rango por publicación y patrón de archivo?
-    use_archives = False
     archive_urls: List[str] = []
+    use_archives = False
     if use_date_filter and date_field.startswith("Fecha de publicación"):
         archive_urls = iter_archive_urls(source, start_date, end_date)
-        use_archives = len(archive_urls) > 0
+        # Forzamos hemeroteca SOLO si el rango es totalmente pasado y hay patrón
+        use_archives = bool(archive_urls) and range_is_past
 
-    # 1) RSS/Atom (si NO estamos usando páginas de archivo por día)
+    # 1) RSS/Atom (solo si NO estamos usando hemeroteca forzada)
     if not use_archives:
         rss = await try_fetch_rss(session, url, headers, timeout)
         if rss:
@@ -501,7 +498,7 @@ async def scrape_source_async(
     # 2) HTML (portada o páginas de archivo diarias)
     targets = archive_urls if use_archives else [url]
     if not selector:
-        return rows  # si veníamos de RSS puede haber filas; si no, vacío
+        return rows
 
     for page in targets:
         html = await fetch_html(
@@ -562,12 +559,13 @@ async def run_parallel(
     date_field: str,
     start_date: date,
     end_date: date,
+    range_is_past: bool,   # <-- NUEVO
     progress_cb=None,
 ) -> List[Dict[str, Any]]:
     """
     Ejecuta scraping en paralelo con límite de concurrencia.
     """
-    connector = aiohttp.TCPConnector(limit_per_host=concurrency, ssl=None)  # verificación TLS por defecto
+    connector = aiohttp.TCPConnector(limit_per_host=concurrency, ssl=None)
     sem = asyncio.Semaphore(concurrency)
     results: List[Dict[str, Any]] = []
 
@@ -577,7 +575,7 @@ async def run_parallel(
             async with sem:
                 out = await scrape_source_async(
                     session, src, include_re, exclude_re, timeout, ttl_sec, neg_ttl_sec, headers, respect_robots,
-                    use_date_filter, date_field, start_date, end_date
+                    use_date_filter, date_field, start_date, end_date, range_is_past
                 )
                 if progress_cb:
                     progress_cb(src.get("name", "¿medio?"), len(out))
@@ -622,7 +620,7 @@ if "search_country" not in st.session_state:
     all_keys = sorted(st.session_state.db.keys())
     st.session_state.search_country = "España" if "España" in all_keys else (all_keys[0] if all_keys else "")
 
-# Defaults seguros para filtro temporal (en session_state)
+# Defaults seguros para filtro temporal
 if "use_date_filter" not in st.session_state:
     st.session_state.use_date_filter = False
 if "date_range" not in st.session_state:
@@ -646,7 +644,11 @@ with st.sidebar.expander(f"📜 Medios en {country} ({len(st.session_state.db.ge
         st.caption("Sin medios registrados.")
     else:
         for s in st.session_state.db[country]:
-            st.markdown(f"- **{s['name']}** — [{s['url']}]({s['url']})  \n  `selector`: `{s['selector']}`  · `base_url`: `{s.get('base_url') or ''}`" + (f"  · `archive_pattern`: `{s.get('archive_pattern')}`" if s.get("archive_pattern") else ""))
+            st.markdown(
+                f"- **{s['name']}** — [{s['url']}]({s['url']})  \n  "
+                f"`selector`: `{s['selector']}`  · `base_url`: `{s.get('base_url') or ''}`"
+                + (f"  · `archive_pattern`: `{s.get('archive_pattern')}`" if s.get('archive_pattern') else "")
+            )
 
 st.sidebar.markdown("---")
 
@@ -659,7 +661,7 @@ st.header("🔍 Búsqueda")
 search_country = st.selectbox(
     "País a buscar",
     sorted(st.session_state.db.keys()),
-    key="search_country",  # mantiene valor entre reruns
+    key="search_country",
 )
 
 # (2) Texto y opciones básicas
@@ -675,7 +677,7 @@ with colC:
     whole_words = st.checkbox("Coincidencia por palabra", value=False)
     ignore_case = st.checkbox("Ignorar mayúsc./minúsc.", value=True)
 
-# (3) Filtro temporal (widgets con key)
+# (3) Filtro temporal
 with st.expander("🗓️ Filtro temporal"):
     st.checkbox(
         "Filtrar por periodo de fechas",
@@ -702,7 +704,7 @@ with st.expander("🗓️ Filtro temporal"):
             help="Sólo aplica cuando filtras por 'Fecha de publicación'.",
         )
 
-# UX: aviso sobre hemerotecas faltantes si aplica
+# Leer/normalizar valores del filtro (y decidir si es pasado)
 use_date_filter = bool(st.session_state.get("use_date_filter", False))
 dr = st.session_state.get("date_range", None)
 if isinstance(dr, (list, tuple)) and len(dr) == 2:
@@ -713,6 +715,7 @@ else:
     start_date, end_date = d, d
 date_field = st.session_state.get("date_field", "Fecha de publicación (recomendado)")
 include_na_pub = bool(st.session_state.get("include_na_pub", True))
+range_is_past = date_range_in_past(start_date, end_date)
 
 # (4) Opciones avanzadas
 with st.expander("⚙️ Opciones avanzadas"):
@@ -774,6 +777,7 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
                     date_field=date_field,
                     start_date=start_date,
                     end_date=end_date,
+                    range_is_past=range_is_past,   # <-- NUEVO
                     progress_cb=add_log_line,
                 )
             )
