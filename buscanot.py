@@ -798,7 +798,6 @@ with st.expander("🌐 Traducción de términos"):
     st.checkbox(
         "Traducir términos por idioma de cada medio (Google Translate)",
         key="translate_per_source",
-        value=st.session_state.translate_per_source,
         help="Mantiene el término original y añade su traducción por medio. Si usas comillas, se hace coincidencia exacta también en la traducción."
     )
     st.caption("La traducción se aplica al pulsar **Buscar** para evitar llamadas innecesarias. Se cachea por texto+idioma.")
