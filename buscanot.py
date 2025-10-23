@@ -40,117 +40,59 @@ ALLOWED_SCHEMES = {"http", "https"}
 TRACKING_PARAMS = {"utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid", "mc_cid", "mc_eid"}
 
 # =========================
-# Base por defecto con patrones de hemeroteca donde se conocen
+# Base por defecto con patrones de hemeroteca + idioma por medio
 DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
     "España": [
-        {
-            "name": "El País",
-            "url": "https://elpais.com/",
-            "selector": "article h2 a, h3 a, .headline a",
-            "archive_selector": None,  # si la hemeroteca usa otro HTML, pon aquí su selector
-            "base_url": "https://elpais.com",
-            "archive_pattern": "https://elpais.com/archivo/{yyyy}-{mm}-{dd}/",
-        },
-        {
-            "name": "El Mundo",
-            "url": "https://www.elmundo.es/",
-            "selector": "article h2 a, h3 a, .ue-c-cover-content__link",
-            "archive_selector": None,
-            "base_url": "https://www.elmundo.es",
-            "archive_pattern": "https://www.elmundo.es/elmundo/hemeroteca/{yyyy}/{mm}/{dd}/",
-        },
-        {
-            "name": "ABC",
-            "url": "https://www.abc.es/",
-            "selector": "article h2 a, h3 a, .titular a",
-            "archive_selector": None,
-            "base_url": "https://www.abc.es",
-            "archive_pattern": "https://www.abc.es/archivo/{yyyy}-{mm}-{dd}/",
-        },
-        {
-            "name": "La Vanguardia",
-            "url": "https://www.lavanguardia.com/",
-            "selector": "article h2 a, h3 a, .headline a",
-            "archive_selector": None,
-            "base_url": "https://www.lavanguardia.com",
-            "archive_pattern": "https://www.lavanguardia.com/hemeroteca/{yyyy}/{mm}/{dd}",
-        },
-        {
-            "name": "El Confidencial",
-            "url": "https://www.elconfidencial.com/",
-            "selector": "article h2 a, h3 a, .news__title a",
-            "archive_selector": None,
-            "base_url": "https://www.elconfidencial.com",
-        },
-        {
-            "name": "20minutos",
-            "url": "https://www.20minutos.es/",
-            "selector": "article h2 a, h3 a, .headline a",
-            "archive_selector": None,
-            "base_url": "https://www.20minutos.es",
-        },
-        {
-            "name": "RTVE",
-            "url": "https://www.rtve.es/noticias/",
-            "selector": "article h2 a, h3 a, .headline a",
-            "archive_selector": None,
-            "base_url": "https://www.rtve.es/noticias/",
-        },
-        {
-            "name": "La Razón",
-            "url": "https://www.larazon.es/",
-            "selector": "article h2 a, h3 a, .headline a",
-            "archive_selector": None,
-            "base_url": "https://www.larazon.es/",
-        },
-        {
-            "name": "El Periodico de Catalunya",
-            "url": "https://www.elperiodico.com/es/",
-            "selector": "article h2 a, h3 a, .headline a",
-            "archive_selector": None,
-            "base_url": "https://www.elperiodico.com/",
-        },
+        {"name": "El País", "url": "https://elpais.com/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://elpais.com", "archive_pattern": "https://elpais.com/archivo/{yyyy}-{mm}-{dd}/", "lang": "es"},
+        {"name": "El Mundo", "url": "https://www.elmundo.es/", "selector": "article h2 a, h3 a, .ue-c-cover-content__link", "archive_selector": None, "base_url": "https://www.elmundo.es", "archive_pattern": "https://www.elmundo.es/elmundo/hemeroteca/{yyyy}/{mm}/{dd}/", "lang": "es"},
+        {"name": "ABC", "url": "https://www.abc.es/", "selector": "article h2 a, h3 a, .titular a", "archive_selector": None, "base_url": "https://www.abc.es", "archive_pattern": "https://www.abc.es/archivo/{yyyy}-{mm}-{dd}/", "lang": "es"},
+        {"name": "La Vanguardia", "url": "https://www.lavanguardia.com/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.lavanguardia.com", "archive_pattern": "https://www.lavanguardia.com/hemeroteca/{yyyy}/{mm}/{dd}", "lang": "es"},
+        {"name": "El Confidencial", "url": "https://www.elconfidencial.com/", "selector": "article h2 a, h3 a, .news__title a", "archive_selector": None, "base_url": "https://www.elconfidencial.com", "lang": "es"},
+        {"name": "20minutos", "url": "https://www.20minutos.es/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.20minutos.es", "lang": "es"},
+        {"name": "RTVE", "url": "https://www.rtve.es/noticias/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.rtve.es/noticias/", "lang": "es"},
+        {"name": "La Razón", "url": "https://www.larazon.es/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.larazon.es/", "lang": "es"},
+        {"name": "El Periodico de Catalunya", "url": "https://www.elperiodico.com/es/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.elperiodico.com/", "lang": "es"},
     ],
     "Marruecos": [
-        {"name": "Hespress (AR)", "url": "https://www.hespress.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.hespress.com"},
-        {"name": "Hespress (EN)", "url": "https://en.hespress.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://en.hespress.com"},
-        {"name": "Le Matin", "url": "https://lematin.ma/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://lematin.ma"},
-        {"name": "L'Economiste", "url": "https://leconomiste.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://leconomiste.com"},
-        {"name": "TelQuel", "url": "https://telquel.ma/", "selector": "article h2 a, h3 a, .post-title a", "base_url": "https://telquel.ma"},
-        {"name": "Aujourd'hui Le Maroc", "url": "https://aujourdhui.ma/", "selector": "article h2 a, h3 a, .entry-title a", "base_url": "https://aujourdhui.ma"},
-        {"name": "Médias24", "url": "https://medias24.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://medias24.com"},
-        {"name": "Morocco World News", "url": "https://www.moroccoworldnews.com/", "selector": "article h2 a, h3 a, .card-title a", "base_url": "https://www.moroccoworldnews.com"},
+        {"name": "Hespress (AR)", "url": "https://www.hespress.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.hespress.com", "lang": "ar"},
+        {"name": "Hespress (EN)", "url": "https://en.hespress.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://en.hespress.com", "lang": "en"},
+        {"name": "Le Matin", "url": "https://lematin.ma/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://lematin.ma", "lang": "fr"},
+        {"name": "L'Economiste", "url": "https://leconomiste.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://leconomiste.com", "lang": "fr"},
+        {"name": "TelQuel", "url": "https://telquel.ma/", "selector": "article h2 a, h3 a, .post-title a", "base_url": "https://telquel.ma", "lang": "fr"},
+        {"name": "Aujourd'hui Le Maroc", "url": "https://aujourdhui.ma/", "selector": "article h2 a, h3 a, .entry-title a", "base_url": "https://aujourdhui.ma", "lang": "fr"},
+        {"name": "Médias24", "url": "https://medias24.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://medias24.com", "lang": "fr"},
+        {"name": "Morocco World News", "url": "https://www.moroccoworldnews.com/", "selector": "article h2 a, h3 a, .card-title a", "base_url": "https://www.moroccoworldnews.com", "lang": "en"},
     ],
     "Francia": [
-        {"name": "Le Monde", "url": "https://www.lemonde.fr/", "selector": "article h2 a, h3 a, .article__title a", "base_url": "https://www.lemonde.fr"},
-        {"name": "Le Figaro", "url": "https://www.lefigaro.fr/", "selector": "article h2 a, h3 a, .fig-headline a", "base_url": "https://www.lefigaro.fr"},
-        {"name": "Libération", "url": "https://www.liberation.fr/", "selector": "article h2 a, h3 a, .article-card a", "base_url": "https://www.liberation.fr"},
-        {"name": "Le Parisien", "url": "https://www.leparisien.fr/", "selector": "article h2 a, h3 a, .article-title a", "base_url": "https://www.leparisien.fr"},
-        {"name": "Les Échos", "url": "https://www.lesechos.fr/", "selector": "article h2 a, h3 a, .teaser__title a", "base_url": "https://www.lesechos.fr"},
-        {"name": "La Croix", "url": "https://www.la-croix.com/", "selector": "article h2 a, h3 a, .article__title a", "base_url": "https://www.la-croix.com"},
-        {"name": "Ouest-France", "url": "https://www.ouest-france.fr/", "selector": "article h2 a, h3 a, .teaser-title a", "base_url": "https://www.ouest-france.fr"},
+        {"name": "Le Monde", "url": "https://www.lemonde.fr/", "selector": "article h2 a, h3 a, .article__title a", "base_url": "https://www.lemonde.fr", "lang": "fr"},
+        {"name": "Le Figaro", "url": "https://www.lefigaro.fr/", "selector": "article h2 a, h3 a, .fig-headline a", "base_url": "https://www.lefigaro.fr", "lang": "fr"},
+        {"name": "Libération", "url": "https://www.liberation.fr/", "selector": "article h2 a, h3 a, .article-card a", "base_url": "https://www.liberation.fr", "lang": "fr"},
+        {"name": "Le Parisien", "url": "https://www.leparisien.fr/", "selector": "article h2 a, h3 a, .article-title a", "base_url": "https://www.leparisien.fr", "lang": "fr"},
+        {"name": "Les Échos", "url": "https://www.lesechos.fr/", "selector": "article h2 a, h3 a, .teaser__title a", "base_url": "https://www.lesechos.fr", "lang": "fr"},
+        {"name": "La Croix", "url": "https://www.la-croix.com/", "selector": "article h2 a, h3 a, .article__title a", "base_url": "https://www.la-croix.com", "lang": "fr"},
+        {"name": "Ouest-France", "url": "https://www.ouest-france.fr/", "selector": "article h2 a, h3 a, .teaser-title a", "base_url": "https://www.ouest-france.fr", "lang": "fr"},
     ],
     "Portugal": [
-        {"name": "Público", "url": "https://www.publico.pt/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.publico.pt"},
-        {"name": "Diário de Notícias", "url": "https://www.dn.pt/", "selector": "article h2 a, h3 a, .card-title a", "base_url": "https://www.dn.pt"},
-        {"name": "Expresso", "url": "https://expresso.pt/", "selector": "article h2 a, h3 a, .article-title a", "base_url": "https://expresso.pt"},
-        {"name": "Observador", "url": "https://observador.pt/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://observador.pt"},
-        {"name": "Correio da Manhã", "url": "https://www.cmjornal.pt/", "selector": "article h2 a, h3 a, .tit a", "base_url": "https://www.cmjornal.pt"},
-        {"name": "Jornal de Notícias", "url": "https://www.jn.pt/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.jn.pt"},
+        {"name": "Público", "url": "https://www.publico.pt/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.publico.pt", "lang": "pt"},
+        {"name": "Diário de Notícias", "url": "https://www.dn.pt/", "selector": "article h2 a, h3 a, .card-title a", "base_url": "https://www.dn.pt", "lang": "pt"},
+        {"name": "Expresso", "url": "https://expresso.pt/", "selector": "article h2 a, h3 a, .article-title a", "base_url": "https://expresso.pt", "lang": "pt"},
+        {"name": "Observador", "url": "https://observador.pt/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://observador.pt", "lang": "pt"},
+        {"name": "Correio da Manhã", "url": "https://www.cmjornal.pt/", "selector": "article h2 a, h3 a, .tit a", "base_url": "https://www.cmjornal.pt", "lang": "pt"},
+        {"name": "Jornal de Notícias", "url": "https://www.jn.pt/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.jn.pt", "lang": "pt"},
     ],
     "Andorra": [
-        {"name": "Diari d'Andorra", "url": "https://www.diariandorra.ad/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.diariandorra.ad"},
-        {"name": "Bondia Andorra", "url": "https://www.bondia.ad/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.bondia.ad"},
-        {"name": "Altaveu", "url": "https://www.altaveu.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.altaveu.com"},
+        {"name": "Diari d'Andorra", "url": "https://www.diariandorra.ad/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.diariandorra.ad", "lang": "ca"},
+        {"name": "Bondia Andorra", "url": "https://www.bondia.ad/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.bondia.ad", "lang": "ca"},
+        {"name": "Altaveu", "url": "https://www.altaveu.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.altaveu.com", "lang": "ca"},
     ],
     "Alemania": [
-        {"name": "Frankfurter Allgemeine (FAZ)", "url": "https://www.faz.net/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.faz.net"},
-        {"name": "Süddeutsche Zeitung", "url": "https://www.sueddeutsche.de/", "selector": "article h2 a, h3 a, .sz-article__title a", "base_url": "https://www.sueddeutsche.de"},
-        {"name": "WELT", "url": "https://www.welt.de/", "selector": "article h2 a, h3 a, .c-teaser__headline a", "base_url": "https://www.welt.de"},
-        {"name": "Der Spiegel", "url": "https://www.spiegel.de/", "selector": "article h2 a, h3 a, .leading-article a", "base_url": "https://www.spiegel.de"},
-        {"name": "Die Zeit", "url": "https://www.zeit.de/index", "selector": "article h2 a, h3 a, .zon-teaser-standard__title a", "base_url": "https://www.zeit.de"},
-        {"name": "BILD", "url": "https://www.bild.de/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.bild.de"},
-        {"name": "tagesschau (ARD)", "url": "https://www.tagesschau.de/", "selector": "article h2 a, h3 a, .teaser__title a", "base_url": "https://www.tagesschau.de"},
+        {"name": "Frankfurter Allgemeine (FAZ)", "url": "https://www.faz.net/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.faz.net", "lang": "de"},
+        {"name": "Süddeutsche Zeitung", "url": "https://www.sueddeutsche.de/", "selector": "article h2 a, h3 a, .sz-article__title a", "base_url": "https://www.sueddeutsche.de", "lang": "de"},
+        {"name": "WELT", "url": "https://www.welt.de/", "selector": "article h2 a, h3 a, .c-teaser__headline a", "base_url": "https://www.welt.de", "lang": "de"},
+        {"name": "Der Spiegel", "url": "https://www.spiegel.de/", "selector": "article h2 a, h3 a, .leading-article a", "base_url": "https://www.spiegel.de", "lang": "de"},
+        {"name": "Die Zeit", "url": "https://www.zeit.de/index", "selector": "article h2 a, h3 a, .zon-teaser-standard__title a", "base_url": "https://www.zeit.de", "lang": "de"},
+        {"name": "BILD", "url": "https://www.bild.de/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.bild.de", "lang": "de"},
+        {"name": "tagesschau (ARD)", "url": "https://www.tagesschau.de/", "selector": "article h2 a, h3 a, .teaser__title a", "base_url": "https://www.tagesschau.de", "lang": "de"},
     ],
 }
 
@@ -162,8 +104,6 @@ def save_db(db: Dict[str, List[Dict[str, Any]]]) -> None:
         json.dump(db, f, ensure_ascii=False, indent=2)
 
 def load_db() -> Dict[str, List[Dict[str, Any]]]:
-    # <-- ojo: si copias desde otra versión, evita el ']]]' que rompe. Aquí es ']]' CORRECTO:
-    # def load_db() -> Dict[str, List[Dict[str, Any]]]:
     if DB_PATH.exists():
         try:
             with open(DB_PATH, "r", encoding="utf-8") as f:
@@ -176,16 +116,19 @@ def load_db() -> Dict[str, List[Dict[str, Any]]]:
     return json.loads(json.dumps(DEFAULT_DB))
 
 # =========================
-# Caché en memoria con TTL (positiva y negativa)
+# Cachés
 # =========================
 @st.cache_resource
 def get_html_cache() -> Dict[str, Tuple[float, str]]:
-    """Dict: url -> (timestamp_epoch, html_text)"""
     return {}
 
 @st.cache_resource
 def get_neg_cache() -> Dict[str, float]:
-    """Dict: url -> timestamp_epoch (para caché negativa corta)"""
+    return {}
+
+@st.cache_resource
+def get_translation_cache() -> Dict[Tuple[str, str], str]:
+    """(texto, lang_destino) -> traducción"""
     return {}
 
 def cache_get(url: str, ttl_sec: int) -> Optional[str]:
@@ -234,31 +177,11 @@ def build_headers(country: str) -> Dict[str, str]:
         h["Accept-Language"] = "*;q=0.1"
     return h
 
-def build_regex(terms: str, whole_words: bool = False, ignore_case: bool = True) -> Optional[re.Pattern]:
-    cleaned = [t.strip() for t in re.split(r"[,\n;]+", terms) if t.strip()]
-    if not cleaned:
-        return None
-    escaped = [re.escape(t) for t in cleaned]
-    body = "|".join(escaped)
-    if whole_words:
-        body = rf"(?<!\w)(?:{body})(?!\w)"
-    else:
-        body = rf"(?:{body})"
-    flags = re.IGNORECASE if ignore_case else 0
-    try:
-        return re.compile(body, flags)
-    except re.error as e:
-        st.error(f"Error en la expresión regular: {e}")
-        return None
-
-def is_relevant(title: str, include_re: Optional[re.Pattern], exclude_re: Optional[re.Pattern]) -> bool:
-    if include_re is None and exclude_re is None:
-        return True
-    if include_re is not None and not include_re.search(title or ""):
-        return False
-    if exclude_re is not None and exclude_re.search(title or ""):
-        return False
-    return True
+def norm_text(s: str) -> str:
+    s = (s or "").strip().lower()
+    s = unicodedata.normalize("NFKC", s)
+    s = re.sub(r"\s+", " ", s)
+    return s
 
 def absolutize(link: str, base_url: Optional[str]) -> str:
     if not link:
@@ -271,12 +194,6 @@ def absolutize(link: str, base_url: Optional[str]) -> str:
     cleaned = parsed._replace(query=urlencode(qs))
     return urlunparse(cleaned)
 
-def norm_text(s: str) -> str:
-    s = (s or "").strip().lower()
-    s = unicodedata.normalize("NFKC", s)
-    s = re.sub(r"\s+", " ", s)
-    return s
-
 def extract_time_candidate(el) -> Optional[str]:
     t = el.find("time")
     if t and (t.get("datetime") or t.get_text(strip=True)):
@@ -286,6 +203,104 @@ def extract_time_candidate(el) -> Optional[str]:
         if v:
             return v
     return None
+
+def is_latin_lang(lang: str) -> bool:
+    return (lang or "").lower() in {"es","fr","pt","de","en","it","ca","gl"}
+
+def split_terms(terms: str) -> List[Tuple[str, bool]]:
+    """
+    Devuelve lista de (texto, exacto?). Exacto=True si venía entre comillas.
+    Separa por comas/; /\n pero respeta fragmentos entre "..." o '...'.
+    """
+    if not terms:
+        return []
+    # Captura frases entre comillas
+    quoted = re.findall(r'"([^"]+)"|\'([^\']+)\'', terms)
+    exacts = {q[0] or q[1] for q in quoted if (q[0] or q[1])}
+    # Elimina las frases exactas del resto
+    tmp = terms
+    for q in exacts:
+        tmp = tmp.replace(f'"{q}"', " ").replace(f"'{q}'", " ")
+    # Resto por separadores
+    others = [t.strip() for t in re.split(r"[,\n;]+", tmp) if t.strip()]
+    out: List[Tuple[str,bool]] = []
+    out += [(t, True) for t in exacts]
+    out += [(t, False) for t in others]
+    return out
+
+def build_regex_from_terms(terms: List[Tuple[str,bool]], whole_words: bool, ignore_case: bool) -> Optional[re.Pattern]:
+    """
+    Construye un patrón con OR. Para exactos => subcadena literal.
+    Para no exactos => palabra completa si whole_words, si no subcadena.
+    """
+    if not terms:
+        return None
+    parts: List[str] = []
+    for text, is_exact in terms:
+        esc = re.escape(text)
+        if is_exact:
+            parts.append(f"(?:{esc})")
+        else:
+            if whole_words:
+                parts.append(rf"(?<!\w)(?:{esc})(?!\w)")
+            else:
+                parts.append(f"(?:{esc})")
+    body = "|".join(parts)
+    flags = re.IGNORECASE if ignore_case else 0
+    try:
+        return re.compile(body, flags)
+    except re.error as e:
+        st.error(f"Error en la expresión regular: {e}")
+        return None
+
+# =========================
+# Traducción (Google Translate endpoint público)
+# =========================
+async def translate_text(session: aiohttp.ClientSession, text: str, target_lang: str) -> str:
+    """
+    Usa endpoint público de Google Translate (sin API key).
+    Retorna texto traducido (top-1).
+    """
+    if not text or not target_lang:
+        return text
+    target_lang = target_lang.lower()
+    cache = get_translation_cache()
+    key = (text, target_lang)
+    if key in cache:
+        return cache[key]
+    try:
+        params = {
+            "client": "gtx",
+            "sl": "auto",
+            "tl": target_lang,
+            "dt": "t",
+            "q": text,
+        }
+        url = "https://translate.googleapis.com/translate_a/single"
+        async with session.get(url, params=params, timeout=DEFAULT_TIMEOUT, ssl=True, headers={"User-Agent": BASE_HEADERS["User-Agent"]}) as r:
+            r.raise_for_status()
+            data = await r.json(content_type=None)
+        # data[0] es lista de segmentos; cada segmento [trad, orig, ...]
+        translated_segments = [seg[0] for seg in data[0] if seg and seg[0]]
+        out = "".join(translated_segments).strip()
+        if out:
+            cache[key] = out
+            return out
+    except Exception:
+        # fallo silencioso: devolvemos original
+        return text
+    return text
+
+async def translate_terms_list(session: aiohttp.ClientSession, terms: List[Tuple[str,bool]], target_lang: str) -> List[Tuple[str,bool]]:
+    """
+    Traduce cada término, manteniendo la marca (exacto?).
+    """
+    out: List[Tuple[str,bool]] = []
+    for t, ex in terms:
+        tt = await translate_text(session, t, target_lang)
+        if tt and tt.lower() != t.lower():
+            out.append((tt, ex))
+    return out
 
 # =========================
 # Respetar robots (caché parsers)
@@ -311,16 +326,12 @@ async def is_allowed(session: aiohttp.ClientSession, headers: Dict[str, str], si
             cache[robots_url] = parser
         return parser.can_fetch(headers.get("User-Agent", BASE_HEADERS["User-Agent"]), path or "/")
     except Exception:
-        return True  # en caso de duda, permitir
+        return True
 
 # =========================
 # Ayuda hemeroteca
 # =========================
 def iter_archive_urls(source: Dict[str, Any], start_date: date, end_date: date, day_cap: int = 31) -> List[str]:
-    """
-    Genera URLs diarias usando source['archive_pattern'] si existe.
-    Limita a 'day_cap' días para evitar abusos accidentales.
-    """
     patt = source.get("archive_pattern")
     if not patt:
         return []
@@ -328,21 +339,11 @@ def iter_archive_urls(source: Dict[str, Any], start_date: date, end_date: date, 
     d = start_date
     count = 0
     while d <= end_date and count < day_cap:
-        urls.append(
-            patt.format(
-                yyyy=d.strftime("%Y"), mm=d.strftime("%m"), dd=d.strftime("%d")
-            )
-        )
+        urls.append(patt.format(yyyy=d.strftime("%Y"), mm=d.strftime("%m"), dd=d.strftime("%d")))
         d += timedelta(days=1)
         count += 1
     return urls
 
-def date_range_in_past(start_date: date, end_date: date) -> bool:
-    """True si el rango está completamente en el pasado (no incluye hoy)."""
-    today = date.today()
-    return end_date < today
-
-# --- NUEVO: utilidades para dividir el rango por días
 def daterange(start: date, end: date):
     d = start
     while d <= end:
@@ -370,7 +371,6 @@ async def fetch_html(
     neg_ttl_sec: int,
     respect_robots: bool,
 ) -> str:
-    """Devuelve HTML usando caché por URL con TTL y caché negativa corta."""
     if neg_cache_hit(url, neg_ttl_sec):
         return ""
 
@@ -406,7 +406,6 @@ async def try_fetch_rss(
     headers: Dict[str, str],
     timeout: ClientTimeout,
 ) -> Optional[List[Tuple[str, str, Optional[datetime]]]]:
-    """Intenta localizar y descargar un feed RSS/Atom desde la portada."""
     try:
         async with session.get(page_url, headers=headers, timeout=timeout, ssl=True) as resp:
             resp.raise_for_status()
@@ -461,11 +460,17 @@ async def try_fetch_rss(
         pass
     return None
 
+# =========================
+# Scraper (con traducción por medio)
+# =========================
 async def scrape_source_async(
     session: aiohttp.ClientSession,
     source: Dict[str, Any],
-    include_re: Optional[re.Pattern],
-    exclude_re: Optional[re.Pattern],
+    include_terms_raw: str,
+    exclude_terms_raw: str,
+    user_whole_words: bool,
+    ignore_case: bool,
+    translate_per_source: bool,
     timeout: ClientTimeout,
     ttl_sec: int,
     neg_ttl_sec: int,
@@ -475,48 +480,74 @@ async def scrape_source_async(
     date_field: str,
     start_date: date,
     end_date: date,
-    range_is_past: bool,   # mantenemos la firma, pero ya no decide el flujo
 ) -> List[Dict[str, Any]]:
-    """
-    Scrapea una fuente. Para cada día del rango:
-      - Días < hoy: usa hemeroteca si hay `archive_pattern` (y `archive_selector` si existe).
-      - Hoy (si está en el rango): usa RSS + portada.
-    """
+
     name = source.get("name")
     url = source.get("url")
     selector_home = source.get("selector")
     selector_archive = source.get("archive_selector") or selector_home
     base_url = source.get("base_url") or None
+    lang = (source.get("lang") or "").lower() or "es"
 
     if not (name and url):
         return []
 
+    # 1) Construcción de regex por medio
+    inc_terms = split_terms(include_terms_raw)
+    exc_terms = split_terms(exclude_terms_raw)
+
+    if translate_per_source and lang:
+        # Traduce manteniendo exactitud si el término venía entre comillas
+        inc_trans = await translate_terms_list(session, inc_terms, lang)
+        exc_trans = await translate_terms_list(session, exc_terms, lang)
+        # Unión (evita duplicados case-insensitive)
+        def merge(a: List[Tuple[str,bool]], b: List[Tuple[str,bool]]) -> List[Tuple[str,bool]]:
+            seen = set()
+            out: List[Tuple[str,bool]] = []
+            for t in a + b:
+                key = (t[0].lower(), t[1])
+                if key not in seen:
+                    seen.add(key)
+                    out.append(t)
+            return out
+        inc_terms = merge(inc_terms, inc_trans)
+        exc_terms = merge(exc_terms, exc_trans)
+
+    # Coincidencia por palabra sólo si idioma latino
+    effective_whole_words = user_whole_words and is_latin_lang(lang)
+
+    include_re = build_regex_from_terms(inc_terms, whole_words=effective_whole_words, ignore_case=ignore_case) if inc_terms else None
+    exclude_re = build_regex_from_terms(exc_terms, whole_words=effective_whole_words, ignore_case=ignore_case) if exc_terms else None
+
+    def is_relevant(title: str) -> bool:
+        if include_re is None and exclude_re is None:
+            return True
+        if include_re is not None and not include_re.search(title or ""):
+            return False
+        if exclude_re is not None and exclude_re.search(title or ""):
+            return False
+        return True
+
     rows: List[Dict[str, Any]] = []
 
-    # Particiona rango en pasados y hoy
+    # Particiona rango en pasados y hoy cuando se filtra por publicación
     today = date.today()
     past_days: List[date] = []
-    include_today = False
-
+    include_today = True
     if use_date_filter and date_field.startswith("Fecha de publicación"):
+        include_today = False
         for d in daterange(start_date, end_date):
             if d < today:
                 past_days.append(d)
             elif d == today:
                 include_today = True
-    else:
-        # sin filtro por publicación, tratamos como "hoy"
-        include_today = True
 
-    # 1) ARCHIVOS para días pasados
+    # 2) ARCHIVOS (pasado)
     if past_days:
         archive_urls = iter_archive_urls_for_dates(source, past_days)
         if archive_urls and selector_archive:
             for page in archive_urls:
-                html = await fetch_html(
-                    session, page, headers=headers, timeout=timeout,
-                    ttl_sec=ttl_sec, neg_ttl_sec=neg_ttl_sec, respect_robots=respect_robots
-                )
+                html = await fetch_html(session, page, headers=headers, timeout=timeout, ttl_sec=ttl_sec, neg_ttl_sec=neg_ttl_sec, respect_robots=respect_robots)
                 if not html:
                     continue
                 try:
@@ -530,7 +561,7 @@ async def scrape_source_async(
                         full_url = absolutize(href, base_url or page)
                         if not full_url:
                             continue
-                        if is_relevant(title, include_re, exclude_re):
+                        if is_relevant(title):
                             raw_dt = extract_time_candidate(el)
                             pub_iso = None
                             if raw_dt:
@@ -540,47 +571,36 @@ async def scrape_source_async(
                                         pub_iso = dt.isoformat()
                                 except Exception:
                                     pub_iso = None
-                            rows.append(
-                                {
-                                    "medio": name,
-                                    "título": title,
-                                    "url": full_url,
-                                    "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
-                                    "publicado": pub_iso,
-                                    "fuente": "html-archivo",
-                                }
-                            )
+                            rows.append({
+                                "medio": name,
+                                "título": title,
+                                "url": full_url,
+                                "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                                "publicado": pub_iso,
+                                "fuente": "html-archivo",
+                            })
                 except Exception as e:
                     st.session_state.setdefault("logs", []).append(f"❌ {name} ({page}): {e}")
-                    continue
-        # si no hay patrón, no intentamos portada para días pasados (para evitar ruido)
 
-    # 2) HOY: RSS + portada
+    # 3) HOY (RSS + portada)
     if include_today:
-        # RSS
         rss = await try_fetch_rss(session, url, headers, timeout)
         if rss:
             for title, href, dt in rss:
                 full_url = absolutize(href, base_url or url)
                 if not full_url or not title:
                     continue
-                if is_relevant(title, include_re, exclude_re):
-                    rows.append(
-                        {
-                            "medio": name,
-                            "título": title,
-                            "url": full_url,
-                            "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
-                            "publicado": (dt.isoformat() if dt else None),
-                            "fuente": "rss",
-                        }
-                    )
-        # Portada del día
+                if is_relevant(title):
+                    rows.append({
+                        "medio": name,
+                        "título": title,
+                        "url": full_url,
+                        "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                        "publicado": (dt.isoformat() if dt else None),
+                        "fuente": "rss",
+                    })
         if selector_home:
-            html = await fetch_html(
-                session, url, headers=headers, timeout=timeout,
-                ttl_sec=ttl_sec, neg_ttl_sec=neg_ttl_sec, respect_robots=respect_robots
-            )
+            html = await fetch_html(session, url, headers=headers, timeout=timeout, ttl_sec=ttl_sec, neg_ttl_sec=neg_ttl_sec, respect_robots=respect_robots)
             if html:
                 try:
                     soup = BeautifulSoup(html, "html.parser")
@@ -593,7 +613,7 @@ async def scrape_source_async(
                         full_url = absolutize(href, base_url or url)
                         if not full_url:
                             continue
-                        if is_relevant(title, include_re, exclude_re):
+                        if is_relevant(title):
                             raw_dt = extract_time_candidate(el)
                             pub_iso = None
                             if raw_dt:
@@ -603,25 +623,29 @@ async def scrape_source_async(
                                         pub_iso = dt.isoformat()
                                 except Exception:
                                     pub_iso = None
-                            rows.append(
-                                {
-                                    "medio": name,
-                                    "título": title,
-                                    "url": full_url,
-                                    "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
-                                    "publicado": pub_iso,
-                                    "fuente": "html",
-                                }
-                            )
+                            rows.append({
+                                "medio": name,
+                                "título": title,
+                                "url": full_url,
+                                "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                                "publicado": pub_iso,
+                                "fuente": "html",
+                            })
                 except Exception as e:
                     st.session_state.setdefault("logs", []).append(f"❌ {name} (portada): {e}")
 
     return rows
 
+# =========================
+# Paralelización
+# =========================
 async def run_parallel(
     sources: List[Dict[str, Any]],
-    include_re: Optional[re.Pattern],
-    exclude_re: Optional[re.Pattern],
+    include_terms_raw: str,
+    exclude_terms_raw: str,
+    user_whole_words: bool,
+    ignore_case: bool,
+    translate_per_source: bool,
     timeout: ClientTimeout,
     concurrency: int,
     ttl_sec: int,
@@ -632,12 +656,8 @@ async def run_parallel(
     date_field: str,
     start_date: date,
     end_date: date,
-    range_is_past: bool,   # mantenido para compatibilidad
     progress_cb=None,
 ) -> List[Dict[str, Any]]:
-    """
-    Ejecuta scraping en paralelo con límite de concurrencia.
-    """
     connector = aiohttp.TCPConnector(limit_per_host=concurrency, ssl=None)
     sem = asyncio.Semaphore(concurrency)
     results: List[Dict[str, Any]] = []
@@ -647,8 +667,11 @@ async def run_parallel(
         async def wrapped(src):
             async with sem:
                 out = await scrape_source_async(
-                    session, src, include_re, exclude_re, timeout, ttl_sec, neg_ttl_sec, headers, respect_robots,
-                    use_date_filter, date_field, start_date, end_date, range_is_past
+                    session, src,
+                    include_terms_raw, exclude_terms_raw,
+                    user_whole_words, ignore_case, translate_per_source,
+                    timeout, ttl_sec, neg_ttl_sec, headers, respect_robots,
+                    use_date_filter, date_field, start_date, end_date
                 )
                 if progress_cb:
                     progress_cb(src.get("name", "¿medio?"), len(out))
@@ -662,7 +685,6 @@ async def run_parallel(
     return results
 
 def dedupe_news(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    # 1) de-dup exactos por (titulo normalizado, url)
     seen = set()
     uniq: List[Dict[str, Any]] = []
     for r in rows:
@@ -672,11 +694,10 @@ def dedupe_news(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         seen.add(key)
         uniq.append(r)
 
-    # 2) Agrupa por título y elige el mejor (RSS y/o con fecha gana)
     by_title: Dict[str, Tuple[int, Dict[str, Any]]] = {}
     for r in uniq:
         t = norm_text(r.get("título", ""))
-        score = (1 if r.get("fuente", "").startswith("rss") else 0) + (1 if r.get("publicado") else 0)
+        score = (1 if (r.get("fuente","") or "").startswith("rss") else 0) + (1 if r.get("publicado") else 0)
         cur = by_title.get(t)
         if (not cur) or (score > cur[0]):
             by_title[t] = (score, r)
@@ -693,7 +714,7 @@ if "search_country" not in st.session_state:
     all_keys = sorted(st.session_state.db.keys())
     st.session_state.search_country = "España" if "España" in all_keys else (all_keys[0] if all_keys else "")
 
-# Defaults seguros para filtro temporal
+# Defaults filtro temporal y traducción
 if "use_date_filter" not in st.session_state:
     st.session_state.use_date_filter = False
 if "date_range" not in st.session_state:
@@ -702,6 +723,8 @@ if "date_field" not in st.session_state:
     st.session_state.date_field = "Fecha de publicación (recomendado)"
 if "include_na_pub" not in st.session_state:
     st.session_state.include_na_pub = True
+if "translate_per_source" not in st.session_state:
+    st.session_state.translate_per_source = True
 
 # =========================
 # Sidebar: gestión BD
@@ -722,6 +745,7 @@ with st.sidebar.expander(f"📜 Medios en {country} ({len(st.session_state.db.ge
                 f"`selector`: `{s['selector']}`  · `base_url`: `{s.get('base_url') or ''}`"
                 + (f"  · `archive_pattern`: `{s.get('archive_pattern')}`" if s.get('archive_pattern') else "")
                 + (f"  · `archive_selector`: `{s.get('archive_selector')}`" if s.get('archive_selector') else "")
+                + (f"  · `lang`: `{s.get('lang','')}`")
             )
 
 st.sidebar.markdown("---")
@@ -742,29 +766,20 @@ search_country = st.selectbox(
 colA, colB, colC = st.columns([2, 2, 1])
 with colA:
     include_terms = st.text_input(
-        "Términos a incluir (coma, punto y coma o saltos de línea):",
-        placeholder="Ej.: altercado, flotilla, Gobierno",
+        "Términos a incluir (coma, punto y coma o saltos de línea). Usa comillas para frases exactas:",
+        placeholder='Ej.: "cambio climático", altercado, flotilla, Gobierno',
     )
 with colB:
-    exclude_terms = st.text_input("Términos a excluir (opcional):", placeholder="ej.: subvención, guerra, militar")
+    exclude_terms = st.text_input("Términos a excluir (opcional):", placeholder='Ej.: "guerra", subvención, militar')
 with colC:
-    whole_words = st.checkbox("Coincidencia por palabra", value=False)
+    whole_words = st.checkbox("Coincidencia por palabra", value=False, help="Se aplicará solo en idiomas latinos automáticamente.")
     ignore_case = st.checkbox("Ignorar mayúsc./minúsc.", value=True)
 
 # (3) Filtro temporal
 with st.expander("🗓️ Filtro temporal"):
-    st.checkbox(
-        "Filtrar por periodo de fechas",
-        key="use_date_filter",
-        value=st.session_state.use_date_filter,
-    )
+    st.checkbox("Filtrar por periodo de fechas", key="use_date_filter", value=st.session_state.use_date_filter)
     if st.session_state.use_date_filter:
-        st.date_input(
-            "Periodo (inicio y fin)",
-            key="date_range",
-            value=st.session_state.date_range,
-            format="YYYY-MM-DD",
-        )
+        st.date_input("Periodo (inicio y fin)", key="date_range", value=st.session_state.date_range, format="YYYY-MM-DD")
         st.selectbox(
             "Campo de fecha a usar",
             ["Fecha de publicación (recomendado)", "Fecha de extracción"],
@@ -778,7 +793,17 @@ with st.expander("🗓️ Filtro temporal"):
             help="Sólo aplica cuando filtras por 'Fecha de publicación'.",
         )
 
-# Leer/normalizar valores del filtro (y decidir si es pasado)
+# (3b) Traducción por medio
+with st.expander("🌐 Traducción de términos"):
+    st.checkbox(
+        "Traducir términos por idioma de cada medio (Google Translate)",
+        key="translate_per_source",
+        value=st.session_state.translate_per_source,
+        help="Mantiene el término original y añade su traducción por medio. Si usas comillas, se hace coincidencia exacta también en la traducción."
+    )
+    st.caption("La traducción se aplica al pulsar **Buscar** para evitar llamadas innecesarias. Se cachea por texto+idioma.")
+
+# Leer/normalizar valores del filtro
 use_date_filter = bool(st.session_state.get("use_date_filter", False))
 dr = st.session_state.get("date_range", None)
 if isinstance(dr, (list, tuple)) and len(dr) == 2:
@@ -789,7 +814,7 @@ else:
     start_date, end_date = d, d
 date_field = st.session_state.get("date_field", "Fecha de publicación (recomendado)")
 include_na_pub = bool(st.session_state.get("include_na_pub", True))
-range_is_past = date_range_in_past(start_date, end_date)  # ya no controla la hemeroteca, pero se mantiene
+translate_per_source = bool(st.session_state.get("translate_per_source", True))
 
 # (4) Opciones avanzadas
 with st.expander("⚙️ Opciones avanzadas"):
@@ -817,9 +842,6 @@ def add_log_line(name: str, n: int):
 if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
     st.session_state.logs = []
 
-    include_re = build_regex(include_terms, whole_words=whole_words, ignore_case=ignore_case)
-    exclude_re = build_regex(exclude_terms, whole_words=whole_words, ignore_case=ignore_case)
-
     # Fuentes a consultar
     sources = [s for s in st.session_state.db.get(search_country, []) if s["name"] in selected_names]
 
@@ -828,7 +850,6 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
     else:
         start = time.time()
         headers = build_headers(search_country)
-        # timeout personalizado
         timeout = ClientTimeout(
             total=timeout_sec,
             connect=min(10, timeout_sec),
@@ -839,8 +860,11 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
             rows_all: List[Dict[str, Any]] = asyncio.run(
                 run_parallel(
                     sources=sources,
-                    include_re=include_re,
-                    exclude_re=exclude_re,
+                    include_terms_raw=include_terms,
+                    exclude_terms_raw=exclude_terms,
+                    user_whole_words=whole_words,
+                    ignore_case=ignore_case,
+                    translate_per_source=translate_per_source,
                     timeout=timeout,
                     concurrency=concurrency,
                     ttl_sec=ttl_sec,
@@ -851,7 +875,6 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
                     date_field=date_field,
                     start_date=start_date,
                     end_date=end_date,
-                    range_is_past=range_is_past,   # no decide, pero se mantiene la firma
                     progress_cb=add_log_line,
                 )
             )
@@ -864,16 +887,13 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
         else:
             df = pd.DataFrame(rows_all)
 
-            # --- Filtrado temporal (aplicado tras construir df) ---
+            # Filtrado temporal post (seguridad)
             if use_date_filter:
-                # Normaliza a datetimes
-                df["_pub_dt"] = pd.to_datetime(df.get("publicado"), utc=True, errors="coerce")   # tz-aware UTC
-                df["_ext_dt"] = pd.to_datetime(df.get("fecha_extraccion"), format="%Y-%m-%d", errors="coerce")  # naive
+                df["_pub_dt"] = pd.to_datetime(df.get("publicado"), utc=True, errors="coerce")
+                df["_ext_dt"] = pd.to_datetime(df.get("fecha_extraccion"), format="%Y-%m-%d", errors="coerce")
 
-                # Límites inclusivos por día completo
                 start_ts_utc = pd.Timestamp(start_date).tz_localize("UTC")
                 end_ts_utc = (pd.Timestamp(end_date).tz_localize("UTC") + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1))
-
                 start_ts_naive = pd.Timestamp(start_date)
                 end_ts_naive = (pd.Timestamp(end_date) + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1))
 
@@ -887,7 +907,6 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
                     mask_ext = df["_ext_dt"].between(start_ts_naive, end_ts_naive, inclusive="both")
                     df = df[mask_ext].copy()
 
-            # Ordenar por fecha publicada y luego por extracción
             if "publicado" in df.columns:
                 df["_dt"] = pd.to_datetime(df["publicado"], utc=True, errors="coerce")
             else:
@@ -904,7 +923,7 @@ if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
                 st.markdown(
                     f"""
                     <div style="border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:10px;">
-                      <p style="margin:0;color:#6b7280;font-size:13px;">📰 <strong>{row['medio']}</strong> · <span style="background:#eef2ff;padding:2px 6px;border-radius:6px;">{fuente.upper()}</span></p>
+                      <p style="margin:0;color:#6b7280;font-size:13px;">📰 <strong>{row['medio']}</strong> · <span style="background:#eef2ff;padding:2px 6px;border-radius:6px;">{(fuente or '').upper()}</span></p>
                       <p style="margin:6px 0;">
                         <a href="{row['url']}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" style="font-size:16px;text-decoration:none;">
                           {row['título']}
