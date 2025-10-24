@@ -766,7 +766,7 @@ search_country = st.selectbox(
 colA, colB, colC = st.columns([2, 2, 1])
 with colA:
     include_terms = st.text_input(
-        "Términos a incluir (coma, punto y coma o saltos de línea). Usa comillas para frases exactas:",
+        "Términos a incluir:",
         placeholder='Ej.: "cambio climático", altercado, flotilla, Gobierno',
     )
 with colB:
