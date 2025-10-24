@@ -729,7 +729,7 @@ if "translate_per_source" not in st.session_state:
 # =========================
 # Sidebar: gestión BD
 # =========================
-st.sidebar.header("🗂️ Listado de medios por país")
+st.sidebar.header("🗂️ LISTADO DE MEDIOS")
 
 all_countries = sorted(st.session_state.db.keys())
 default_country = "España" if "España" in all_countries else (all_countries[0] if all_countries else "España")
