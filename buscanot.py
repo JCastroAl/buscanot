@@ -836,7 +836,7 @@ with st.expander("⚙️ Opciones avanzadas"):
 def add_log_line(name: str, n: int):
     st.session_state.logs.append(f"✅ {name}: {n} resultados")
 
-if st.button("🚀 Buscar en medios del país seleccionado", type="primary"):
+if st.button("🔍 Buscar en país seleccionado", type="primary"):
     st.session_state.logs = []
 
     # Fuentes a consultar
