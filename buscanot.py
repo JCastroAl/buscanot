@@ -44,7 +44,7 @@ TRACKING_PARAMS = {"utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_
 DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
     "España": [
         {"name": "El País", "url": "https://elpais.com/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://elpais.com", "archive_pattern": "https://elpais.com/archivo/{yyyy}-{mm}-{dd}/", "lang": "es"},
-        {"name": "El Mundo", "url": "https://www.elmundo.es/", "selector": "article h2 a, h3 a, .ue-c-cover-content__link", "archive_selector": None, "base_url": "https://www.elmundo.es", "archive_pattern": "https://www.elmundo.es/elmundo/hemeroteca/{yyyy}/{mm}/{dd}/", "lang": "es"},
+        {"name": "El Mundo", "url": "https://www.elmundo.es/", "selector": "article h2 a, h3 a, .ue-c-cover-content__link", "archive_selector": None, "base_url": "https://www.elmundo.es", "archive_pattern": "https://www.elmundo.es/elmundo/hemeroteca/{yyyy}/{mm}/{dd}/noticias.html", "lang": "es"},
         {"name": "ABC", "url": "https://www.abc.es/", "selector": "article h2 a, h3 a, .titular a", "archive_selector": None, "base_url": "https://www.abc.es", "archive_pattern": "https://www.abc.es/archivo/{yyyy}-{mm}-{dd}/", "lang": "es"},
         {"name": "La Vanguardia", "url": "https://www.lavanguardia.com/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.lavanguardia.com", "archive_pattern": "https://www.lavanguardia.com/hemeroteca/{yyyy}/{mm}/{dd}", "lang": "es"},
         {"name": "El Confidencial", "url": "https://www.elconfidencial.com/", "selector": "article h2 a, h3 a, .news__title a", "archive_selector": None, "base_url": "https://www.elconfidencial.com", "lang": "es"},
