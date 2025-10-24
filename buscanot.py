@@ -733,7 +733,7 @@ st.sidebar.header("🗂️ Listado de medios por país")
 
 all_countries = sorted(st.session_state.db.keys())
 default_country = "España" if "España" in all_countries else (all_countries[0] if all_countries else "España")
-country = st.sidebar.selectbox(all_countries, index=all_countries.index(default_country))
+country = st.sidebar.selectbox("Escoge una nación", all_countries, index=all_countries.index(default_country))
 
 with st.sidebar.expander(f"📜 Medios en {country} ({len(st.session_state.db.get(country, []))})", expanded=True):
     if not st.session_state.db.get(country):
