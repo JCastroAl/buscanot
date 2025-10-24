@@ -753,9 +753,7 @@ st.sidebar.markdown("---")
 # =========================
 # Controles de búsqueda
 # =========================
-st.header("🔍 Búsqueda")
-
-# (1) País a buscar — FUERA del expandible
+# (1) País a buscar
 search_country = st.selectbox(
     "País a buscar",
     sorted(st.session_state.db.keys()),
