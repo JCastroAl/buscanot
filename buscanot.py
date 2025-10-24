@@ -765,10 +765,10 @@ colA, colB, colC = st.columns([2, 2, 1])
 with colA:
     include_terms = st.text_input(
         "Términos a incluir:",
-        placeholder='Ej.: "cambio climático", altercado, flotilla, Gobierno',
+        placeholder='Ej.: "Cambio climático", flotilla, Gobierno',
     )
 with colB:
-    exclude_terms = st.text_input("Términos a excluir (opcional):", placeholder='Ej.: "guerra", subvención, militar')
+    exclude_terms = st.text_input("Términos a excluir (opcional):", placeholder='Ej.: "Guerra civil", subvención, militar')
 with colC:
     whole_words = st.checkbox("Coincidencia por palabra", value=False, help="Se aplicará solo en idiomas latinos automáticamente.")
     ignore_case = st.checkbox("Ignorar mayúsc./minúsc.", value=True)
@@ -796,7 +796,7 @@ with st.expander("🌐 Traducción de términos"):
     st.checkbox(
         "Traducir términos por idioma de cada medio (Google Translate)",
         key="translate_per_source",
-        help="Mantiene el término original y añade su traducción por medio. Si usas comillas, se hace coincidencia exacta también en la traducción."
+        help="Mantiene el término original y añade su traducción. Si usas comillas, también se hace coincidencia exacta."
     )
     st.caption("La traducción se aplica al pulsar **Buscar** para evitar llamadas innecesarias. Se cachea por texto+idioma.")
 
