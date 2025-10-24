@@ -21,7 +21,7 @@ import urllib.robotparser as rp
 # Configuración general
 # =========================
 st.set_page_config(page_title="BuscaNot", layout="wide")
-st.title("🌍 Buscador de noticias por país")
+st.title("🌍 BUSCADOR DE NOTICIAS")
 
 DB_PATH = Path("media_db.json")
 
