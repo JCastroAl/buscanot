@@ -626,14 +626,12 @@ async def scrape_source_async(
     # Particiona rango en pasados y hoy cuando se filtra por publicación
     today = date.today()
     past_days: List[date] = []
-    include_today = True
+    include_today = False
     if use_date_filter and date_field.startswith("Fecha de publicación"):
-        include_today = False
         for d in daterange(start_date, end_date):
-            if d < today:
-                past_days.append(d)
-            elif d == today:
-                include_today = True
+            past_days.append(d)  # incluye también hoy
+    else:
+        include_today = True
 
     # 2) ARCHIVOS (pasado)
     if past_days:
