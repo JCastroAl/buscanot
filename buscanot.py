@@ -828,13 +828,16 @@ all_countries = sorted(st.session_state.db.keys())
 default_country = "España" if "España" in all_countries else (all_countries[0] if all_countries else "España")
 country = st.sidebar.selectbox("Escoge una nación", all_countries, index=all_countries.index(default_country))
 
-with st.sidebar.expander(f"📜 Medios en {country} ({len(st.session_state.db.get(country, []))})", expanded=True):
+with st.sidebar.expander(
+    f"📜 Medios en {country} ({len(st.session_state.db.get(country, []))})",
+    expanded=True
+):
     medios = st.session_state.db.get(country, [])
     if not medios:
         st.caption("Sin medios registrados.")
     else:
         for s in medios:
-            st.markdown(f"- **{s['name']}** — [{s['url']}]({s['url']})")
+            st.link_button(s["name"], s["url"], use_container_width=True)
             
 st.sidebar.markdown("---")
 
