@@ -836,8 +836,10 @@ with st.sidebar.expander(
     if not medios:
         st.caption("Sin medios registrados.")
     else:
-        for s in medios:
-            st.link_button(s["name"], s["url"], use_container_width=True)
+        cols = st.columns(2)
+        for i, s in enumerate(medios):
+            with cols[i % 2]:
+                st.link_button(s["name"], s["url"], use_container_width=True)
             
 st.sidebar.markdown("---")
 
