@@ -54,10 +54,10 @@ COMMON_ARCHIVE_PATTERNS = [
 # Base por defecto con patrones de hemeroteca + idioma por medio
 DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
     "España": [
-        {"name": "El País", "url": "https://elpais.com/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://elpais.com", "archive_pattern": "https://elpais.com/archivo/{yyyy}-{mm}-{dd}/", "lang": "es"},
-        {"name": "El Mundo", "url": "https://www.elmundo.es/", "selector": "article h2 a, h3 a, .ue-c-cover-content__link", "archive_selector": None, "base_url": "https://www.elmundo.es", "archive_pattern": "https://www.elmundo.es/elmundo/hemeroteca/{yyyy}/{mm}/{dd}", "lang": "es"},
-        {"name": "ABC", "url": "https://www.abc.es/", "selector": "article h2 a, h3 a, .titular a", "archive_selector": None, "base_url": "https://www.abc.es", "archive_pattern": "https://www.abc.es/archivo/{yyyy}-{mm}-{dd}/", "lang": "es"},
-        {"name": "La Vanguardia", "url": "https://www.lavanguardia.com/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.lavanguardia.com", "archive_pattern": "https://www.lavanguardia.com/hemeroteca/{yyyy}/{mm}/{dd}", "lang": "es"},
+        {"name": "El País", "url": "https://elpais.com/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": "h2 a, h3 a, .c_t a", "base_url": "https://elpais.com", "archive_pattern": "https://elpais.com/hemeroteca/{yyyy}-{mm}-{dd}/", "lang": "es"},
+        {"name": "El Mundo", "url": "https://www.elmundo.es/", "selector": "article h2 a, h3 a, .ue-c-cover-content__link", "archive_selector": None, "base_url": "https://www.elmundo.es", "archive_pattern": None, "lang": "es"},
+        {"name": "ABC", "url": "https://www.abc.es/", "selector": "article h2 a, h3 a, .titular a", "archive_selector": None, "base_url": "https://www.abc.es", "archive_pattern": None, "lang": "es"},
+        {"name": "La Vanguardia", "url": "https://www.lavanguardia.com/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.lavanguardia.com", "archive_pattern": None, "lang": "es"},
         {"name": "El Confidencial", "url": "https://www.elconfidencial.com/", "selector": "article h2 a, h3 a, .news__title a", "archive_selector": None, "base_url": "https://www.elconfidencial.com", "lang": "es"},
         {"name": "20minutos", "url": "https://www.20minutos.es/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.20minutos.es", "lang": "es"},
         {"name": "RTVE", "url": "https://www.rtve.es/noticias/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.rtve.es/noticias/", "lang": "es"},
