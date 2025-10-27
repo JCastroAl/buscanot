@@ -40,6 +40,17 @@ ALLOWED_SCHEMES = {"http", "https"}
 TRACKING_PARAMS = {"utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid", "mc_cid", "mc_eid"}
 
 # =========================
+# Patrones comunes para descubrir hemeroteca (si no se define)
+# =========================
+COMMON_ARCHIVE_PATTERNS = [
+    "/hemeroteca/{yyyy}-{mm}-{dd}/",      
+    "/hemeroteca/{yyyy}/{mm}/{dd}/",     
+    "/archivo/{yyyy}-{mm}-{dd}/",
+    "/archivo/{yyyy}/{mm}/{dd}/",
+    "/{yyyy}/{mm}/{dd}/",                
+]
+
+# =========================
 # Base por defecto con patrones de hemeroteca + idioma por medio
 DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
     "España": [
