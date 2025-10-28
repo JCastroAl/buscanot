@@ -173,6 +173,7 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
         {"name": "Ta Nea", "url": "https://www.tanea.gr/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.tanea.gr", "lang": "el"},
         {"name": "To Vima", "url": "https://www.tovima.gr/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.tovima.gr", "lang": "el"},
         {"name": "Proto Thema", "url": "https://www.protothema.gr/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.protothema.gr", "lang": "el"},
+        {"name": "Athens-Macedonian News Agency", "url": "https://www.amna.gr/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.amna.gr", "lang": "el"},
     ],
     "Hungría": [
         {"name": "Népszava", "url": "https://nepszava.hu/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://nepszava.hu", "lang": "hu"},
