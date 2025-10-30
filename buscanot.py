@@ -744,10 +744,37 @@ st.sidebar.markdown("---")
 # =========================
 # Controles de búsqueda
 # =========================
-# (1) País a buscar
+all_countries = sorted(st.session_state.db.keys())
+
+# Construimos continentes a partir de lo que haya en el JSON
+continent_to_countries = {}
+for c in all_countries:
+    cont = get_continent_for_country(c)
+    continent_to_countries.setdefault(cont, []).append(c)
+
+all_continents = sorted(continent_to_countries.keys())
+
+# 1) selector de continente
+selected_continent = st.selectbox(
+    "Continente / región",
+    all_continents,
+    key="search_continent",
+)
+
+# 2) selector de país (filtrado por continente)
+countries_in_cont = sorted(continent_to_countries.get(selected_continent, []))
+
+# si el país guardado en sesión no está en este continente, ponemos el primero
+default_country_for_cont = (
+    st.session_state.get("search_country")
+    if st.session_state.get("search_country") in countries_in_cont
+    else (countries_in_cont[0] if countries_in_cont else "")
+)
+
 search_country = st.selectbox(
     "País a buscar",
-    sorted(st.session_state.db.keys()),
+    countries_in_cont,
+    index=countries_in_cont.index(default_country_for_cont) if default_country_for_cont in countries_in_cont else 0,
     key="search_country",
 )
 
