@@ -224,6 +224,14 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
         {"name": "Al-Quds (English)", "url": "https://www.alquds.com/en", "selector": "article h2 a, h3 a, .post-title a, .title a, .card-title a", "archive_selector": "a", "base_url": "https://www.alquds.com", "archive_pattern": "https://www.alquds.com/en?language=en&page={dd}", "lang": "en"},
         {"name": "Al-Ayyam", "url": "https://www.al-ayyam.ps/ar", "selector": "article h2 a, h3 a, .title a, .card-title a, .post-title a", "archive_selector": None, "base_url": "https://www.al-ayyam.ps", "archive_pattern": "https://www.al-ayyam.ps/public/pdfs/{yyyy}/{mm}/{dd}/all/all.pdf", "lang": "ar"},
     ],
+"Japón": [
+        {"name": "The Asahi Shimbun", "url": "https://www.asahi.com/ajw/", "selector": "article h2 a, h3 a, .SecTitle a, .List__title a", "archive_selector": "article h2 a, h3 a, .SecTitle a, .List__title a", "base_url": "https://www.asahi.com", "archive_pattern": "https://www.asahi.com/ajw/?page={page}", "lang": "en"},
+        {"name": "The Mainichi", "url": "https://mainichi.jp/english/", "selector": "article h2 a, h3 a, .articleList__ttl a, .news-item a", "archive_selector": "article h2 a, h3 a, .articleList__ttl a, .news-item a", "base_url": "https://mainichi.jp", "archive_pattern": "https://mainichi.jp/english/?pn={page}", "lang": "en"},
+        {"name": "Yomiuri Shimbun", "url": "https://www.yomiuri.co.jp/", "selector": "article h2 a, h3 a, .headline a, .p-topics-title a", "archive_selector": "article h2 a, h3 a, .headline a, .p-topics-title a", "base_url": "https://www.yomiuri.co.jp", "archive_pattern": "https://www.yomiuri.co.jp/{yyyy}/{mm}/{dd}/", "lang": "ja"},
+        {"name": "Sankei News", "url": "https://www.sankei.com/", "selector": "article h2 a, h3 a, .article-title a, .headline a", "archive_selector": "article h2 a, h3 a, .article-title a, .headline a", "base_url": "https://www.sankei.com", "archive_pattern": "https://www.sankei.com/article/{yyyy}{mm}{dd}0000000/", "lang": "ja"},
+        {"name": "NHK World-Japan", "url": "https://www3.nhk.or.jp/nhkworld/en/news/", "selector": "article h2 a, h3 a, .news_item a, .c-newslist__item a", "archive_selector": "article h2 a, h3 a, .news_item a, .c-newslist__item a", "base_url": "https://www3.nhk.or.jp", "archive_pattern": "https://www3.nhk.or.jp/nhkworld/en/news/?page={page}", "lang": "en"},
+        {"name": "Japan Today", "url": "https://japantoday.com/", "selector": "article h2 a, h3 a, .story-title a, .article-title a", "archive_selector": "article h2 a, h3 a, .story-title a, .article-title a", "base_url": "https://japantoday.com", "archive_pattern": "https://japantoday.com/category/national?page={page}", "lang": "en"},
+    ],
 }
 # =========================
 # Persistencia BD
