@@ -11,11 +11,11 @@
   ],
   "Marruecos": [
     {"name": "Hespress", "url": "https://www.hespress.com/", "selector": "article h2 a, h3 a, .title a", "archive_selector": null, "base_url": "https://www.hespress.com", "archive_pattern": null, "lang": "ar"},
-    {"name": "Le Matin", "url": "https://lematin.ma/", "selector": "article h2 a, h3 a, .title a", "archive_selector": null, "base_url": "https://lematin.ma", "archive_pattern": null, "lang": "fr"},
+    {"name": "Le Matin", "url": "https://lematin.ma/", "selector": "article h2 a, h3 a, .title a", "archive_selector": null, "base_url": "https://lematin.ma", "archive_pattern": null, "rss_fallback": "https://lematin.ma/rssFeed/0", "lang": "fr"}
     {"name": "TelQuel", "url": "https://telquel.ma/", "selector": "article h2 a, h3 a, .post-title a", "archive_selector": null, "base_url": "https://telquel.ma", "archive_pattern": null, "lang": "fr"},
-    {"name": "MAP News", "url": "https://www.mapnews.ma/en/actualites", "selector": "article h2 a, h3 a, .title a, .card-title a", "archive_selector": "article h2 a, h3 a, .title a, .card-title a", "base_url": "https://www.mapnews.ma", "archive_pattern": "https://www.mapnews.ma/en/actualites?page={page}", "lang": "en"},
+    {"name": "MAP News", "url": "https://www.mapnews.ma/en/actualites", "selector": "article h2 a, h3 a, .title a, .card-title a", "archive_selector": "article h2 a, h3 a, .title a, .card-title a", "base_url": "https://www.mapnews.ma", "archive_pattern": "https://www.mapnews.ma/en/actualites?page={page}", "rss_fallback": null, "lang": "en"}
     {"name": "SNRT News", "url": "https://snrtnews.com/thematique/%D9%85%D8%AC%D8%AA%D9%85%D8%B9", "selector": "article h2 a, h3 a, .card-title a, .news-title a", "archive_selector": "article h2 a, h3 a, .card-title a, .news-title a", "base_url": "https://snrtnews.com", "archive_pattern": "https://snrtnews.com/thematique/%D9%85%D8%AC%D8%AA%D9%85%D8%B9?page={page}", "lang": "ar"},
-    {"name": "Akhbarona", "url": "https://www.akhbarona.com/", "selector": "article h2 a, h3 a, .title a, .post-title a", "archive_selector": "article h2 a, h3 a, .title a, .post-title a", "base_url": "https://www.akhbarona.com", "archive_pattern": "https://www.akhbarona.com/last/index.{page}.html", "lang": "ar"},
+    {"name": "Akhbarona", "url": "https://www.akhbarona.com/", "selector": "article h2 a, h3 a, .title a, .post-title a", "archive_selector": "article h2 a, h3 a, .title a, .post-title a", "base_url": "https://www.akhbarona.com", "archive_pattern": "https://www.akhbarona.com/last/index.{page}.html", "rss_fallback": "https://www.akhbarona.com/rss.xml", "lang": "ar"}
     {"name": "Morocco World News", "url": "https://www.moroccoworldnews.com/", "selector": "article h2 a, h3 a, .card-title a", "archive_selector": null, "base_url": "https://www.moroccoworldnews.com", "archive_pattern": null, "lang": "en"}
   ],
   "Francia": [
@@ -33,12 +33,12 @@
     {"name": "Observador", "url": "https://observador.pt/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": null, "base_url": "https://observador.pt", "archive_pattern": null, "lang": "pt"},
     {"name": "Correio da Manhã", "url": "https://www.cmjornal.pt/", "selector": "article h2 a, h3 a, .tit a", "archive_selector": null, "base_url": "https://www.cmjornal.pt", "archive_pattern": null, "lang": "pt"},
     {"name": "Jornal de Notícias", "url": "https://www.jn.pt/", "selector": "article h2 a, h3 a, .title a", "archive_selector": null, "base_url": "https://www.jn.pt", "archive_pattern": null, "lang": "pt"},
-    {"name": "RTP Notícias", "url": "https://www.rtp.pt/noticias/", "selector": "article h2 a, h3 a, .news a, .noticia_titulo a, .card-title a", "archive_selector": "article h2 a, h3 a, .news a, .noticia_titulo a, .card-title a", "base_url": "https://www.rtp.pt", "archive_pattern": "https://www.rtp.pt/noticias/?pg={page}", "lang": "pt"},
+    {"name": "RTP Notícias", "url": "https://www.rtp.pt/noticias/", "selector": "article h2 a, h3 a, .news a, .noticia_titulo a, .card-title a", "archive_selector": "article h2 a, h3 a, .news a, .noticia_titulo a, .card-title a", "base_url": "https://www.rtp.pt", "archive_pattern": "https://www.rtp.pt/noticias/?pg={page}", "rss_fallback": "https://www.rtp.pt/noticias/rss", "lang": "pt"}
     {"name": "Lusa", "url": "https://www.lusa.pt/", "selector": "article h2 a, h3 a, .news-title a, .card-title a", "archive_selector": null, "base_url": "https://www.lusa.pt", "archive_pattern": null, "lang": "pt"}
   ],
   "Andorra": [
     {"name": "Diari d'Andorra", "url": "https://www.diariandorra.ad/", "selector": "article h2 a, h3 a, .title a", "archive_selector": null, "base_url": "https://www.diariandorra.ad", "archive_pattern": null, "lang": "ca"},
-    {"name": "El Periòdic d’Andorra", "url": "https://elperiodic.ad/noticies/", "selector": "article h2 a, h3 a, .article-title a, .titular a", "archive_selector": "article h2 a, h3 a, .article-title a, .titular a", "base_url": "https://elperiodic.ad", "archive_pattern": "https://elperiodic.ad/noticies/?page={page}", "lang": "ca"}
+    {"name": "El Periòdic d’Andorra", "url": "https://elperiodic.ad/noticies/", "selector": "article h2 a, h3 a, .article-title a, .titular a", "archive_selector": "article h2 a, h3 a, .article-title a, .titular a", "base_url": "https://elperiodic.ad", "archive_pattern": "https://elperiodic.ad/noticies/?page={page}", "rss_fallback": "https://elperiodic.ad/feed", "lang": "ca"}
   ],
   "Alemania": [
     {"name": "Frankfurter Allgemeine", "url": "https://www.faz.net/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": null, "base_url": "https://www.faz.net", "archive_pattern": null, "lang": "de"},
