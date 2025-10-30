@@ -391,6 +391,12 @@ def iter_archive_urls_for_pages(source: Dict[str, Any], max_pages: int = 10) -> 
 # =========================
 # Networking asíncrono + RSS/HTML
 # =========================
+from functools import lru_cache
+
+@lru_cache(maxsize=128)
+def fetch_html_cached(url: str, headers_str: str = "", respect_robots: bool = True) -> str:
+    return None
+
 async def fetch_html(
     session: aiohttp.ClientSession,
     url: str,
@@ -400,13 +406,23 @@ async def fetch_html(
     neg_ttl_sec: int,
     respect_robots: bool,
 ) -> str:
+    # ✅ 1) Cache LRU en memoria (ultrarrápida)
+    cache_key = (url, str(sorted(headers.items())), respect_robots)
+    cached_html = fetch_html_cached(*cache_key)
+    if cached_html:
+        return cached_html
+
+    # ✅ 2) Cache tradicional (disco o memoria persistente)
     if neg_cache_hit(url, neg_ttl_sec):
         return ""
 
     cached = cache_get(url, ttl_sec)
     if cached is not None:
+        # También almacenamos en LRU para futuras peticiones rápidas
+        fetch_html_cached(url, str(sorted(headers.items())), respect_robots)
         return cached
 
+    # ✅ 3) Respeto a robots.txt (si aplica)
     if respect_robots:
         parsed = urlparse(url)
         if not await is_allowed(session, headers, f"{parsed.scheme}://{parsed.netloc}", parsed.path):
@@ -414,19 +430,26 @@ async def fetch_html(
             neg_cache_put(url)
             return ""
 
+    # ✅ 4) Intentos de descarga con reintentos exponenciales
     tries = 3
     for attempt in range(1, tries + 1):
         try:
             async with session.get(url, headers=headers, timeout=timeout, ssl=True) as resp:
                 resp.raise_for_status()
                 html = await resp.text()
+
+                # Guarda en ambas cachés
                 cache_put(url, html)
+                fetch_html_cached(url, str(sorted(headers.items())), respect_robots)
+
                 return html
+
         except Exception as e:
             if attempt == tries:
                 neg_cache_put(url)
                 st.session_state.setdefault("logs", []).append(f"❌ GET {url}: {e}")
                 return ""
+
             await asyncio.sleep((2 ** (attempt - 1)) + random.random())
 
 async def try_fetch_rss(
