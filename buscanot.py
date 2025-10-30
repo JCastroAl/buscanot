@@ -969,7 +969,7 @@ if st.button("🔍 Buscar en país seleccionado", type="primary"):
             sock_connect=min(10, timeout_sec),
             sock_read=min(max(5, timeout_sec - 5), timeout_sec),
         )
-        with st.spinner("Buscando en paralelo…"):
+        with st.spinner("Buscando en medios…"):
             rows_all: List[Dict[str, Any]] = asyncio.run(
                 run_parallel(
                     sources=sources,
