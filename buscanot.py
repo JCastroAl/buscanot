@@ -701,9 +701,6 @@ if not st.session_state.db:
     st.stop()
 if "logs" not in st.session_state:
     st.session_state.logs = []
-if "search_country" not in st.session_state:
-    all_keys = sorted(st.session_state.db.keys())
-    st.session_state.search_country = "España" if "España" in all_keys else (all_keys[0] if all_keys else "")
 # Mapeo país -> continente
 COUNTRY_TO_CONTINENT = {
     # Europa
