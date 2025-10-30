@@ -680,11 +680,9 @@ async def scrape_source_async(
 # =========================
 async def run_parallel(
     sources: List[Dict[str, Any]],
+    terms_by_lang: Dict[str, Dict[str, Any]],
     include_terms_raw: str,
     exclude_terms_raw: str,
-    user_whole_words: bool,
-    ignore_case: bool,
-    translate_per_source: bool,
     timeout: ClientTimeout,
     concurrency: int,
     ttl_sec: int,
@@ -706,11 +704,20 @@ async def run_parallel(
         async def wrapped(src):
             async with sem:
                 out = await scrape_source_async(
-                    session, src,
-                    include_terms_raw, exclude_terms_raw,
-                    user_whole_words, ignore_case, translate_per_source,
-                    timeout, ttl_sec, neg_ttl_sec, headers, respect_robots,
-                    use_date_filter, date_field, start_date, end_date
+                    session=session,
+                    source=src,
+                    terms_by_lang=terms_by_lang,
+                    include_terms_raw=include_terms_raw,
+                    exclude_terms_raw=exclude_terms_raw,
+                    timeout=timeout,
+                    ttl_sec=ttl_sec,
+                    neg_ttl_sec=neg_ttl_sec,
+                    headers=headers,
+                    respect_robots=respect_robots,
+                    use_date_filter=use_date_filter,
+                    date_field=date_field,
+                    start_date=start_date,
+                    end_date=end_date,
                 )
                 if progress_cb:
                     progress_cb(src.get("name", "¿medio?"), len(out))
