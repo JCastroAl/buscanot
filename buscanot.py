@@ -541,7 +541,43 @@ async def try_fetch_rss(
     page_url: str,
     headers: Dict[str, str],
     timeout: ClientTimeout,
+    rss_url: Optional[str] = None,
 ) -> Optional[List[Tuple[str, str, Optional[datetime]]]]:
+    async def fetch_and_parse(feed_url: str) -> Optional[List[Tuple[str, str, Optional[datetime]]]]:
+        try:
+            async with session.get(feed_url, headers=headers, timeout=timeout, ssl=True) as r2:
+                if r2.status != 200:
+                    return None
+                xml = await r2.text()
+            feed = BeautifulSoup(xml, "xml")
+            items = feed.find_all(["item", "entry"])
+            out: List[Tuple[str, str, Optional[datetime]]] = []
+            for it in items:
+                title = (it.title.get_text(strip=True) if it.title else "").strip()
+                link = (
+                    it.link.get("href")
+                    if it.link and it.link.has_attr("href")
+                    else (it.link.get_text(strip=True) if it.link else "")
+                ).strip()
+                pub = None
+                if it.find("pubDate"):
+                    try:
+                        pub = parsedate_to_datetime(it.find("pubDate").get_text(strip=True))
+                    except Exception:
+                        pub = None
+                elif it.find("updated"):
+                    try:
+                        pub = pd.to_datetime(it.find("updated").get_text(strip=True), utc=True, errors="coerce").to_pydatetime()
+                    except Exception:
+                        pub = None
+                out.append((title, link, pub))
+            return out or None
+        except Exception:
+            return None
+    if rss_url:
+        rss_data = await fetch_and_parse(rss_url)
+        if rss_data:
+            return rss_data
     try:
         async with session.get(page_url, headers=headers, timeout=timeout, ssl=True) as resp:
             resp.raise_for_status()
@@ -561,37 +597,9 @@ async def try_fetch_rss(
         for feed_url in candidates:
             if not feed_url:
                 continue
-            try:
-                async with session.get(feed_url, headers=headers, timeout=timeout, ssl=True) as r2:
-                    if r2.status != 200:
-                        continue
-                    xml = await r2.text()
-                feed = BeautifulSoup(xml, "xml")
-                items = feed.find_all(["item", "entry"])
-                out: List[Tuple[str, str, Optional[datetime]]] = []
-                for it in items:
-                    title = (it.title.get_text(strip=True) if it.title else "").strip()
-                    link = (
-                        it.link.get("href")
-                        if it.link and it.link.has_attr("href")
-                        else (it.link.get_text(strip=True) if it.link else "")
-                    ).strip()
-                    pub = None
-                    if it.find("pubDate"):
-                        try:
-                            pub = parsedate_to_datetime(it.find("pubDate").get_text(strip=True))
-                        except Exception:
-                            pub = None
-                    elif it.find("updated"):
-                        try:
-                            pub = pd.to_datetime(it.find("updated").get_text(strip=True), utc=True, errors="coerce").to_pydatetime()
-                        except Exception:
-                            pub = None
-                    out.append((title, link, pub))
-                if out:
-                    return out
-            except Exception:
-                continue
+            rss_data = await fetch_and_parse(feed_url)
+            if rss_data:
+                return rss_data
     except Exception:
         pass
     return None
