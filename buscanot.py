@@ -218,6 +218,13 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
         {"name": "Maariv", "url": "https://www.maariv.co.il/", "selector": "article h2 a, h3 a, .article-title a, .title a", "archive_selector": None, "base_url": "https://www.maariv.co.il", "archive_pattern": None, "lang": "he"},
         {"name": "+972 Magazine", "url": "https://www.972mag.com/", "selector": "article h2 a, h3 a, .entry-title a, .post-title a", "archive_selector": "article h2 a, h3 a, .entry-title a, .post-title a", "base_url": "https://www.972mag.com", "archive_pattern": "https://www.972mag.com/topic/archives/", "lang": "en"},
     ],
+"Palestina": [
+        {"name": "WAFA (English)", "url": "https://english.wafa.ps/Pages/LastNews", "selector": "article h2 a, h3 a, .title a, .card-title a, .news a", "archive_selector": "article h2 a, h3 a, .title a, .card-title a, .news a", "base_url": "https://english.wafa.ps", "archive_pattern": None, "lang": "en"},
+        {"name": "Palestinian Broadcasting Corporation (PBC)", "url": "https://www.pbc.ps/", "selector": "article h2 a, h3 a, .card-title a, .post-title a, .news-title a", "archive_selector": None, "base_url": "https://www.pbc.ps", "archive_pattern": None, "lang": "ar"},
+        {"name": "Al-Haya Al-Jadida", "url": "https://www.alhaya.ps/ar", "selector": "article h2 a, h3 a, .title a, .card-title a, .post-title a", "archive_selector": "article h2 a, h3 a, .title a, .card-title a, .post-title a", "base_url": "https://www.alhaya.ps", "archive_pattern": "https://www.alhaya.ps/ar/Category/61/%D8%B9%D9%86%D8%A7%D9%88%D9%8A%D9%86-%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1?page=1", "lang": "ar"},
+        {"name": "Al-Quds (English)", "url": "https://www.alquds.com/en", "selector": "article h2 a, h3 a, .post-title a, .title a, .card-title a", "archive_selector": "a", "base_url": "https://www.alquds.com", "archive_pattern": "https://www.alquds.com/en?language=en&page={dd}", "lang": "en"},
+        {"name": "Al-Ayyam", "url": "https://www.al-ayyam.ps/ar", "selector": "article h2 a, h3 a, .title a, .card-title a, .post-title a", "archive_selector": None, "base_url": "https://www.al-ayyam.ps", "archive_pattern": "https://www.al-ayyam.ps/public/pdfs/{yyyy}/{mm}/{dd}/all/all.pdf", "lang": "ar"},
+    ],
 }
 # =========================
 # Persistencia BD
