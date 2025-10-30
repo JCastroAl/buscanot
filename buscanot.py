@@ -212,7 +212,7 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
         {"name": "CNN", "url": "https://edition.cnn.com/", "selector": "article h2 a, h3 a, .cd__headline a", "archive_selector": None, "base_url": "https://edition.cnn.com", "archive_pattern": None, "lang": "en"},
         {"name": "CBS News", "url": "https://www.cbsnews.com/", "selector": "article h2 a, h3 a, .headline a, .feature-list__link", "archive_selector": None, "base_url": "https://www.cbsnews.com", "archive_pattern": None, "lang": "en"},
     ],
-
+}
 # =========================
 # Persistencia BD
 # =========================
