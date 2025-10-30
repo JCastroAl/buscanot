@@ -95,13 +95,12 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
         {"name": "El Periòdic d’Andorra", "url": "https://elperiodic.ad/noticies/", "selector": "article h2 a, h3 a, .article-title a, .titular a", "archive_selector": "article h2 a, h3 a, .article-title a, .titular a", "base_url": "https://elperiodic.ad", "archive_pattern": "https://elperiodic.ad/noticies/?page={page}", "lang": "ca"},
     ],
     "Alemania": [
-        {"name": "Frankfurter Allgemeine (FAZ)", "url": "https://www.faz.net/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.faz.net", "lang": "de"},
+        {"name": "Frankfurter Allgemeine", "url": "https://www.faz.net/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.faz.net", "lang": "de"},
         {"name": "Süddeutsche Zeitung", "url": "https://www.sueddeutsche.de/", "selector": "article h2 a, h3 a, .sz-article__title a", "base_url": "https://www.sueddeutsche.de", "lang": "de"},
-        {"name": "WELT", "url": "https://www.welt.de/", "selector": "article h2 a, h3 a, .c-teaser__headline a", "base_url": "https://www.welt.de", "lang": "de"},
+        {"name": "Die Welt", "url": "https://www.welt.de/", "selector": "article h2 a, h3 a, .c-teaser__headline a", "base_url": "https://www.welt.de", "lang": "de"},
         {"name": "Der Spiegel", "url": "https://www.spiegel.de/", "selector": "article h2 a, h3 a, .leading-article a", "base_url": "https://www.spiegel.de", "lang": "de"},
         {"name": "Die Zeit", "url": "https://www.zeit.de/index", "selector": "article h2 a, h3 a, .zon-teaser-standard__title a", "base_url": "https://www.zeit.de", "lang": "de"},
-        {"name": "BILD", "url": "https://www.bild.de/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.bild.de", "lang": "de"},
-        {"name": "tagesschau (ARD)", "url": "https://www.tagesschau.de/", "selector": "article h2 a, h3 a, .teaser__title a", "base_url": "https://www.tagesschau.de", "lang": "de"},
+        {"name": "Bild", "url": "https://www.bild.de/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.bild.de", "lang": "de"},
         {"name": "Handelsblatt", "url": "https://www.handelsblatt.com/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.handelsblatt.com", "lang": "de"},
     ],
     "Austria": [
@@ -109,6 +108,8 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
         {"name": "Die Presse", "url": "https://www.diepresse.com/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.diepresse.com", "lang": "de"},
         {"name": "Kurier", "url": "https://kurier.at/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://kurier.at", "lang": "de"},
         {"name": "Kronen Zeitung", "url": "https://www.krone.at/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.krone.at", "lang": "de"},
+        {"name": "ORF.at", "url": "https://orf.at/", "selector": "article h2 a, h3 a, .story__title a, .ticker-story__title a", "archive_selector": "article h2 a, h3 a, .story__title a, .ticker-story__title a", "base_url": "https://orf.at", "archive_pattern": "https://orf.at/inland/?page={page}", "lang": "de"},
+        {"name": "oe24", "url": "https://www.oe24.at/", "selector": "article h2 a, h3 a, .story-title a, .headline a, .teaser__title a", "archive_selector": "article h2 a, h3 a, .story-title a, .headline a, .teaser__title a", "base_url": "https://www.oe24.at", "archive_pattern": "https://www.oe24.at/zeitung?page={page}", "lang": "de"},
     ],
     "Bélgica": [
         {"name": "Le Soir", "url": "https://www.lesoir.be/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.lesoir.be", "lang": "fr"},
