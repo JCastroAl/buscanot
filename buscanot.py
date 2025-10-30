@@ -568,52 +568,60 @@ async def scrape_source_async(
     # =========================
     # 2) ARCHIVOS (pasado)
     # =========================
-    if past_days:
+   if past_days and not html_disabled:
+    archive_pattern = source.get("archive_pattern")
+    archive_urls = []
+
+    if is_date_based_pattern(archive_pattern):
         archive_urls = iter_archive_urls_for_dates(source, past_days)
-        if archive_urls and selector_archive and not html_disabled:
-            for page in archive_urls:
-                html = await fetch_html(
-                    session,
-                    page,
-                    headers=headers,
-                    timeout=timeout,
-                    ttl_sec=ttl_sec,
-                    neg_ttl_sec=neg_ttl_sec,
-                    respect_robots=(respect_robots and not disable_robots),
-                )
-                if not html:
-                    continue
-                try:
-                    soup = BeautifulSoup(html, "html.parser")
-                    elements = soup.select(selector_archive) if selector_archive else []
-                    for el in elements:
-                        title = el.get_text(strip=True)
-                        href = el.get("href")
-                        if not href or not title:
-                            continue
-                        full_url = absolutize(href, base_url or page)
-                        if not full_url:
-                            continue
-                        if is_relevant(title):
-                            raw_dt = extract_time_candidate(el)
-                            pub_iso = None
-                            if raw_dt:
-                                try:
-                                    dt = pd.to_datetime(raw_dt, utc=True, errors="coerce")
-                                    if pd.notnull(dt):
-                                        pub_iso = dt.isoformat()
-                                except Exception:
-                                    pub_iso = None
-                            rows.append({
-                                "medio": name,
-                                "título": title,
-                                "url": full_url,
-                                "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
-                                "publicado": pub_iso,
-                                "fuente": "html-archivo",
-                            })
-                except Exception as e:
-                    st.session_state.setdefault("logs", []).append(f"❌ {name} ({page}): {e}")
+    elif is_page_based_pattern(archive_pattern):
+        # si es por páginas, solo recorremos las primeras 10 por defecto
+        archive_urls = iter_archive_urls_for_pages(source, max_pages=10)
+
+    if archive_urls and selector_archive:
+        for page in archive_urls:
+            html = await fetch_html(
+                session,
+                page,
+                headers=headers,
+                timeout=timeout,
+                ttl_sec=ttl_sec,
+                neg_ttl_sec=neg_ttl_sec,
+                respect_robots=(respect_robots and not disable_robots),
+            )
+            if not html:
+                continue
+            try:
+                soup = BeautifulSoup(html, "html.parser")
+                elements = soup.select(selector_archive) if selector_archive else []
+                for el in elements:
+                    title = el.get_text(strip=True)
+                    href = el.get("href")
+                    if not href or not title:
+                        continue
+                    full_url = absolutize(href, base_url or page)
+                    if not full_url:
+                        continue
+                    if is_relevant(title):
+                        raw_dt = extract_time_candidate(el)
+                        pub_iso = None
+                        if raw_dt:
+                            try:
+                                dt = pd.to_datetime(raw_dt, utc=True, errors="coerce")
+                                if pd.notnull(dt):
+                                    pub_iso = dt.isoformat()
+                            except Exception:
+                                pub_iso = None
+                        rows.append({
+                            "medio": name,
+                            "título": title,
+                            "url": full_url,
+                            "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                            "publicado": pub_iso,
+                            "fuente": "html-archivo",
+                        })
+            except Exception as e:
+                st.session_state.setdefault("logs", []).append(f"❌ {name} ({page}): {e}")
 
     # =========================
     # 3) HOY (RSS + portada)
