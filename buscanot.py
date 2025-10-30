@@ -51,205 +51,31 @@ COMMON_ARCHIVE_PATTERNS = [
 ]
 
 # =========================
-# Base por defecto con patrones de hemeroteca + idioma por medio
-DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
-    "España": [
-        {"name": "El País", "url": "https://elpais.com/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": "h2 a, h3 a, .c_t a", "base_url": "https://elpais.com", "archive_pattern": "https://elpais.com/hemeroteca/{yyyy}-{mm}-{dd}/", "lang": "es"},
-        {"name": "El Mundo", "url": "https://www.elmundo.es/", "selector": "article h2 a, h3 a, .ue-c-cover-content__link", "archive_selector": "h2 a, h3 a, .ue-c-cover-content__link, .mod-title a, .headline a", "base_url": "https://www.elmundo.es", "archive_pattern": "https://www.elmundo.es/elmundo/hemeroteca/{yyyy}/{mm}/{dd}/noticias.html", "lang": "es"},
-        {"name": "ABC", "url": "https://www.abc.es/", "selector": "article h2 a, h3 a, .titular a", "archive_selector": None, "base_url": "https://www.abc.es", "archive_pattern": None, "lang": "es"},
-        {"name": "La Vanguardia", "url": "https://www.lavanguardia.com/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.lavanguardia.com", "archive_pattern": None, "lang": "es"},
-        {"name": "El Confidencial", "url": "https://www.elconfidencial.com/", "selector": "article h2 a, h3 a, .news__title a", "archive_selector": None, "base_url": "https://www.elconfidencial.com", "lang": "es"},
-        {"name": "RTVE", "url": "https://www.rtve.es/noticias/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.rtve.es/noticias/", "lang": "es"},
-        {"name": "La Razón", "url": "https://www.larazon.es/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.larazon.es/", "lang": "es"},
-        {"name": "El Periodico de Catalunya", "url": "https://www.elperiodico.com/es/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": None, "base_url": "https://www.elperiodico.com/", "lang": "es"},
-    ],
-    "Marruecos": [
-        {"name": "Hespress", "url": "https://www.hespress.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.hespress.com", "lang": "ar"},
-        {"name": "Le Matin", "url": "https://lematin.ma/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://lematin.ma", "lang": "fr"},
-        {"name": "TelQuel", "url": "https://telquel.ma/", "selector": "article h2 a, h3 a, .post-title a", "base_url": "https://telquel.ma", "lang": "fr"},
-        {"name": "MAP News", "url": "https://www.mapnews.ma/en/actualites", "selector": "article h2 a, h3 a, .title a, .card-title a", "archive_selector": "article h2 a, h3 a, .title a, .card-title a", "base_url": "https://www.mapnews.ma", "archive_pattern": "https://www.mapnews.ma/en/actualites?page={page}", "lang": "en"},
-        {"name": "SNRT News", "url": "https://snrtnews.com/thematique/%D9%85%D8%AC%D8%AA%D9%85%D8%B9", "selector": "article h2 a, h3 a, .card-title a, .news-title a", "archive_selector": "article h2 a, h3 a, .card-title a, .news-title a", "base_url": "https://snrtnews.com", "archive_pattern": "https://snrtnews.com/thematique/%D9%85%D8%AC%D8%AA%D9%85%D8%B9?page={page}", "lang": "ar"},
-        {"name": "Akhbarona", "url": "https://www.akhbarona.com/", "selector": "article h2 a, h3 a, .title a, .post-title a", "archive_selector": "article h2 a, h3 a, .title a, .post-title a", "base_url": "https://www.akhbarona.com", "archive_pattern": "https://www.akhbarona.com/last/index.{page}.html", "lang": "ar"},
-        {"name": "Morocco World News", "url": "https://www.moroccoworldnews.com/", "selector": "article h2 a, h3 a, .card-title a", "base_url": "https://www.moroccoworldnews.com", "lang": "en"},
-    ],
-    "Francia": [
-        {"name": "Le Monde", "url": "https://www.lemonde.fr/", "selector": "article h2 a, h3 a, .article__title a", "base_url": "https://www.lemonde.fr", "lang": "fr"},
-        {"name": "Le Figaro", "url": "https://www.lefigaro.fr/", "selector": "article h2 a, h3 a, .fig-headline a", "base_url": "https://www.lefigaro.fr", "lang": "fr"},
-        {"name": "Libération", "url": "https://www.liberation.fr/", "selector": "article h2 a, h3 a, .article-card a", "base_url": "https://www.liberation.fr", "lang": "fr"},
-        {"name": "Le Parisien", "url": "https://www.leparisien.fr/", "selector": "article h2 a, h3 a, .article-title a", "base_url": "https://www.leparisien.fr", "lang": "fr"},
-        {"name": "La Croix", "url": "https://www.la-croix.com/", "selector": "article h2 a, h3 a, .article__title a", "base_url": "https://www.la-croix.com", "lang": "fr"},
-        {"name": "Ouest-France", "url": "https://www.ouest-france.fr/", "selector": "article h2 a, h3 a, .teaser-title a", "base_url": "https://www.ouest-france.fr", "lang": "fr"},
-        {"name": "Radio France", "url": "https://www.radiofrance.fr/actualite", "selector": "article h2 a, h3 a, .rf-card__title a, .rf-article-card__title a", "archive_selector": "article h2 a, h3 a, .rf-card__title a, .rf-article-card__title a", "base_url": "https://www.radiofrance.fr", "archive_pattern": "https://www.radiofrance.fr/actualite?page={page}", "lang": "fr"},
-    ],
-    "Portugal": [
-        {"name": "Público", "url": "https://www.publico.pt/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.publico.pt", "lang": "pt"},
-        {"name": "Diário de Notícias", "url": "https://www.dn.pt/", "selector": "article h2 a, h3 a, .card-title a", "base_url": "https://www.dn.pt", "lang": "pt"},
-        {"name": "Observador", "url": "https://observador.pt/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://observador.pt", "lang": "pt"},
-        {"name": "Correio da Manhã", "url": "https://www.cmjornal.pt/", "selector": "article h2 a, h3 a, .tit a", "base_url": "https://www.cmjornal.pt", "lang": "pt"},
-        {"name": "Jornal de Notícias", "url": "https://www.jn.pt/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.jn.pt", "lang": "pt"},
-        {"name": "RTP Notícias", "url": "https://www.rtp.pt/noticias/", "selector": "article h2 a, h3 a, .news a, .noticia_titulo a, .card-title a", "archive_selector": "article h2 a, h3 a, .news a, .noticia_titulo a, .card-title a", "base_url": "https://www.rtp.pt", "archive_pattern": "https://www.rtp.pt/noticias/?pg={page}", "lang": "pt"},
-        {"name": "Lusa", "url": "https://www.lusa.pt/", "selector": "article h2 a, h3 a, .news-title a, .card-title a", "archive_selector": None, "base_url": "https://www.lusa.pt", "archive_pattern": None, "lang": "pt"},
-    ],
-    "Andorra": [
-        {"name": "Diari d'Andorra", "url": "https://www.diariandorra.ad/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.diariandorra.ad", "lang": "ca"},
-        {"name": "El Periòdic d’Andorra", "url": "https://elperiodic.ad/noticies/", "selector": "article h2 a, h3 a, .article-title a, .titular a", "archive_selector": "article h2 a, h3 a, .article-title a, .titular a", "base_url": "https://elperiodic.ad", "archive_pattern": "https://elperiodic.ad/noticies/?page={page}", "lang": "ca"},
-    ],
-    "Alemania": [
-        {"name": "Frankfurter Allgemeine", "url": "https://www.faz.net/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.faz.net", "lang": "de"},
-        {"name": "Süddeutsche Zeitung", "url": "https://www.sueddeutsche.de/", "selector": "article h2 a, h3 a, .sz-article__title a", "base_url": "https://www.sueddeutsche.de", "lang": "de"},
-        {"name": "Die Welt", "url": "https://www.welt.de/", "selector": "article h2 a, h3 a, .c-teaser__headline a", "base_url": "https://www.welt.de", "lang": "de"},
-        {"name": "Der Spiegel", "url": "https://www.spiegel.de/", "selector": "article h2 a, h3 a, .leading-article a", "base_url": "https://www.spiegel.de", "lang": "de"},
-        {"name": "Die Zeit", "url": "https://www.zeit.de/index", "selector": "article h2 a, h3 a, .zon-teaser-standard__title a", "base_url": "https://www.zeit.de", "lang": "de"},
-        {"name": "Bild", "url": "https://www.bild.de/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.bild.de", "lang": "de"},
-        {"name": "Handelsblatt", "url": "https://www.handelsblatt.com/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.handelsblatt.com", "lang": "de"},
-    ],
-    "Austria": [
-        {"name": "Der Standard", "url": "https://www.derstandard.at/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.derstandard.at", "lang": "de"},
-        {"name": "Die Presse", "url": "https://www.diepresse.com/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.diepresse.com", "lang": "de"},
-        {"name": "Kurier", "url": "https://kurier.at/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://kurier.at", "lang": "de"},
-        {"name": "Kronen Zeitung", "url": "https://www.krone.at/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.krone.at", "lang": "de"},
-        {"name": "ORF.at", "url": "https://orf.at/", "selector": "article h2 a, h3 a, .story__title a, .ticker-story__title a", "archive_selector": "article h2 a, h3 a, .story__title a, .ticker-story__title a", "base_url": "https://orf.at", "archive_pattern": "https://orf.at/inland/?page={page}", "lang": "de"},
-        {"name": "oe24", "url": "https://www.oe24.at/", "selector": "article h2 a, h3 a, .story-title a, .headline a, .teaser__title a", "archive_selector": "article h2 a, h3 a, .story-title a, .headline a, .teaser__title a", "base_url": "https://www.oe24.at", "archive_pattern": "https://www.oe24.at/zeitung?page={page}", "lang": "de"},
-    ],
-    "Bélgica": [
-        {"name": "Le Soir", "url": "https://www.lesoir.be/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.lesoir.be", "lang": "fr"},
-        {"name": "La Libre Belgique", "url": "https://www.lalibre.be/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.lalibre.be", "lang": "fr"},
-        {"name": "De Standaard", "url": "https://www.standaard.be/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.standaard.be", "lang": "nl"},
-        {"name": "Het Laatste Nieuws", "url": "https://www.hln.be/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.hln.be", "lang": "nl"},
-        {"name": "De Morgen", "url": "https://www.demorgen.be/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.demorgen.be", "lang": "nl"},
-    ],
-    "Bosnia y Herzegovina": [
-        {"name": "Dnevni Avaz", "url": "https://www.avaz.ba/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.avaz.ba", "lang": "bs"},
-        {"name": "Oslobođenje", "url": "https://www.oslobodjenje.ba/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.oslobodjenje.ba", "lang": "bs"},
-        {"name": "Nezavisne novine", "url": "https://www.nezavisne.com/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.nezavisne.com", "lang": "sr"},
-    ],
-    "Bulgaria": [
-        {"name": "Dnevnik", "url": "https://www.dnevnik.bg/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.dnevnik.bg", "lang": "bg"},
-        {"name": "24 Chasa", "url": "https://www.24chasa.bg/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.24chasa.bg", "lang": "bg"},
-        {"name": "Trud", "url": "https://trud.bg/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://trud.bg", "lang": "bg"},
-        {"name": "Sega", "url": "https://www.segabg.com/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.segabg.com", "lang": "bg"},
-    ],
-    "Chipre": [
-        {"name": "Cyprus Mail", "url": "https://cyprus-mail.com/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://cyprus-mail.com", "lang": "en"},
-        {"name": "Politis", "url": "https://politis.com.cy/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://politis.com.cy", "lang": "el"},
-        {"name": "Phileleftheros", "url": "https://www.philenews.com/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.philenews.com", "lang": "el"},
-    ],
-    "Croacia": [
-        {"name": "Jutarnji list", "url": "https://www.jutarnji.hr/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.jutarnji.hr", "lang": "hr"},
-        {"name": "Večernji list", "url": "https://www.vecernji.hr/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.vecernji.hr", "lang": "hr"},
-        {"name": "Slobodna Dalmacija", "url": "https://slobodnadalmacija.hr/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://slobodnadalmacija.hr", "lang": "hr"},
-    ],
-    "Dinamarca": [
-        {"name": "Politiken", "url": "https://politiken.dk/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://politiken.dk", "lang": "da"},
-        {"name": "Berlingske", "url": "https://www.berlingske.dk/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.berlingske.dk", "lang": "da"},
-        {"name": "Jyllands-Posten", "url": "https://jyllands-posten.dk/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://jyllands-posten.dk", "lang": "da"},
-        {"name": "Ekstra Bladet", "url": "https://ekstrabladet.dk/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://ekstrabladet.dk", "lang": "da"},
-        {"name": "Børsen", "url": "https://borsen.dk/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://borsen.dk", "lang": "da"},
-    ],
-    "Eslovaquia": [
-        {"name": "SME", "url": "https://www.sme.sk/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.sme.sk", "lang": "sk"},
-        {"name": "Pravda", "url": "https://www.pravda.sk/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.pravda.sk", "lang": "sk"},
-        {"name": "Hospodárske noviny", "url": "https://www.hnonline.sk/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.hnonline.sk", "lang": "sk"},
-    ],
-    "Eslovenia": [
-        {"name": "Delo", "url": "https://www.delo.si/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.delo.si", "lang": "sl"},
-        {"name": "Dnevnik", "url": "https://www.dnevnik.si/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.dnevnik.si", "lang": "sl"},
-        {"name": "Večer", "url": "https://www.vecer.com/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.vecer.com", "lang": "sl"},
-    ],
-    "Estonia": [
-        {"name": "Postimees", "url": "https://www.postimees.ee/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.postimees.ee", "lang": "et"},
-        {"name": "Eesti Päevaleht", "url": "https://www.delfi.ee/ekspress/epl", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.delfi.ee", "lang": "et"},
-        {"name": "Õhtuleht", "url": "https://www.ohtuleht.ee/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.ohtuleht.ee", "lang": "et"},
-    ],
-    "Finlandia": [
-        {"name": "Helsingin Sanomat", "url": "https://www.hs.fi/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.hs.fi", "lang": "fi"},
-        {"name": "Ilta-Sanomat", "url": "https://www.is.fi/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.is.fi", "lang": "fi"},
-        {"name": "Iltalehti", "url": "https://www.iltalehti.fi/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.iltalehti.fi", "lang": "fi"},
-        {"name": "Kauppalehti", "url": "https://www.kauppalehti.fi/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.kauppalehti.fi", "lang": "fi"},
-    ],
-    "Grecia": [
-        {"name": "Kathimerini", "url": "https://www.kathimerini.gr/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.kathimerini.gr", "lang": "el"},
-        {"name": "Ta Nea", "url": "https://www.tanea.gr/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.tanea.gr", "lang": "el"},
-        {"name": "To Vima", "url": "https://www.tovima.gr/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.tovima.gr", "lang": "el"},
-        {"name": "Proto Thema", "url": "https://www.protothema.gr/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.protothema.gr", "lang": "el"},
-        {"name": "Athens-Macedonian News Agency", "url": "https://www.amna.gr/en", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.amna.gr", "lang": "en"},
-    ],
-    "Hungría": [
-        {"name": "Népszava", "url": "https://nepszava.hu/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://nepszava.hu", "lang": "hu"},
-        {"name": "Magyar Nemzet", "url": "https://magyarnemzet.hu/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://magyarnemzet.hu", "lang": "hu"},
-        {"name": "Világgazdaság", "url": "https://www.vg.hu/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.vg.hu", "lang": "hu"},
-        {"name": "Blikk", "url": "https://www.blikk.hu/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.blikk.hu", "lang": "hu"},
-    ],
-    "Irlanda": [
-        {"name": "The Irish Times", "url": "https://www.irishtimes.com/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.irishtimes.com", "lang": "en"},
-        {"name": "Irish Independent", "url": "https://www.independent.ie/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.independent.ie", "lang": "en"},
-        {"name": "Irish Examiner", "url": "https://www.irishexaminer.com/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.irishexaminer.com", "lang": "en"},
-        {"name": "TheJournal.ie", "url": "https://www.thejournal.ie/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.thejournal.ie", "lang": "en"},
-    ],
-    "Islandia": [
-        {"name": "Morgunblaðið", "url": "https://www.mbl.is/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.mbl.is", "lang": "is"},
-        {"name": "Fréttablaðið", "url": "https://www.frettabladid.is/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.frettabladid.is", "lang": "is"},
-        {"name": "Vísir", "url": "https://www.visir.is/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.visir.is", "lang": "is"},
-    ],
-    "Italia": [
-        {"name": "Corriere della Sera", "url": "https://www.corriere.it/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.corriere.it", "lang": "it"},
-        {"name": "la Repubblica", "url": "https://www.repubblica.it/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.repubblica.it", "lang": "it"},
-        {"name": "La Stampa", "url": "https://www.lastampa.it/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.lastampa.it", "lang": "it"},
-        {"name": "Il Messaggero", "url": "https://www.ilmessaggero.it/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.ilmessaggero.it", "lang": "it"},
-        {"name": "Il Sole 24 Ore", "url": "https://www.ilsole24ore.com/", "selector": "article h2 a, h3 a, .headline a, .title a", "base_url": "https://www.ilsole24ore.com", "lang": "it"},
-    ],
-"Estados Unidos": [
-        {"name": "The Boston Globe", "url": "https://www.bostonglobe.com/", "selector": "article h2 a, h3 a, .headline a, .story a", "archive_selector": "article h2 a, h3 a, .headline a, .story a", "base_url": "https://www.bostonglobe.com", "archive_pattern": None, "lang": "en"},
-        {"name": "Los Angeles Times", "url": "https://www.latimes.com/", "selector": "article h2 a, h3 a, .promo-title, .story-title a", "archive_selector": "article h2 a, h3 a, .promo-title, .story-title a", "base_url": "https://www.latimes.com", "archive_pattern": "https://www.latimes.com/archives", "lang": "en"},
-        {"name": "USA TODAY", "url": "https://www.usatoday.com/", "selector": "article h2 a, h3 a, a.gnt_m_flm_a, a.gnt_m_flm_bt", "archive_selector": None, "base_url": "https://www.usatoday.com", "archive_pattern": None, "lang": "en"},
-        {"name": "The New York Times", "url": "https://www.nytimes.com/", "selector": "article h2 a, h3 a, .css-1g7m0tk a, .story-wrapper a", "archive_selector": "a", "base_url": "https://www.nytimes.com", "archive_pattern": "https://www.nytimes.com/sitemap/{yyyy}/{mm}/{dd}/", "lang": "en"},
-        {"name": "NPR", "url": "https://www.npr.org/", "selector": "article h2 a, h3 a, .title a, .story-text a", "archive_selector": "article h2 a, h3 a, .title a, .story-text a", "base_url": "https://www.npr.org", "archive_pattern": "https://www.npr.org/sections/news/archive?date={yyyy}-{mm}-{dd}", "lang": "en"},
-        {"name": "The Washington Post", "url": "https://feeds.washingtonpost.com/rss/politics", "selector": "item title, article h2 a, h3 a, .wpds-c-card__title a, a[data-qa='headline-link']", "archive_selector": "a", "base_url": "https://www.washingtonpost.com", "archive_pattern": "https://www.washingtonpost.com/sitemap/{yyyy}/", "lang": "en", "use_amp": False, "disable_robots": True, "rss_fallback": "https://feeds.washingtonpost.com/rss/politics", "html_disabled": True},
-        {"name": "AP News", "url": "https://apnews.com/", "selector": "article h2 a, h3 a, .headline a", "archive_selector": "article h2 a, h3 a, .headline a", "base_url": "https://apnews.com", "archive_pattern": "https://apnews.com/hub/archive", "lang": "en"},
-        {"name": "ABC News", "url": "https://abcnews.go.com/", "selector": "article h2 a, h3 a, .headline a, .story-title a", "archive_selector": None, "base_url": "https://abcnews.go.com", "archive_pattern": None, "lang": "en"},
-        {"name": "CNN", "url": "https://edition.cnn.com/", "selector": "article h2 a, h3 a, .cd__headline a", "archive_selector": None, "base_url": "https://edition.cnn.com", "archive_pattern": None, "lang": "en"},
-        {"name": "CBS News", "url": "https://www.cbsnews.com/", "selector": "article h2 a, h3 a, .headline a, .feature-list__link", "archive_selector": None, "base_url": "https://www.cbsnews.com", "archive_pattern": None, "lang": "en"},
-    ],
-"Israel": [
-        {"name": "Ynetnews", "url": "https://www.ynetnews.com/", "selector": "article h2 a, h3 a, .title a, .sub-title a", "archive_selector": "article h2 a, h3 a, .title a, .sub-title a", "base_url": "https://www.ynetnews.com", "archive_pattern": None, "lang": "en"},
-        {"name": "Israel Hayom", "url": "https://www.israelhayom.com/", "selector": "article h2 a, h3 a, .entry-title a, .headline a", "archive_selector": "article h2 a, h3 a, .entry-title a, .headline a", "base_url": "https://www.israelhayom.com", "archive_pattern": "https://www.israelhayom.com/category/news/", "lang": "en"},
-        {"name": "The Jerusalem Post", "url": "https://www.jpost.com/", "selector": "article h2 a, h3 a, .article-title a, .title a", "archive_selector": "a", "base_url": "https://www.jpost.com", "archive_pattern": "https://www.jpost.com/articlearchive/listarticlearchive.aspx?date={mm}%2F{dd}%2F{yyyy}", "lang": "en"},
-        {"name": "Maariv", "url": "https://www.maariv.co.il/", "selector": "article h2 a, h3 a, .article-title a, .title a", "archive_selector": None, "base_url": "https://www.maariv.co.il", "archive_pattern": None, "lang": "he"},
-        {"name": "+972 Magazine", "url": "https://www.972mag.com/", "selector": "article h2 a, h3 a, .entry-title a, .post-title a", "archive_selector": "article h2 a, h3 a, .entry-title a, .post-title a", "base_url": "https://www.972mag.com", "archive_pattern": "https://www.972mag.com/topic/archives/", "lang": "en"},
-    ],
-"Palestina": [
-        {"name": "WAFA (English)", "url": "https://english.wafa.ps/Pages/LastNews", "selector": "article h2 a, h3 a, .title a, .card-title a, .news a", "archive_selector": "article h2 a, h3 a, .title a, .card-title a, .news a", "base_url": "https://english.wafa.ps", "archive_pattern": None, "lang": "en"},
-        {"name": "Palestinian Broadcasting Corporation (PBC)", "url": "https://www.pbc.ps/", "selector": "article h2 a, h3 a, .card-title a, .post-title a, .news-title a", "archive_selector": None, "base_url": "https://www.pbc.ps", "archive_pattern": None, "lang": "ar"},
-        {"name": "Al-Haya Al-Jadida", "url": "https://www.alhaya.ps/ar", "selector": "article h2 a, h3 a, .title a, .card-title a, .post-title a", "archive_selector": "article h2 a, h3 a, .title a, .card-title a, .post-title a", "base_url": "https://www.alhaya.ps", "archive_pattern": "https://www.alhaya.ps/ar/Category/61/%D8%B9%D9%86%D8%A7%D9%88%D9%8A%D9%86-%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1?page=1", "lang": "ar"},
-        {"name": "Al-Quds (English)", "url": "https://www.alquds.com/en", "selector": "article h2 a, h3 a, .post-title a, .title a, .card-title a", "archive_selector": "a", "base_url": "https://www.alquds.com", "archive_pattern": "https://www.alquds.com/en?language=en&page={dd}", "lang": "en"},
-        {"name": "Al-Ayyam", "url": "https://www.al-ayyam.ps/ar", "selector": "article h2 a, h3 a, .title a, .card-title a, .post-title a", "archive_selector": None, "base_url": "https://www.al-ayyam.ps", "archive_pattern": "https://www.al-ayyam.ps/public/pdfs/{yyyy}/{mm}/{dd}/all/all.pdf", "lang": "ar"},
-    ],
-"Japón": [
-        {"name": "The Asahi Shimbun", "url": "https://www.asahi.com/ajw/", "selector": "article h2 a, h3 a, .SecTitle a, .List__title a", "archive_selector": "article h2 a, h3 a, .SecTitle a, .List__title a", "base_url": "https://www.asahi.com", "archive_pattern": "https://www.asahi.com/ajw/?page={page}", "lang": "en"},
-        {"name": "Yomiuri Shimbun", "url": "https://www.yomiuri.co.jp/", "selector": "article h2 a, h3 a, .headline a, .p-topics-title a", "archive_selector": "article h2 a, h3 a, .headline a, .p-topics-title a", "base_url": "https://www.yomiuri.co.jp", "archive_pattern": "https://www.yomiuri.co.jp/{yyyy}/{mm}/{dd}/", "lang": "ja"},
-        {"name": "Sankei News", "url": "https://www.sankei.com/", "selector": "article h2 a, h3 a, .article-title a, .headline a", "archive_selector": "article h2 a, h3 a, .article-title a, .headline a", "base_url": "https://www.sankei.com", "archive_pattern": "https://www.sankei.com/article/{yyyy}{mm}{dd}0000000/", "lang": "ja"},
-        {"name": "NHK World-Japan", "url": "https://www3.nhk.or.jp/nhkworld/en/news/", "selector": "article h2 a, h3 a, .news_item a, .c-newslist__item a", "archive_selector": "article h2 a, h3 a, .news_item a, .c-newslist__item a", "base_url": "https://www3.nhk.or.jp", "archive_pattern": "https://www3.nhk.or.jp/nhkworld/en/news/?page={page}", "lang": "en"},
-        {"name": "Japan Today", "url": "https://japantoday.com/", "selector": "article h2 a, h3 a, .story-title a, .article-title a", "archive_selector": "article h2 a, h3 a, .story-title a, .article-title a", "base_url": "https://japantoday.com", "archive_pattern": "https://japantoday.com/category/national?page={page}", "lang": "en"},
-    ],
-}
-# =========================
 # Persistencia BD
 # =========================
 def save_db(db: Dict[str, List[Dict[str, Any]]]) -> None:
-    with open(DB_PATH, "w", encoding="utf-8") as f:
-        json.dump(db, f, ensure_ascii=False, indent=2)
+    try:
+        with open(DB_PATH, "w", encoding="utf-8") as f:
+            json.dump(db, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        st.error(f"❌ No se pudo guardar media_db.json: {e}")
 
 def load_db() -> Dict[str, List[Dict[str, Any]]]:
     if DB_PATH.exists():
         try:
             with open(DB_PATH, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                if isinstance(data, dict):
-                    return data
-        except Exception:
-            st.warning("No se pudo leer media_db.json. Se carga la base por defecto.")
-    save_db(DEFAULT_DB)
-    return json.loads(json.dumps(DEFAULT_DB))
+            if isinstance(data, dict):
+                return data
+            else:
+                st.error("⚠️ El fichero media_db.json no contiene un objeto JSON de nivel raíz (debería ser { ... }).")
+                return {}
+        except Exception as e:
+            st.error(f"⚠️ No se pudo leer media_db.json: {e}")
+            return {}
+    else:
+        st.error("⚠️ No se encontró el fichero media_db.json en el directorio de la app. Créalo y vuelve a ejecutar.")
+        return {}
 
 # =========================
 # Cachés
