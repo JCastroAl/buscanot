@@ -704,6 +704,42 @@ if "logs" not in st.session_state:
 if "search_country" not in st.session_state:
     all_keys = sorted(st.session_state.db.keys())
     st.session_state.search_country = "España" if "España" in all_keys else (all_keys[0] if all_keys else "")
+# Mapeo país -> continente
+COUNTRY_TO_CONTINENT = {
+    # Europa
+    "España": "Europa",
+    "Portugal": "Europa",
+    "Francia": "Europa",
+    "Andorra": "Europa",
+    "Alemania": "Europa",
+    "Austria": "Europa",
+    "Bélgica": "Europa",
+    "Bosnia y Herzegovina": "Europa",
+    "Bulgaria": "Europa",
+    "Chipre": "Europa",
+    "Croacia": "Europa",
+    "Dinamarca": "Europa",
+    "Eslovaquia": "Europa",
+    "Eslovenia": "Europa",
+    "Estonia": "Europa",
+    "Finlandia": "Europa",
+    "Grecia": "Europa",
+    "Hungría": "Europa",
+    "Irlanda": "Europa",
+    "Islandia": "Europa",
+    "Italia": "Europa",
+    # África
+    "Marruecos": "África",
+    "Palestina": "Asia",
+    "Israel": "Asia",
+    # América
+    "Estados Unidos": "América",
+    # Asia
+    "Japón": "Asia",
+}
+
+def get_continent_for_country(country: str) -> str:
+    return COUNTRY_TO_CONTINENT.get(country, "Otros")
 
 # Defaults filtro temporal y traducción
 if "use_date_filter" not in st.session_state:
