@@ -764,12 +764,12 @@ all_continents = sorted(continent_to_countries.keys())
 
 st.sidebar.header("🗂️ LISTADO DE MEDIOS")
 
-sidebar_cont = st.sidebar.selectbox("Región", all_continents, key="sidebar_continent")
+sidebar_cont = st.sidebar.selectbox("Continente", all_continents, key="sidebar_continent")
 countries_in_sidebar_cont = sorted(continent_to_countries.get(sidebar_cont, []))
 
 default_country = "España" if "España" in countries_in_sidebar_cont else (countries_in_sidebar_cont[0] if countries_in_sidebar_cont else "")
 country = st.sidebar.selectbox(
-    "Escoge una nación",
+    "País",
     countries_in_sidebar_cont,
     index=countries_in_sidebar_cont.index(default_country) if default_country in countries_in_sidebar_cont else 0,
     key="sidebar_country",
@@ -806,7 +806,7 @@ all_continents = sorted(continent_to_countries.keys())
 
 # 1) selector de continente
 selected_continent = st.selectbox(
-    "Continente / región",
+    "Continente",
     all_continents,
     key="search_continent",
 )
