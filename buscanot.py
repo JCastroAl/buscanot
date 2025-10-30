@@ -486,11 +486,9 @@ async def try_fetch_rss(
 async def scrape_source_async(
     session: aiohttp.ClientSession,
     source: Dict[str, Any],
+    terms_by_lang: Dict[str, Dict[str, Any]],
     include_terms_raw: str,
     exclude_terms_raw: str,
-    user_whole_words: bool,
-    ignore_case: bool,
-    translate_per_source: bool,
     timeout: ClientTimeout,
     ttl_sec: int,
     neg_ttl_sec: int,
@@ -510,37 +508,25 @@ async def scrape_source_async(
     lang = (source.get("lang") or "").lower() or "es"
 
     html_disabled = bool(source.get("html_disabled", False))
+    disable_robots = bool(source.get("disable_robots", False))
     rss_fallback = source.get("rss_fallback")
-    source_disable_robots = bool(source.get("disable_robots", False))
 
     if not (name and url):
         return []
 
-    # 1) Construcción de regex por medio (igual que antes)
-    inc_terms = split_terms(include_terms_raw)
-    exc_terms = split_terms(exclude_terms_raw)
+    # =========================
+    # 1) términos ya preparados por idioma
+    # =========================
+    lang_terms = terms_by_lang.get(lang)
+    if not lang_terms:
+        # si por lo que sea no tenemos ese idioma, usamos los originales en bruto (sin regex)
+        lang_terms = {
+            "include_re": None,
+            "exclude_re": None,
+        }
 
-    if translate_per_source and lang:
-        inc_trans = await translate_terms_list(session, inc_terms, lang)
-        exc_trans = await translate_terms_list(session, exc_terms, lang)
-
-        def merge(a: List[Tuple[str,bool]], b: List[Tuple[str,bool]]) -> List[Tuple[str,bool]]:
-            seen = set()
-            out: List[Tuple[str,bool]] = []
-            for t in a + b:
-                key = (t[0].lower(), t[1])
-                if key not in seen:
-                    seen.add(key)
-                    out.append(t)
-            return out
-
-        inc_terms = merge(inc_terms, inc_trans)
-        exc_terms = merge(exc_terms, exc_trans)
-
-    effective_whole_words = user_whole_words and is_latin_lang(lang)
-
-    include_re = build_regex_from_terms(inc_terms, whole_words=effective_whole_words, ignore_case=ignore_case) if inc_terms else None
-    exclude_re = build_regex_from_terms(exc_terms, whole_words=effective_whole_words, ignore_case=ignore_case) if exc_terms else None
+    include_re = lang_terms.get("include_re")
+    exclude_re = lang_terms.get("exclude_re")
 
     def is_relevant(title: str) -> bool:
         if include_re is None and exclude_re is None:
@@ -553,6 +539,7 @@ async def scrape_source_async(
 
     rows: List[Dict[str, Any]] = []
 
+    # Particiona rango en pasados y hoy cuando se filtra por publicación
     today = date.today()
     past_days: List[date] = []
     include_today = False
@@ -562,12 +549,12 @@ async def scrape_source_async(
     else:
         include_today = True
 
-    effective_respect_robots = respect_robots and (not source_disable_robots)
-
-    # 2) ARCHIVOS (pasado) -- igual que antes, solo cambiamos respect_robots
+    # =========================
+    # 2) ARCHIVOS (pasado)
+    # =========================
     if past_days:
         archive_urls = iter_archive_urls_for_dates(source, past_days)
-        if archive_urls and selector_archive:
+        if archive_urls and selector_archive and not html_disabled:
             for page in archive_urls:
                 html = await fetch_html(
                     session,
@@ -576,7 +563,7 @@ async def scrape_source_async(
                     timeout=timeout,
                     ttl_sec=ttl_sec,
                     neg_ttl_sec=neg_ttl_sec,
-                    respect_robots=effective_respect_robots,  # 🔴
+                    respect_robots=(respect_robots and not disable_robots),
                 )
                 if not html:
                     continue
@@ -612,25 +599,38 @@ async def scrape_source_async(
                 except Exception as e:
                     st.session_state.setdefault("logs", []).append(f"❌ {name} ({page}): {e}")
 
+    # =========================
     # 3) HOY (RSS + portada)
+    # =========================
     if include_today:
-        rss = await try_fetch_rss(session, url, headers, timeout, rss_url=rss_fallback)
-        if rss:
-            for title, href, dt in rss:
-                full_url = absolutize(href, base_url or url)
-                if not full_url or not title:
-                    continue
-                if is_relevant(title):
-                    rows.append({
-                        "medio": name,
-                        "título": title,
-                        "url": full_url,
-                        "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
-                        "publicado": (dt.isoformat() if dt else None),
-                        "fuente": "rss",
-                    })
+        # a) RSS prioritario: si el medio define rss_fallback lo usamos
+        rss_urls_to_try = []
+        if rss_fallback:
+            rss_urls_to_try.append(rss_fallback)
+        rss_urls_to_try.append(url)
 
-        if (not html_disabled) and selector_home:
+        got_rss = False
+        for candidate in rss_urls_to_try:
+            rss = await try_fetch_rss(session, candidate, headers, timeout)
+            if rss:
+                got_rss = True
+                for title, href, dt in rss:
+                    full_url = absolutize(href, base_url or candidate)
+                    if not full_url or not title:
+                        continue
+                    if is_relevant(title):
+                        rows.append({
+                            "medio": name,
+                            "título": title,
+                            "url": full_url,
+                            "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                            "publicado": (dt.isoformat() if dt else None),
+                            "fuente": "rss",
+                        })
+                break  # no intentamos más RSS
+
+        # b) HTML portada (si no está deshabilitado)
+        if selector_home and not html_disabled:
             html = await fetch_html(
                 session,
                 url,
@@ -638,7 +638,7 @@ async def scrape_source_async(
                 timeout=timeout,
                 ttl_sec=ttl_sec,
                 neg_ttl_sec=neg_ttl_sec,
-                respect_robots=effective_respect_robots,
+                respect_robots=(respect_robots and not disable_robots),
             )
             if html:
                 try:
