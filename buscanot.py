@@ -979,27 +979,40 @@ if st.button("🔍 Buscar en país seleccionado", type="primary"):
             sock_read=min(max(5, timeout_sec - 5), timeout_sec),
         )
         with st.spinner("Buscando en medios…"):
-            rows_all: List[Dict[str, Any]] = asyncio.run(
-                run_parallel(
-                    sources=sources,
-                    include_terms_raw=include_terms,
-                    exclude_terms_raw=exclude_terms,
-                    user_whole_words=whole_words,
-                    ignore_case=ignore_case,
-                    translate_per_source=translate_per_source,
-                    timeout=timeout,
-                    concurrency=concurrency,
-                    ttl_sec=ttl_sec,
-                    neg_ttl_sec=neg_ttl_sec,
-                    headers=headers,
-                    respect_robots=respect_robots,
-                    use_date_filter=use_date_filter,
-                    date_field=date_field,
-                    start_date=start_date,
-                    end_date=end_date,
-                    progress_cb=add_log_line,
-                )
-            )
+            # 2) ejecuto todo en un solo loop
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    # 2a) preparar términos por idioma
+                    needed_langs = sorted(set((s.get("lang") or "es").lower() for s in sources))
+                    terms_by_lang = await prepare_terms_per_language(
+                        session=session,
+                        include_terms_raw=include_terms,
+                        exclude_terms_raw=exclude_terms,
+                        languages=needed_langs,
+                        user_whole_words=whole_words,
+                        ignore_case=ignore_case,
+                    )
+                    # 2b) lanzar scrapers en paralelo
+                    rows_all = await run_parallel(
+                        sources=sources,
+                        terms_by_lang=terms_by_lang,
+                        include_terms_raw=include_terms,
+                        exclude_terms_raw=exclude_terms,
+                        timeout=timeout,
+                        concurrency=concurrency,
+                        ttl_sec=ttl_sec,
+                        neg_ttl_sec=neg_ttl_sec,
+                        headers=headers,
+                        respect_robots=respect_robots,
+                        use_date_filter=use_date_filter,
+                        date_field=date_field,
+                        start_date=start_date,
+                        end_date=end_date,
+                        progress_cb=add_log_line,
+                    )
+                    return rows_all
+        
+            rows_all: List[Dict[str, Any]] = asyncio.run(main())
 
         elapsed = time.time() - start
         rows_all = dedupe_news(rows_all)
