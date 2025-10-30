@@ -697,6 +697,8 @@ def dedupe_news(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 # =========================
 if "db" not in st.session_state:
     st.session_state.db = load_db()
+if not st.session_state.db:
+    st.stop()
 if "logs" not in st.session_state:
     st.session_state.logs = []
 if "search_country" not in st.session_state:
