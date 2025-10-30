@@ -371,6 +371,22 @@ def iter_archive_urls_for_dates(source: Dict[str, Any], dates: List[date]) -> Li
         urls.append(patt.format(yyyy=d.strftime("%Y"), mm=d.strftime("%m"), dd=d.strftime("%d")))
     return urls
 
+def is_date_based_pattern(pattern: Optional[str]) -> bool:
+    if not pattern:
+        return False
+    return any(tag in pattern for tag in ["{yyyy}", "{mm}", "{dd}"])
+
+def is_page_based_pattern(pattern: Optional[str]) -> bool:
+    if not pattern:
+        return False
+    return "{page}" in pattern
+
+def iter_archive_urls_for_pages(source: Dict[str, Any], max_pages: int = 10) -> List[str]:
+    pattern = source.get("archive_pattern")
+    if not pattern or not is_page_based_pattern(pattern):
+        return []
+    return [pattern.format(page=i) for i in range(1, max_pages + 1)]
+
 # =========================
 # Networking asíncrono + RSS/HTML
 # =========================
