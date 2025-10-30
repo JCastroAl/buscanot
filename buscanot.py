@@ -254,9 +254,6 @@ async def translate_text(session: aiohttp.ClientSession, text: str, target_lang:
     return text
 
 async def translate_terms_list(session: aiohttp.ClientSession, terms: List[Tuple[str,bool]], target_lang: str) -> List[Tuple[str,bool]]:
-    """
-    Traduce cada término, manteniendo la marca (exacto?).
-    """
     out: List[Tuple[str,bool]] = []
     for t, ex in terms:
         tt = await translate_text(session, t, target_lang)
@@ -264,6 +261,59 @@ async def translate_terms_list(session: aiohttp.ClientSession, terms: List[Tuple
             out.append((tt, ex))
     return out
 
+async def prepare_terms_per_language(
+    session: aiohttp.ClientSession,
+    include_terms_raw: str,
+    exclude_terms_raw: str,
+    languages: List[str],
+    user_whole_words: bool,
+    ignore_case: bool,
+) -> Dict[str, Dict[str, Any]]:
+
+    base_inc = split_terms(include_terms_raw)
+    base_exc = split_terms(exclude_terms_raw)
+
+    result: Dict[str, Dict[str, Any]] = {}
+
+    for lang in languages:
+        lang = (lang or "").lower() or "es"
+
+        # empezamos con los originales
+        inc_terms = list(base_inc)
+        exc_terms = list(base_exc)
+
+        # si el idioma no es "sin traducir", intentamos traducir
+        if lang not in {"", "es"}:
+            inc_trans = await translate_terms_list(session, base_inc, lang)
+            exc_trans = await translate_terms_list(session, base_exc, lang)
+
+            def merge(a, b):
+                seen = set()
+                out = []
+                for t in a + b:
+                    key = (t[0].lower(), t[1])
+                    if key not in seen:
+                        seen.add(key)
+                        out.append(t)
+                return out
+
+            inc_terms = merge(inc_terms, inc_trans)
+            exc_terms = merge(exc_terms, exc_trans)
+
+        effective_whole_words = user_whole_words and is_latin_lang(lang)
+
+        inc_re = build_regex_from_terms(inc_terms, whole_words=effective_whole_words, ignore_case=ignore_case) if inc_terms else None
+        exc_re = build_regex_from_terms(exc_terms, whole_words=effective_whole_words, ignore_case=ignore_case) if exc_terms else None
+
+        result[lang] = {
+            "include_terms": inc_terms,
+            "exclude_terms": exc_terms,
+            "include_re": inc_re,
+            "exclude_re": exc_re,
+        }
+
+    return result
+    
 # =========================
 # Respetar robots (caché parsers)
 # =========================
