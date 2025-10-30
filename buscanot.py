@@ -924,14 +924,22 @@ with colC:
 # (3) Filtro temporal
 with st.expander("🗓️ Filtro temporal"):
     st.checkbox("Filtrar por periodo de fechas", key="use_date_filter", value=st.session_state.use_date_filter)
+
     if st.session_state.use_date_filter:
-        st.date_input("Periodo (inicio y fin)", key="date_range", value=st.session_state.date_range, format="YYYY-MM-DD")
+        st.date_input(
+            "Periodo (inicio y fin)",
+            key="date_range",
+            value=st.session_state.date_range,
+            format="DD-MM-YYYY",
+        )
+
         st.selectbox(
             "Campo de fecha a usar",
             ["Fecha de publicación (recomendado)", "Fecha de extracción"],
             key="date_field",
             index=0 if st.session_state.date_field.startswith("Fecha de publicación") else 1,
         )
+
         st.checkbox(
             "Incluir noticias sin fecha de publicación",
             key="include_na_pub",
