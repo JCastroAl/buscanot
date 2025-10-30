@@ -92,8 +92,7 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
     ],
     "Andorra": [
         {"name": "Diari d'Andorra", "url": "https://www.diariandorra.ad/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.diariandorra.ad", "lang": "ca"},
-        {"name": "Bondia Andorra", "url": "https://www.bondia.ad/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.bondia.ad", "lang": "ca"},
-        {"name": "Altaveu", "url": "https://www.altaveu.com/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.altaveu.com", "lang": "ca"},
+        {"name": "El Periòdic d’Andorra", "url": "https://elperiodic.ad/noticies/", "selector": "article h2 a, h3 a, .article-title a, .titular a", "archive_selector": "article h2 a, h3 a, .article-title a, .titular a", "base_url": "https://elperiodic.ad", "archive_pattern": "https://elperiodic.ad/noticies/?page={page}", "lang": "ca"},
     ],
     "Alemania": [
         {"name": "Frankfurter Allgemeine (FAZ)", "url": "https://www.faz.net/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://www.faz.net", "lang": "de"},
