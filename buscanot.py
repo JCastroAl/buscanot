@@ -756,11 +756,27 @@ if "translate_per_source" not in st.session_state:
 # =========================
 # Sidebar: gestión BD
 # =========================
+all_countries = sorted(st.session_state.db.keys())
+
+continent_to_countries = {}
+for c in all_countries:
+    cont = get_continent_for_country(c)
+    continent_to_countries.setdefault(cont, []).append(c)
+
+all_continents = sorted(continent_to_countries.keys())
+
 st.sidebar.header("🗂️ LISTADO DE MEDIOS")
 
-all_countries = sorted(st.session_state.db.keys())
-default_country = "España" if "España" in all_countries else (all_countries[0] if all_countries else "España")
-country = st.sidebar.selectbox("Escoge una nación", all_countries, index=all_countries.index(default_country))
+sidebar_cont = st.sidebar.selectbox("Región", all_continents, key="sidebar_continent")
+countries_in_sidebar_cont = sorted(continent_to_countries.get(sidebar_cont, []))
+
+default_country = "España" if "España" in countries_in_sidebar_cont else (countries_in_sidebar_cont[0] if countries_in_sidebar_cont else "")
+country = st.sidebar.selectbox(
+    "Escoge una nación",
+    countries_in_sidebar_cont,
+    index=countries_in_sidebar_cont.index(default_country) if default_country in countries_in_sidebar_cont else 0,
+    key="sidebar_country",
+)
 
 with st.sidebar.expander(
     f"📜 Medios en {country} ({len(st.session_state.db.get(country, []))})",
@@ -770,11 +786,12 @@ with st.sidebar.expander(
     if not medios:
         st.caption("Sin medios registrados.")
     else:
+        medios = sorted(medios, key=lambda x: x.get("name", ""))
         cols = st.columns(2)
         for i, s in enumerate(medios):
             with cols[i % 2]:
                 st.link_button(s["name"], s["url"], use_container_width=True)
-            
+
 st.sidebar.markdown("---")
 
 # =========================
