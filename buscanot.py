@@ -633,18 +633,21 @@ async def scrape_source_async(
     base_url = source.get("base_url") or None
     lang = (source.get("lang") or "").lower() or "es"
 
+    html_disabled = bool(source.get("html_disabled", False))
+    rss_fallback = source.get("rss_fallback")
+    source_disable_robots = bool(source.get("disable_robots", False))
+
     if not (name and url):
         return []
 
-    # 1) Construcción de regex por medio
+    # 1) Construcción de regex por medio (igual que antes)
     inc_terms = split_terms(include_terms_raw)
     exc_terms = split_terms(exclude_terms_raw)
 
     if translate_per_source and lang:
-        # Traduce manteniendo exactitud si el término venía entre comillas
         inc_trans = await translate_terms_list(session, inc_terms, lang)
         exc_trans = await translate_terms_list(session, exc_terms, lang)
-        # Unión (evita duplicados case-insensitive)
+
         def merge(a: List[Tuple[str,bool]], b: List[Tuple[str,bool]]) -> List[Tuple[str,bool]]:
             seen = set()
             out: List[Tuple[str,bool]] = []
@@ -654,10 +657,10 @@ async def scrape_source_async(
                     seen.add(key)
                     out.append(t)
             return out
+
         inc_terms = merge(inc_terms, inc_trans)
         exc_terms = merge(exc_terms, exc_trans)
 
-    # Coincidencia por palabra sólo si idioma latino
     effective_whole_words = user_whole_words and is_latin_lang(lang)
 
     include_re = build_regex_from_terms(inc_terms, whole_words=effective_whole_words, ignore_case=ignore_case) if inc_terms else None
@@ -674,22 +677,31 @@ async def scrape_source_async(
 
     rows: List[Dict[str, Any]] = []
 
-    # Particiona rango en pasados y hoy cuando se filtra por publicación
     today = date.today()
     past_days: List[date] = []
     include_today = False
     if use_date_filter and date_field.startswith("Fecha de publicación"):
         for d in daterange(start_date, end_date):
-            past_days.append(d)  # incluye también hoy
+            past_days.append(d)
     else:
         include_today = True
 
-    # 2) ARCHIVOS (pasado)
+    effective_respect_robots = respect_robots and (not source_disable_robots)
+
+    # 2) ARCHIVOS (pasado) -- igual que antes, solo cambiamos respect_robots
     if past_days:
         archive_urls = iter_archive_urls_for_dates(source, past_days)
         if archive_urls and selector_archive:
             for page in archive_urls:
-                html = await fetch_html(session, page, headers=headers, timeout=timeout, ttl_sec=ttl_sec, neg_ttl_sec=neg_ttl_sec, respect_robots=respect_robots)
+                html = await fetch_html(
+                    session,
+                    page,
+                    headers=headers,
+                    timeout=timeout,
+                    ttl_sec=ttl_sec,
+                    neg_ttl_sec=neg_ttl_sec,
+                    respect_robots=effective_respect_robots,  # 🔴
+                )
                 if not html:
                     continue
                 try:
@@ -726,7 +738,7 @@ async def scrape_source_async(
 
     # 3) HOY (RSS + portada)
     if include_today:
-        rss = await try_fetch_rss(session, url, headers, timeout)
+        rss = await try_fetch_rss(session, url, headers, timeout, rss_url=rss_fallback)
         if rss:
             for title, href, dt in rss:
                 full_url = absolutize(href, base_url or url)
@@ -741,8 +753,17 @@ async def scrape_source_async(
                         "publicado": (dt.isoformat() if dt else None),
                         "fuente": "rss",
                     })
-        if selector_home:
-            html = await fetch_html(session, url, headers=headers, timeout=timeout, ttl_sec=ttl_sec, neg_ttl_sec=neg_ttl_sec, respect_robots=respect_robots)
+
+        if (not html_disabled) and selector_home:
+            html = await fetch_html(
+                session,
+                url,
+                headers=headers,
+                timeout=timeout,
+                ttl_sec=ttl_sec,
+                neg_ttl_sec=neg_ttl_sec,
+                respect_robots=effective_respect_robots,
+            )
             if html:
                 try:
                     soup = BeautifulSoup(html, "html.parser")
