@@ -87,6 +87,8 @@ DEFAULT_DB: Dict[str, List[Dict[str, Any]]] = {
         {"name": "Observador", "url": "https://observador.pt/", "selector": "article h2 a, h3 a, .headline a", "base_url": "https://observador.pt", "lang": "pt"},
         {"name": "Correio da Manhã", "url": "https://www.cmjornal.pt/", "selector": "article h2 a, h3 a, .tit a", "base_url": "https://www.cmjornal.pt", "lang": "pt"},
         {"name": "Jornal de Notícias", "url": "https://www.jn.pt/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.jn.pt", "lang": "pt"},
+        {"name": "RTP Notícias", "url": "https://www.rtp.pt/noticias/", "selector": "article h2 a, h3 a, .news a, .noticia_titulo a, .card-title a", "archive_selector": "article h2 a, h3 a, .news a, .noticia_titulo a, .card-title a", "base_url": "https://www.rtp.pt", "archive_pattern": "https://www.rtp.pt/noticias/?pg={page}", "lang": "pt"},
+        {"name": "Lusa", "url": "https://www.lusa.pt/", "selector": "article h2 a, h3 a, .news-title a, .card-title a", "archive_selector": None, "base_url": "https://www.lusa.pt", "archive_pattern": None, "lang": "pt"},
     ],
     "Andorra": [
         {"name": "Diari d'Andorra", "url": "https://www.diariandorra.ad/", "selector": "article h2 a, h3 a, .title a", "base_url": "https://www.diariandorra.ad", "lang": "ca"},
