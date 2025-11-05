@@ -1978,4 +1978,946 @@
           "rss_fallback": "http://www.asriran.com/fa/rss/allnews"
         }
       ]
+      "Baréin": [
+        {
+          "name": "BNA Bahrain News Agency",
+          "url": "http://bna.bh/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://bna.bh",
+          "archive_pattern": null,
+          "lang": "ar",
+          "rss_fallback": "http://www.twentyfoursevennews.com/category/media/bna-bahrain-news-agency/feed/"
+        }
+      ],
+      "Bangladés": [
+        {
+          "name": "Kalerkantho.com",
+          "url": "http://kalerkantho.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://kalerkantho.com",
+          "archive_pattern": null,
+          "lang": "bn",
+          "rss_fallback": "http://www.kalerkantho.com/rss.xml"
+        }
+      ],
+      "Barbados": [
+        {
+          "name": "Voice of Barbados",
+          "url": "http://vob929.ocmnet.net/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://vob929.ocmnet.net",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://www.theguardian.com/world/barbados/rss"
+        }
+      ],
+      "Belice": [
+        {
+          "name": "Channel 5",
+          "url": "http://channel5belize.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://channel5belize.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://edition.channel5belize.com/OYE/?feed=rss2&tag=love"
+        },
+        {
+          "name": "The Reporter",
+          "url": "http://www.reporter.bz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.reporter.bz",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://www.hollywoodreporter.com/taxonomy/term/59/0/feed"
+        },
+        {
+          "name": "Amandala",
+          "url": "http://amandala.com.bz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://amandala.com.bz",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://amandala.com.bz/news/feed/"
+        }
+      ],
+      "Bermudas": [
+        {
+          "name": "Bernews",
+          "url": "http://bernews.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://bernews.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://bernews.com/tag/rory-field/feed/"
+        }
+      ],
+      "Bolivia": [
+        {
+          "name": "Opinion",
+          "url": "https://www.opinion.com.bo/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.opinion.com.bo",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.opinion.com.bo/rss/"
+        },
+        {
+          "name": "La Epoca",
+          "url": "https://www.la-epoca.com.bo/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.la-epoca.com.bo",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.la-epoca.com.bo/feed/"
+        },
+        {
+          "name": "Radio Fides",
+          "url": "https://radiofides.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://radiofides.com",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://radiofides.com/es/feed/"
+        },
+        {
+          "name": "La Patria",
+          "url": "https://lapatria.bo/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://lapatria.bo",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://lapatria.bo/feed/"
+        }
+      ],
+      "Birmania": [
+        {
+          "name": "The Irrawaddy",
+          "url": "http://irrawaddy.org/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://irrawaddy.org",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://www.irrawaddy.org/feed"
+        }
+      ],
+      "Burundi": [
+        {
+          "name": "IWACU",
+          "url": "http://iwacu-burundi.org/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://iwacu-burundi.org",
+          "archive_pattern": null,
+          "lang": "fr",
+          "rss_fallback": "http://www.iwacu-burundi.org/feed/"
+        },
+        {
+          "name": "RTNB",
+          "url": "http://www.rtnb.bi/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.rtnb.bi",
+          "archive_pattern": null,
+          "lang": "fr",
+          "rss_fallback": "http://www.iwacu-burundi.org/tag/presidence/feed/"
+        }
+      ],
+      "Camerún": [
+        {
+          "name": "AllAfrica Cameroon",
+          "url": "http://allafrica.com/cameroon/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://allafrica.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://allafrica.com/tools/headlines/rdf/cameroon/headlines.rdf"
+        },
+        {
+          "name": "Afrik.com",
+          "url": "http://www.afrik.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.afrik.com",
+          "archive_pattern": null,
+          "lang": "fr",
+          "rss_fallback": "http://www.afrik.com/affiliation/backend-foot-pays34.html"
+        },
+        {
+          "name": "Africa Presse",
+          "url": "http://www.africapresse.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.africapresse.com",
+          "archive_pattern": null,
+          "lang": "fr",
+          "rss_fallback": "http://www.africapresse.com/feed/"
+        }
+      ],
+      "Canadá": [
+        {
+          "name": "CBC News",
+          "url": "https://www.cbc.ca/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.cbc.ca",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://www.cbc.ca/cmlink/rss-topstories"
+        },
+        {
+          "name": "Radio Canada",
+          "url": "http://www.radio-canada.ca/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.radio-canada.ca",
+          "archive_pattern": null,
+          "lang": "fr",
+          "rss_fallback": "https://ici.radio-canada.ca/rss/4159"
+        },
+        {
+          "name": "National Post",
+          "url": "https://www.nationalpost.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.nationalpost.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://nationalpost.com/feed/"
+        },
+        {
+          "name": "Toronto Sun",
+          "url": "https://www.torontosun.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.torontosun.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://torontosun.com/category/news/feed"
+        },
+        {
+          "name": "Global News",
+          "url": "https://www.globalnews.ca/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.globalnews.ca",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://globalnews.ca/feed/"
+        },
+        {
+          "name": "Calgary Herald",
+          "url": "https://calgaryherald.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://calgaryherald.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://calgaryherald.com/feed"
+        },
+        {
+          "name": "Vancouver Sun",
+          "url": "https://torontosun.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://torontosun.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://torontosun.com/feed/"
+        },
+        {
+          "name": "Edmonton Journal",
+          "url": "https://edmontonjournal.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://edmontonjournal.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://edmontonjournal.com/feed/"
+        },
+        {
+          "name": "Ottawa Citizen",
+          "url": "https://www.ottawacitizen.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.ottawacitizen.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://ottawacitizen.com/feed/"
+        },
+        {
+          "name": "Montreal Gazette",
+          "url": "https://montrealgazette.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://montrealgazette.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://montrealgazette.com/feed/"
+        },
+        {
+          "name": "Calgary Sun",
+          "url": "https://www.calgarysun.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.calgarysun.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://calgarysun.com/feed"
+        },
+        {
+          "name": "Le Journal de Montreal",
+          "url": "http://www.journaldemontreal.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.journaldemontreal.com",
+          "archive_pattern": null,
+          "lang": "fr",
+          "rss_fallback": "http://www.journaldemontreal.com/accueil/rss.xml"
+        },
+        {
+          "name": "Winnipeg Free Press",
+          "url": "https://www.winnipegfreepress.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.winnipegfreepress.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://www.winnipegfreepress.com/breakingnews/feed"
+        },
+        {
+          "name": "Windsor Star",
+          "url": "https://windsorstar.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://windsorstar.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://windsorstar.com/feed"
+        },
+        {
+          "name": "The Tyee",
+          "url": "https://thetyee.ca/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://thetyee.ca",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://thetyee.ca/rss2.xml"
+        },
+        {
+          "name": "The National Observer",
+          "url": "https://www.nationalobserver.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.nationalobserver.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://www.nationalobserver.com/front/rss"
+        },
+        {
+          "name": "Business in Vancouver",
+          "url": "https://www.biv.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.biv.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://www.biv.com/rss"
+        },
+        {
+          "name": "Grande Prairie Daily Herald",
+          "url": "https://www.dailyheraldtribune.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.dailyheraldtribune.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://www.dailyheraldtribune.com/feed"
+        },
+        {
+          "name": "Le Journal de Quebec",
+          "url": "https://www.journaldequebec.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.journaldequebec.com",
+          "archive_pattern": null,
+          "lang": "fr",
+          "rss_fallback": "https://www.journaldequebec.com/rss.xml"
+        }
+      ],
+      "Cabo Verde": [
+        {
+          "name": "SAPO.cv",
+          "url": "http://www.sapo.cv",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.sapo.cv",
+          "archive_pattern": null,
+          "lang": "pt",
+          "rss_fallback": "http://videos.sapo.cv/asemana/rss"
+        }
+      ],
+      "Islas Caimán": [
+        {
+          "name": "Cayman News Service",
+          "url": "http://caymannewsservice.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://caymannewsservice.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "https://caymannewsservice.com/feed/"
+        }
+      ],
+      "Chile": [
+        {
+          "name": "Diario Financiero",
+          "url": "https://www.df.cl/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.df.cl",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.df.cl/noticias/site/list/port/rss.xml"
+        },
+        {
+          "name": "Publimetro",
+          "url": "https://publimetro.cl/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://publimetro.cl",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.publimetro.cl/arc/outboundfeeds/rss/?outputType=xml"
+        },
+        {
+          "name": "El Siglo",
+          "url": "https://elsiglo.cl/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://elsiglo.cl",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://elsiglo.cl/feed/"
+        },
+        {
+          "name": "La Nación",
+          "url": "https://lanacion.cl/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://lanacion.cl",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.lanacion.cl/feed/"
+        }
+      ],
+      "Colombia": [
+        {
+          "name": "El Colombiano",
+          "url": "http://elcolombiano.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://elcolombiano.com",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "http://www.elcolombiano.com/rss/inicio.xml"
+        },
+        {
+          "name": "Futbolred.com",
+          "url": "http://futbolred.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://futbolred.com",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "http://www.futbolred.com/feeds/home"
+        }
+      ],
+      "Costa Rica": [
+        {
+          "name": "everardoherrera.com",
+          "url": "http://everardoherrera.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://everardoherrera.com",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "http://everardoherrera.com/index.php?format=feed&type=rss"
+        },
+        {
+          "name": "El Financiero",
+          "url": "http://elfinancierocr.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://elfinancierocr.com",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "http://www.elfinancierocr.com/rss/"
+        }
+      ],
+      "República Checa": [
+        {
+          "name": "Novinky.cz",
+          "url": "http://novinky.cz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://novinky.cz",
+          "archive_pattern": null,
+          "lang": "cs",
+          "rss_fallback": "http://www.novinky.cz/rss/"
+        },
+        {
+          "name": "Super.cz",
+          "url": "http://super.cz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://super.cz",
+          "archive_pattern": null,
+          "lang": "cs",
+          "rss_fallback": "http://www.super.cz/rss2/"
+        },
+        {
+          "name": "Sport.cz",
+          "url": "http://sport.cz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://sport.cz",
+          "archive_pattern": null,
+          "lang": "cs",
+          "rss_fallback": "http://www.sport.cz/rss2/"
+        },
+        {
+          "name": "Blesk.cz",
+          "url": "http://blesk.cz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://blesk.cz",
+          "archive_pattern": null,
+          "lang": "cs",
+          "rss_fallback": "http://www.blesk.cz/rss/"
+        },
+        {
+          "name": "Aktualne.cz",
+          "url": "http://aktualne.centrum.cz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://aktualne.centrum.cz",
+          "archive_pattern": null,
+          "lang": "cs",
+          "rss_fallback": "http://zpravy.aktualne.cz/rss/"
+        },
+        {
+          "name": "Denik.cz",
+          "url": "http://denik.cz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://denik.cz",
+          "archive_pattern": null,
+          "lang": "cs",
+          "rss_fallback": "http://www.denik.cz/rss/sport.html"
+        },
+        {
+          "name": "Lidovky.cz",
+          "url": "http://lidovky.cz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://lidovky.cz",
+          "archive_pattern": null,
+          "lang": "cs",
+          "rss_fallback": "http://servis.lidovky.cz/rss.aspx?c=ln_lidovky"
+        },
+        {
+          "name": "Penize.cz",
+          "url": "http://penize.cz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://penize.cz",
+          "archive_pattern": null,
+          "lang": "cs",
+          "rss_fallback": "http://feeds.feedburner.com/penize?format=xml"
+        },
+        {
+          "name": "IHNED.cz",
+          "url": "http://ihned.cz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://ihned.cz",
+          "archive_pattern": null,
+          "lang": "cs",
+          "rss_fallback": "http://ihned.cz/?p=000000_rss"
+        },
+        {
+          "name": "Kurzy.cz",
+          "url": "http://kurzy.cz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://kurzy.cz",
+          "archive_pattern": null,
+          "lang": "cs",
+          "rss_fallback": "http://www.kurzy.cz/zpravy/util/forext.dat?type=rss"
+        },
+        {
+          "name": "Aha!",
+          "url": "http://ahaonline.cz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://ahaonline.cz",
+          "archive_pattern": null,
+          "lang": "cs",
+          "rss_fallback": "http://www.ahaonline.cz/rss.php"
+        },
+        {
+          "name": "ShowBiz.cz",
+          "url": "http://showbiz.cz/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://showbiz.cz",
+          "archive_pattern": null,
+          "lang": "cs",
+          "rss_fallback": "http://www.showbiz.cz/feed/"
+        }
+      ],
+      "República Democrática del Congo": [
+        {
+          "name": "Congo Planet",
+          "url": "http://www.congoplanet.com",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.congoplanet.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://www.congoplanet.com/feeds/rss_congo_africa.xml"
+        }
+      ],
+      "Yibuti": [
+        {
+          "name": "La Nacion",
+          "url": "http://www.lanation.dj/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.lanation.dj",
+          "archive_pattern": null,
+          "lang": "fr",
+          "rss_fallback": "http://www.nacion.com/rss/"
+        }
+      ],
+      "Dominica": [
+        {
+          "name": "Dominica News",
+          "url": "http://dominicanewsonline.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://dominicanewsonline.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://dominicanewsonline.com/news/feed/"
+        }
+      ],
+      "República Dominicana": [
+        {
+          "name": "Almomento.net",
+          "url": "http://almomento.net/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://almomento.net",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "http://almomento.net/feed/"
+        }
+      ],
+      "Ecuador": [
+        {
+          "name": "El Universo",
+          "url": "https://eluniverso.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://eluniverso.com",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.eluniverso.com/arc/outboundfeeds/rss-subsection/noticias/ecuador?outputType=xml"
+        },
+        {
+          "name": "GK City",
+          "url": "https://gk.city/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://gk.city",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://gk.city/feed/"
+        },
+        {
+          "name": "Expreso",
+          "url": "https://expreso.ec/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://expreso.ec",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.expreso.ec/rss/"
+        },
+        {
+          "name": "El Mercurio",
+          "url": "https://elmercurio.com.ec/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://elmercurio.com.ec",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://elmercurio.com.ec/feed/"
+        },
+        {
+          "name": "La Prensa",
+          "url": "https://www.laprensa.com.ec/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.laprensa.com.ec",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.laprensa.com.ec/feed/"
+        },
+        {
+          "name": "Los Andes",
+          "url": "https://www.diariolosandes.com.ec/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.diariolosandes.com.ec",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.diariolosandes.com.ec/feed/"
+        },
+        {
+          "name": "La Republica",
+          "url": "https://larepublica.ec/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://larepublica.ec",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.larepublica.ec/feed/"
+        },
+        {
+          "name": "El Heraldo",
+          "url": "https://www.elheraldo.com.ec/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.elheraldo.com.ec",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.elheraldo.com.ec/feed/"
+        },
+        {
+          "name": "Crónica",
+          "url": "https://cronica.com.ec/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://cronica.com.ec",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://cronica.com.ec/feed/"
+        },
+        {
+          "name": "Manabí Noticias",
+          "url": "https://manabinoticias.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://manabinoticias.com",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://manabinoticias.com/feed/"
+        },
+        {
+          "name": "Noti Amazonía",
+          "url": "https://www.notiamazonia.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.notiamazonia.com",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.notiamazonia.com/feed/"
+        },
+        {
+          "name": "El Amazónico",
+          "url": "https://www.elamazonico.com/portal/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://www.elamazonico.com",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.elamazonico.com/portal/feed/"
+        },
+        {
+          "name": "Qué!",
+          "url": "https://quenoticias.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://quenoticias.com",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://quenoticias.com/feed/"
+        },
+        {
+          "name": "ecuavisa",
+          "url": "https://ecuavisa.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://ecuavisa.com",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.ecuavisa.com/rss/noticias"
+        },
+        {
+          "name": "Diario El Mercurio",
+          "url": "https://elmercurio.com.ec/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://elmercurio.com.ec",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://elmercurio.com.ec/feed/"
+        },
+        {
+          "name": "Ecuador en vivo",
+          "url": "https://ecuadorenvivo.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://ecuadorenvivo.com",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://ecuadorenvivo.com/feed/"
+        },
+        {
+          "name": "futbolecuador.com",
+          "url": "https://futbolecuador.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://futbolecuador.com",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://www.futbolecuador.com/stories/rss"
+        },
+        {
+          "name": "StudioFútbol",
+          "url": "https://studiofutbol.com.ec/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "https://studiofutbol.com.ec",
+          "archive_pattern": null,
+          "lang": "es",
+          "rss_fallback": "https://studiofutbol.com.ec/feed/"
+        }
+      ],
+      "Egipto": [
+        {
+          "name": "Shorouk",
+          "url": "http://www.shorouknews.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.shorouknews.com",
+          "archive_pattern": null,
+          "lang": "ar",
+          "rss_fallback": "http://www.shorouknews.com/columns/rss/"
+        },
+        {
+          "name": "IkhwanOnline.com",
+          "url": "http://www.ikhwanonline.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.ikhwanonline.com",
+          "archive_pattern": null,
+          "lang": "ar",
+          "rss_fallback": "http://www.ikhwanwiki.com/index.php?title=%D9%85%D9%84%D9%81_%D8%A7%D9%84%D8%A5%D8%AE%D9%88%D8%A7%D9%86_%D9%81%D9%8A_%D8%A7%D9%84%D9%8A%D9%85%D9%86&feed=atom&action=history"
+        }
+      ],
+      "Eritrea": [
+        {
+          "name": "Asmarino Independent",
+          "url": "http://www.asmarino.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.asmarino.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://asmarino.com/?format=feed&type=rss"
+        },
+        {
+          "name": "VOA Tigrigna",
+          "url": "http://tigrigna.voanews.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://tigrigna.voanews.com",
+          "archive_pattern": null,
+          "lang": "ti",
+          "rss_fallback": "http://tigrigna.voanews.com/podcast/?count=50&zoneId=3315"
+        },
+        {
+          "name": "Eritrea Profile",
+          "url": "http://www.shabait.com/eritrea-profile",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.shabait.com",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://feeds.bbci.co.uk/news/world/africa/rss.xml"
+        }
+      ],
+      "Etiopía": [
+        {
+          "name": "Quatero.net",
+          "url": "http://www.quatero.net/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.quatero.net",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://quatero.net/archives/category/interviews/feed"
+        }
+      ],
+      "Polinesia Francesa": [
+        {
+          "name": "Tahiti Infos",
+          "url": "http://www.tahiti-infos.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://www.tahiti-infos.com",
+          "archive_pattern": null,
+          "lang": "fr",
+          "rss_fallback": "http://www.tahiti-infos.com/xml/syndication.rss"
+        },
+        {
+          "name": "Tahiti News",
+          "url": "http://tahitinews.co/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://tahitinews.co",
+          "archive_pattern": null,
+          "lang": "fr",
+          "rss_fallback": "https://tahitinews.co/feed/"
+        }
+      ],
+      "Gambia": [
+        {
+          "name": "Point",
+          "url": "http://thepoint.gm/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://thepoint.gm",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://thepoint.gm/posts/rss/xml"
+        }
+      ]
 }
