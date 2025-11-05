@@ -903,7 +903,7 @@
       "selector": "article h2 a, h3 a, .headline a, .title a",
       "archive_selector": null,
       "base_url": "https://www.mbl.is",
-      "archive_pattern": null,
+      "archive_pattern": "http://www.mbl.is/mbl-frettir-forsida",
       "lang": "is"
     },
     {
@@ -921,7 +921,7 @@
       "selector": "article h2 a, h3 a, .headline a, .title a",
       "archive_selector": null,
       "base_url": "https://www.visir.is",
-      "archive_pattern": null,
+      "archive_pattern": "https://www.visir.is/rss/frettir",
       "lang": "is"
     }
   ],
@@ -1841,5 +1841,67 @@
         "lang": "zh",
         "rss_fallback": "http://feeds.feedburner.com/123greetings-daily-rss"
       }
-  ]
+    ],
+      "India": [
+      {
+        "name": "Times of India",
+        "url": "http://timesofindia.indiatimes.com/",
+        "selector": "article h2 a, h3 a, .headline a, .title a",
+        "archive_selector": null,
+        "base_url": "http://timesofindia.indiatimes.com",
+        "archive_pattern": null,
+        "lang": "en",
+        "rss_fallback": "http://timesofindia.indiatimes.com/rssfeedsdefault.cms"
+      },
+      {
+        "name": "The Economic Times",
+        "url": "http://economictimes.indiatimes.com/",
+        "selector": "article h2 a, h3 a, .headline a, .title a",
+        "archive_selector": null,
+        "base_url": "http://economictimes.indiatimes.com",
+        "archive_pattern": null,
+        "lang": "en",
+        "rss_fallback": "http://economictimes.indiatimes.com/rssfeedsdefault.cms"
+      },
+      {
+        "name": "India.com",
+        "url": "http://india.com/",
+        "selector": "article h2 a, h3 a, .headline a, .title a",
+        "archive_selector": null,
+        "base_url": "http://india.com",
+        "archive_pattern": null,
+        "lang": "en",
+        "rss_fallback": "http://www.india.com/feed/"
+      },
+      {
+        "name": "Zee News",
+        "url": "http://zeenews.india.com/",
+        "selector": "article h2 a, h3 a, .headline a, .title a",
+        "archive_selector": null,
+        "base_url": "http://zeenews.india.com",
+        "archive_pattern": null,
+        "lang": "en",
+        "rss_fallback": "http://zeenews.india.com/rss/india-national-news.xml"
+      },
+      {
+        "name": "The Hindu",
+        "url": "http://thehindu.com/",
+        "selector": "article h2 a, h3 a, .headline a, .title a",
+        "archive_selector": null,
+        "base_url": "http://thehindu.com",
+        "archive_pattern": null,
+        "lang": "en",
+        "rss_fallback": "http://www.thehindu.com/news/?service=rss"
+      },
+      {
+        "name": "Dainik Jagran",
+        "url": "http://jagran.com/",
+        "selector": "article h2 a, h3 a, .headline a, .title a",
+        "archive_selector": null,
+        "base_url": "http://jagran.com",
+        "archive_pattern": null,
+        "lang": "hi",
+        "rss_fallback": "http://rss.jagran.com/local/uttar-pradesh/lucknow-city.xml"
+      }
+    ]
 }
