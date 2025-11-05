@@ -831,6 +831,7 @@ COUNTRY_TO_CONTINENT = {
     "Irlanda": "Europa",
     "Islandia": "Europa",
     "Italia": "Europa",
+    "Isla de Man": "Europa",
     # África
     "Algeria": "África",
     "Marruecos": "África",
@@ -844,6 +845,7 @@ COUNTRY_TO_CONTINENT = {
     "Eritrea": "África",
     "Etiopía": "África",
     "Gambia": "África",
+    "Guinea": "África",
     # América
     "Barbados": "América",
     "Belice": "América",
@@ -862,6 +864,9 @@ COUNTRY_TO_CONTINENT = {
     "Bahamas": "América",
     "Estados Unidos": "América",
     "Aruba": "América",
+    "Guatemala": "América",
+    "Guyana": "América",
+    "Haití": "América",
     # Asia
     "Afghanistan": "Asia",
     "Armenia": "Asia",
@@ -872,10 +877,15 @@ COUNTRY_TO_CONTINENT = {
     "Japón": "Asia",
     "Palestina": "Asia",
     "Israel": "Asia",
+    "India": "Asia",
+    "Indonesia": "Asia",
+    "Irán": "Asia",
+    "Hong Kong": "Asia",
     # Oceanía
     "Australia": "Oceanía",
     "Polinesia Francesa": "Oceanía",
-    "Islas Caimán": "Oceanía"
+    "Islas Caimán": "Oceanía",
+    "Guam": "Oceanía",
 }
 
 def get_continent_for_country(country: str) -> str:
