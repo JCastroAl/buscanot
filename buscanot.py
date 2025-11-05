@@ -909,6 +909,7 @@ COUNTRY_TO_CONTINENT = {
     "Martinica": "América",
     # Asia
     "Afghanistan": "Asia",
+    "Arabía Saudí": "Asia",
     "Armenia": "Asia",
     "Azerbaiyán": "Asia",
     "Baréin": "Asia",
