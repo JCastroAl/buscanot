@@ -839,7 +839,7 @@ COUNTRY_TO_CONTINENT = {
     "Brasil": "América",
     "Cuba": "América",
     "Argentina": "América",
-    "Bahamas": "América"
+    "Bahamas": "América",
     "Estados Unidos": "América",
     "Aruba": "América",
     # Asia
