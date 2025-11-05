@@ -874,7 +874,7 @@
       "selector": "article h2 a, h3 a, .headline a, .title a",
       "archive_selector": null,
       "base_url": "https://www.independent.ie",
-      "archive_pattern": null,
+      "archive_pattern": "http://www.independent.ie/irish-news/rss",
       "lang": "en"
     },
     {
@@ -892,7 +892,7 @@
       "selector": "article h2 a, h3 a, .headline a, .title a",
       "archive_selector": null,
       "base_url": "https://www.thejournal.ie",
-      "archive_pattern": null,
+      "archive_pattern": "http://www.thejournal.ie/feed/",
       "lang": "en"
     }
   ],
