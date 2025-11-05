@@ -789,7 +789,7 @@
       "selector": "article h2 a, h3 a, .headline a, .title a",
       "archive_selector": null,
       "base_url": "https://www.tanea.gr",
-      "archive_pattern": null,
+      "archive_pattern": "http://www.tanea.gr/rss.axd?pgid=1",
       "lang": "el"
     },
     {
@@ -798,7 +798,7 @@
       "selector": "article h2 a, h3 a, .headline a, .title a",
       "archive_selector": null,
       "base_url": "https://www.tovima.gr",
-      "archive_pattern": null,
+      "archive_pattern": "http://www.tovima.gr/feed/politics/",
       "lang": "el"
     },
     {
@@ -1771,5 +1771,29 @@
       "lang": "en",
       "rss_fallback": "http://bahamaspress.com/category/news/feed/"
     }
-  ]
+  ],
+    "Guam": [
+    {
+      "name": "KUAM News",
+      "url": "http://www.kuam.com/",
+      "selector": "article h2 a, h3 a, .headline a, .title a",
+      "archive_selector": null,
+      "base_url": "http://www.kuam.com",
+      "archive_pattern": null,
+      "lang": "en",
+      "rss_fallback": "http://www.kuam.com/Global/category.asp?C=164100&clienttype=rss"
+    }
+  ],
+    "Guatemala": [
+      {
+        "name": "Plaza Publica",
+        "url": "http://plazapublica.com.gt/",
+        "selector": "article h2 a, h3 a, .headline a, .title a",
+        "archive_selector": null,
+        "base_url": "http://plazapublica.com.gt",
+        "archive_pattern": null,
+        "lang": "es",
+        "rss_fallback": "http://www.plazapublica.com.gt/rss"
+      }
+    ]
 }
