@@ -811,6 +811,7 @@ COUNTRY_TO_CONTINENT = {
     "España": "Europa",
     "Portugal": "Europa",
     "Francia": "Europa",
+    "Albania": "Europa",
     "Andorra": "Europa",
     "Alemania": "Europa",
     "Austria": "Europa",
@@ -830,15 +831,24 @@ COUNTRY_TO_CONTINENT = {
     "Islandia": "Europa",
     "Italia": "Europa",
     # África
+    "Algeria": "África",
     "Marruecos": "África",
     "Palestina": "Asia",
     "Israel": "Asia",
     # América
     "Brasil": "América",
     "Cuba": "América",
+    "Argentina": "América",
+    "Bahamas": "América"
     "Estados Unidos": "América",
+    "Aruba": "América",
     # Asia
+    "Afghanistan": "Asia",
+    "Armenia": "Asia",
+    "Azerbaiyán": "Asia",
     "Japón": "Asia",
+    # Oceanía
+    "Australia": "Oceanía",
 }
 
 def get_continent_for_country(country: str) -> str:
