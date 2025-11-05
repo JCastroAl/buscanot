@@ -7,8 +7,8 @@
       "archive_selector": "h2 a, h3 a, .c_t a",
       "base_url": "https://elpais.com",
       "archive_pattern": "https://elpais.com/hemeroteca/{yyyy}-{mm}-{dd}/",
-      "rss_fallback": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/ultimas-noticias/portada",
-      "lang": "es"
+      "lang": "es",
+      "rss_fallback": "https://elpais.com/rss/elpais/portada.xml"
     },
     {
       "name": "El Mundo",
@@ -17,8 +17,8 @@
       "archive_selector": "h2 a, h3 a, .ue-c-cover-content__link, .mod-title a, .headline a",
       "base_url": "https://www.elmundo.es",
       "archive_pattern": "https://www.elmundo.es/elmundo/hemeroteca/{yyyy}/{mm}/{dd}/noticias.html",
-      "rss_fallback": "https://e00-elmundo.uecdn.es/rss/portada.xml",
-      "lang": "es"
+      "lang": "es",
+      "rss_fallback": "http://estaticos.elmundo.es/elmundo/rss/portada.xml"
     },
     {
       "name": "ABC",
@@ -47,7 +47,7 @@
       "base_url": "https://www.elconfidencial.com",
       "archive_pattern": null,
       "lang": "es",
-      "rss_fallback": "https://www.elconfidencial.com/rss/espana/"
+      "rss_fallback": "https://rss.elconfidencial.com/espana/"
     },
     {
       "name": "RTVE",
@@ -56,7 +56,8 @@
       "archive_selector": null,
       "base_url": "https://www.rtve.es/noticias/",
       "archive_pattern": null,
-      "lang": "es"
+      "lang": "es",
+      "rss_fallback": "https://www.rtve.es/rss/temas_noticias.xml"
     },
     {
       "name": "La Razón",
@@ -74,7 +75,8 @@
       "archive_selector": null,
       "base_url": "https://www.elperiodico.com/",
       "archive_pattern": null,
-      "lang": "es"
+      "lang": "es",
+      "rss_fallback": "https://www.elperiodico.com/es/rss/rss_portada.xml"
     }
   ],
   "Marruecos": [
@@ -85,7 +87,8 @@
       "archive_selector": null,
       "base_url": "https://www.hespress.com",
       "archive_pattern": null,
-      "lang": "ar"
+      "lang": "ar",
+      "rss_fallback": "https://hespress.com/feed"
     },
     {
       "name": "Le Matin",
@@ -132,7 +135,7 @@
       "archive_selector": "article h2 a, h3 a, .title a, .post-title a",
       "base_url": "https://www.akhbarona.com",
       "archive_pattern": "https://www.akhbarona.com/last/index.{page}.html",
-      "rss_fallback": "https://www.akhbarona.com/rss.xml",
+      "rss_fallback": "https://akhbarona.com/feed/index.rss",
       "lang": "ar"
     },
     {
@@ -142,6 +145,7 @@
       "archive_selector": null,
       "base_url": "https://www.moroccoworldnews.com",
       "archive_pattern": null,
+      "rss_fallback": "https://www.moroccoworldnews.com/feed/",
       "lang": "en"
     }
   ],
@@ -153,7 +157,8 @@
       "archive_selector": "article h2 a, h3 a, .article__title a",
       "base_url": "https://www.lemonde.fr",
       "archive_pattern": "https://www.lemonde.fr/archives-du-monde/{dd}-{mm}-{yyyy}/",
-      "lang": "fr"
+      "lang": "fr",
+      "rss_fallback": "https://www.lemonde.fr/rss/une.xml"
     },
     {
       "name": "Le Figaro",
@@ -181,7 +186,8 @@
       "archive_selector": null,
       "base_url": "https://www.leparisien.fr",
       "archive_pattern": null,
-      "lang": "fr"
+      "lang": "fr",
+      "rss_fallback": "https://feeds.leparisien.fr/leparisien/rss"
     },
     {
       "name": "La Croix",
