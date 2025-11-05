@@ -1795,5 +1795,51 @@
         "lang": "es",
         "rss_fallback": "http://www.plazapublica.com.gt/rss"
       }
-    ]
+   ],
+      "Guyana": [
+      {
+        "name": "Kaieteur News",
+        "url": "http://kaieteurnewsonline.com/",
+        "selector": "article h2 a, h3 a, .headline a, .title a",
+        "archive_selector": null,
+        "base_url": "http://kaieteurnewsonline.com",
+        "archive_pattern": null,
+        "lang": "en",
+        "rss_fallback": "http://www.kaieteurnewsonline.com/feed/"
+      },
+      {
+        "name": "Capitol News",
+        "url": "http://capitolnewsgy.com/",
+        "selector": "article h2 a, h3 a, .headline a, .title a",
+        "archive_selector": null,
+        "base_url": "http://capitolnewsgy.com",
+        "archive_pattern": null,
+        "lang": "en",
+        "rss_fallback": "http://capitolnewsgy.com/feed/"
+      }
+    ],
+      "Haití": [
+      {
+        "name": "Haiti Libre",
+        "url": "http://haitilibre.com/",
+        "selector": "article h2 a, h3 a, .headline a, .title a",
+        "archive_selector": null,
+        "base_url": "http://haitilibre.com",
+        "archive_pattern": null,
+        "lang": "en",
+        "rss_fallback": "http://www.haitilibre.com/rss-flash-en.xml"
+      }
+    ],
+      "Hong Kong": [
+      {
+        "name": "Orient Daily",
+        "url": "http://orientaldaily.on.cc/",
+        "selector": "article h2 a, h3 a, .headline a, .title a",
+        "archive_selector": null,
+        "base_url": "http://orientaldaily.on.cc",
+        "archive_pattern": null,
+        "lang": "zh",
+        "rss_fallback": "http://feeds.feedburner.com/123greetings-daily-rss"
+      }
+    ],
 }
