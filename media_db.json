@@ -7,6 +7,7 @@
       "archive_selector": "h2 a, h3 a, .c_t a",
       "base_url": "https://elpais.com",
       "archive_pattern": "https://elpais.com/hemeroteca/{yyyy}-{mm}-{dd}/",
+      "rss_fallback": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/ultimas-noticias/portada",
       "lang": "es"
     },
     {
@@ -16,6 +17,7 @@
       "archive_selector": "h2 a, h3 a, .ue-c-cover-content__link, .mod-title a, .headline a",
       "base_url": "https://www.elmundo.es",
       "archive_pattern": "https://www.elmundo.es/elmundo/hemeroteca/{yyyy}/{mm}/{dd}/noticias.html",
+      "rss_fallback": "https://e00-elmundo.uecdn.es/rss/portada.xml",
       "lang": "es"
     },
     {
