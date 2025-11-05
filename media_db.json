@@ -1198,158 +1198,157 @@
       "lang": "en"
     }
   ],
-  "Brasil": [
-    {
-  	"name": "O Dia",
-  	"url": "https://odia.ig.com.br/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://odia.ig.com.br/",
-  	"archive_pattern":null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "null"
-	},
- 	{
-  	"name": "o Correio Brazilense",
-  	"url": "https://www.correioweb.com.br/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://www.correioweb.com.br/",
-  	"archive_pattern":null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "null"
-	},
- 	{
-  	"name": "O Globo",
-  	"url": "https://oglobo.globo.com/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://oglobo.globo.com/",
-  	"archive_pattern":null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "https://oglobo.globo.com/rss.xml"
-	},
- {
-  	"name": "Jornal Do Brasil",
-  	"url": "https://www.jb.com.br/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://www.jb.com.br/",
-  	"archive_pattern":null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "null"
-	},
- {
-  	"name": "Folha de Sao Paulo",
-  	"url": "https://www.folha.uol.com.br/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://www.folha.uol.com.br/",
-  	"archive_pattern":null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "https://rss.uol.com.br/"
-	},
- {
-  	"name": "TV Rede Globo",
-  	"url": "https://redeglobo.globo.com/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://redeglobo.globo.com/",
-  	"archive_pattern": null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "null"
-	},
- {
-  	"name": "Sistema Brasileiro de Televisao (SBT)",
-  	"url": "https://www.sbt.com.br/home",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://www.sbt.com.br/home",
-  	"archive_pattern": null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "null"
-	},
- {
-  	"name": "TV Brasil",
-  	"url": "https://tvbrasil.ebc.com.br/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://tvbrasil.ebc.com.br/",
-  	"archive_pattern": null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "null"
-	},
- {
-  	"name": "TV Record",
-  	"url": "https://record.r7.com/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://record.r7.com/",
-  	"archive_pattern": null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "null"
-	},
- {
-  	"name": "TV Cultura",
-  	"url": "https://cultura.uol.com.br/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://cultura.uol.com.br/",
-  	"archive_pattern": null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "null"
-	},
- {
-  	"name": "Radio Nacional",
-  	"url": "https://www.ebc.com.br/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://www.ebc.com.br/",
-  	"archive_pattern":null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "null"
-	},
- {
-  	"name": "Radio Bandeirantes",
-  	"url": "https://www.band.com.br/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://www.band.com.br/",
-  	"archive_pattern":null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "null"
-	},
- {
-  	"name": "Agencia Brasil",
-  	"url": "https://agenciabrasil.ebc.com.br/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://agenciabrasil.ebc.com.br/",
-  	"archive_pattern":null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml"
-	},
- {
+"Brasil": [
+  {
+    "name": "O Dia",
+    "url": "https://odia.ig.com.br/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://odia.ig.com.br/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": null
+  },
+  {
+    "name": "o Correio Brazilense",
+    "url": "https://www.correioweb.com.br/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://www.correioweb.com.br/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": null
+  },
+  {
+    "name": "O Globo",
+    "url": "https://oglobo.globo.com/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://oglobo.globo.com/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": "https://oglobo.globo.com/rss.xml"
+  },
+  {
+    "name": "Jornal Do Brasil",
+    "url": "https://www.jb.com.br/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://www.jb.com.br/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": null
+  },
+  {
+    "name": "Folha de Sao Paulo",
+    "url": "https://www.folha.uol.com.br/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://www.folha.uol.com.br/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": "https://rss.uol.com.br/"
+  },
+  {
+    "name": "TV Rede Globo",
+    "url": "https://redeglobo.globo.com/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://redeglobo.globo.com/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": null
+  },
+  {
+    "name": "Sistema Brasileiro de Televisao (SBT)",
+    "url": "https://www.sbt.com.br/home",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://www.sbt.com.br/home",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": null
+  },
+  {
+    "name": "TV Brasil",
+    "url": "https://tvbrasil.ebc.com.br/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://tvbrasil.ebc.com.br/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": null
+  },
+  {
+    "name": "TV Record",
+    "url": "https://record.r7.com/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://record.r7.com/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": null
+  },
+  {
+    "name": "TV Cultura",
+    "url": "https://cultura.uol.com.br/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://cultura.uol.com.br/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": null
+  },
+  {
+    "name": "Radio Nacional",
+    "url": "https://www.ebc.com.br/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://www.ebc.com.br/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": null
+  },
+  {
+    "name": "Radio Bandeirantes",
+    "url": "https://www.band.com.br/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://www.band.com.br/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": null
+  },
+  {
+    "name": "Agencia Brasil",
+    "url": "https://agenciabrasil.ebc.com.br/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://agenciabrasil.ebc.com.br/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": "https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml"
+  },
+  {
     "name": "UOL",
-  	"url": "https://www.uol.com.br/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://www.uol.com.br/",
-  	"archive_pattern": null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "http://rss.uol.com.br/feed/noticias.xml"
-	},
- {
-  	"name": "G1",
-  	"url": "https://g1.globo.com/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://g1.globo.com/",
-  	"archive_pattern":null,
-  	"lang": "pt-BR",
-  	"rss_fallback": "https://g1.globo.com/rss/g1/brasil/"
-    }
-  ],
+    "url": "https://www.uol.com.br/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://www.uol.com.br/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": "http://rss.uol.com.br/feed/noticias.xml"
+  },
+  {
+    "name": "G1",
+    "url": "https://g1.globo.com/",
+    "selector": "article h2 a, h3 a, .titular a",
+    "archive_selector": null,
+    "base_url": "https://g1.globo.com/",
+    "archive_pattern": null,
+    "lang": "pt-BR",
+    "rss_fallback": "https://g1.globo.com/rss/g1/brasil/"
+  }
   "Cuba": [
     {
       "name": "Granma",
