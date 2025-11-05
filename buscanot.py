@@ -834,6 +834,7 @@ COUNTRY_TO_CONTINENT = {
     "Palestina": "Asia",
     "Israel": "Asia",
     # América
+    "Brasil": "América",
     "Estados Unidos": "América",
     # Asia
     "Japón": "Asia",
