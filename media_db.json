@@ -1350,26 +1350,27 @@
   	"rss_fallback": "https://g1.globo.com/rss/g1/brasil/"
     }
   ],
+{
   "Cuba": [
- {
-  	"name": “Granma",
-  	"url": "https://www.granma.cu/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://www.granma.cu/",
-  	"archive_pattern":null,
-  	"lang": "es",
-  	"rss_fallback": "null"
-	},
- {
-  	"name": “Prensa Latina",
-  	"url": "https://www.prensa-latina.cu/",
-  	"selector": "article h2 a, h3 a, .titular a",
-  	"archive_selector": null,
-  	"base_url": "https://www.prensa-latina.cu/",
-  	"archive_pattern":null,
-  	"lang": "es",
-  	"rss_fallback": "https://laprensalatina.com/feed/"
-	}
+    {
+      "name": "Granma",
+      "url": "https://www.granma.cu/",
+      "selector": "article h2 a, h3 a, .titular a",
+      "archive_selector": null,
+      "base_url": "https://www.granma.cu/",
+      "archive_pattern": null,
+      "lang": "es",
+      "rss_fallback": null
+    },
+    {
+      "name": "Prensa Latina",
+      "url": "https://www.prensa-latina.cu/",
+      "selector": "article h2 a, h3 a, .titular a",
+      "archive_selector": null,
+      "base_url": "https://www.prensa-latina.cu/",
+      "archive_pattern": null,
+      "lang": "es",
+      "rss_fallback": "https://laprensalatina.com/feed/"
+    }
   ]
 }
