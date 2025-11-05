@@ -403,7 +403,7 @@
       "selector": "article h2 a, h3 a, .headline a, .title a",
       "archive_selector": null,
       "base_url": "https://www.krone.at",
-      "archive_pattern": null,
+      "archive_pattern": "https://api.krone.at/v1/rss/rssfeed-google.xml",
       "lang": "de"
     },
     {
