@@ -827,7 +827,7 @@
       "selector": "article h2 a, h3 a, .headline a, .title a",
       "archive_selector": null,
       "base_url": "https://nepszava.hu",
-      "archive_pattern": null,
+      "archive_pattern": "http://nepszava.hu/rss/",
       "lang": "hu"
     },
     {
