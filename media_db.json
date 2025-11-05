@@ -1197,9 +1197,9 @@
       "archive_pattern": "https://japantoday.com/category/national?page={page}",
       "lang": "en"
     }
-  ]
-    "Brasil": [
- 	{
+  ],
+  "Brasil": [
+    {
   	"name": "O Dia",
   	"url": "https://odia.ig.com.br/",
   	"selector": "article h2 a, h3 a, .titular a",
