@@ -316,21 +316,23 @@
     },
     {
       "name": "Süddeutsche Zeitung",
-      "url": "https://www.sueddeutsche.de/",
+      "url": "http://sueddeutsche.de/",
       "selector": "article h2 a, h3 a, .sz-article__title a",
       "archive_selector": null,
-      "base_url": "https://www.sueddeutsche.de",
+      "base_url": "http://sueddeutsche.de",
       "archive_pattern": null,
-      "lang": "de"
+      "lang": "de",
+      "rss_fallback": "http://rss.sueddeutsche.de/rss/Wirtschaft"
     },
     {
       "name": "Die Welt",
-      "url": "https://www.welt.de/",
+      "url": "http://welt.de/",
       "selector": "article h2 a, h3 a, .c-teaser__headline a",
       "archive_selector": null,
-      "base_url": "https://www.welt.de",
+      "base_url": "http://welt.de",
       "archive_pattern": null,
-      "lang": "de"
+      "lang": "de",
+      "rss_fallback": "http://www.welt.de/?service=Rss"
     },
     {
       "name": "Der Spiegel",
@@ -343,12 +345,13 @@
     },
     {
       "name": "Die Zeit",
-      "url": "https://www.zeit.de/index",
+      "url": "http://zeit.de/",
       "selector": "article h2 a, h3 a, .zon-teaser-standard__title a",
       "archive_selector": null,
-      "base_url": "https://www.zeit.de",
+      "base_url": "http://zeit.de",
       "archive_pattern": null,
-      "lang": "de"
+      "lang": "de",
+      "rss_fallback": "http://newsfeed.zeit.de/index"
     },
     {
       "name": "Bild",
@@ -361,12 +364,13 @@
     },
     {
       "name": "Handelsblatt",
-      "url": "https://www.handelsblatt.com/",
+      "url": "http://handelsblatt.com/",
       "selector": "article h2 a, h3 a, .headline a, .title a",
       "archive_selector": null,
-      "base_url": "https://www.handelsblatt.com",
+      "base_url": "http://handelsblatt.com",
       "archive_pattern": null,
-      "lang": "de"
+      "lang": "de",
+      "rss_fallback": "http://www.handelsblatt.com/contentexport/feed/schlagzeilen"
     }
   ],
   "Austria": [
