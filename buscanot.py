@@ -835,6 +835,7 @@ COUNTRY_TO_CONTINENT = {
     "Israel": "Asia",
     # América
     "Brasil": "América",
+    "Cuba": "América",
     "Estados Unidos": "América",
     # Asia
     "Japón": "Asia",
