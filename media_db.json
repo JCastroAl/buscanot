@@ -1075,7 +1075,7 @@
       "selector": "article h2 a, h3 a, .title a, .sub-title a",
       "archive_selector": "article h2 a, h3 a, .title a, .sub-title a",
       "base_url": "https://www.ynetnews.com",
-      "archive_pattern": null,
+      "archive_pattern": "http://www.ynet.co.il/Integration/StoryRss3082.xml",
       "lang": "en"
     },
     {
