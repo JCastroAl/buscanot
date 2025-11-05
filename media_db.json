@@ -941,7 +941,7 @@
       "selector": "article h2 a, h3 a, .headline a, .title a",
       "archive_selector": null,
       "base_url": "https://www.repubblica.it",
-      "archive_pattern": null,
+      "archive_pattern": "http://www.repubblica.it/rss/homepage/rss2.0.xml",
       "lang": "it"
     },
     {
@@ -950,7 +950,7 @@
       "selector": "article h2 a, h3 a, .headline a, .title a",
       "archive_selector": null,
       "base_url": "https://www.lastampa.it",
-      "archive_pattern": null,
+      "archive_pattern": "http://www.lastampa.it/rss.xml",
       "lang": "it"
     },
     {
@@ -959,7 +959,7 @@
       "selector": "article h2 a, h3 a, .headline a, .title a",
       "archive_selector": null,
       "base_url": "https://www.ilmessaggero.it",
-      "archive_pattern": null,
+      "archive_pattern": "http://www.ilmessaggero.it/rss/home.xml",
       "lang": "it"
     },
     {
