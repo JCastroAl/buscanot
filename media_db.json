@@ -1903,5 +1903,79 @@
         "lang": "hi",
         "rss_fallback": "http://rss.jagran.com/local/uttar-pradesh/lucknow-city.xml"
       }
-    ]
+    ],
+      "Indonesia": [
+      {
+        "name": "okezone.com",
+        "url": "http://okezone.com/",
+        "selector": "article h2 a, h3 a, .headline a, .title a",
+        "archive_selector": null,
+        "base_url": "http://okezone.com",
+        "archive_pattern": null,
+        "lang": "id",
+        "rss_fallback": "http://sindikasi.okezone.com/index.php/rss/0/RSS2.0"
+      },
+      {
+        "name": "Merdeka.com",
+        "url": "http://merdeka.com/",
+        "selector": "article h2 a, h3 a, .headline a, .title a",
+        "archive_selector": null,
+        "base_url": "http://merdeka.com",
+        "archive_pattern": null,
+        "lang": "id",
+        "rss_fallback": "http://www.merdeka.com/feed/"
+      }
+    ],
+      "Irán": [
+        {
+          "name": "Tabnak",
+          "url": "http://tabnak.ir/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://tabnak.ir",
+          "archive_pattern": null,
+          "lang": "fa",
+          "rss_fallback": "http://www.tabnak.ir/fa/rss/allnews"
+        },
+        {
+          "name": "Khabar Online",
+          "url": "http://khabaronline.ir/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://khabaronline.ir",
+          "archive_pattern": null,
+          "lang": "en",
+          "rss_fallback": "http://english.khabaronline.ir/rss/"
+        },
+        {
+          "name": "Radiofarda.com",
+          "url": "http://radiofarda.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://radiofarda.com",
+          "archive_pattern": null,
+          "lang": "fa",
+          "rss_fallback": "http://www.radiofarda.com/api/"
+        },
+        {
+          "name": "Mehr News",
+          "url": "http://mehrnews.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://mehrnews.com",
+          "archive_pattern": null,
+          "lang": "fa",
+          "rss_fallback": "http://www.mehrnews.com/rss"
+        },
+        {
+          "name": "Asriran.com",
+          "url": "http://asriran.com/",
+          "selector": "article h2 a, h3 a, .headline a, .title a",
+          "archive_selector": null,
+          "base_url": "http://asriran.com",
+          "archive_pattern": null,
+          "lang": "fa",
+          "rss_fallback": "http://www.asriran.com/fa/rss/allnews"
+        }
+      ]
 }
