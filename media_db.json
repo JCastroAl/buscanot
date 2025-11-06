@@ -40,16 +40,6 @@
       "lang": "es"
     },
     {
-      "name": "El Confidencial",
-      "url": "https://www.elconfidencial.com/",
-      "selector": "article h2 a, h3 a, .news__title a, .headline a, .ec-article__title a, .ec-card a, a[href*='/espana/'], a[href*='/politica/']",
-      "archive_selector": null,
-      "base_url": "https://www.elconfidencial.com",
-      "archive_pattern": null,
-      "lang": "es",
-      "rss_fallback": "https://rss.elconfidencial.com/espana/"
-    },
-    {
       "name": "RTVE",
       "url": "https://www.rtve.es/noticias/",
       "selector": "article h2 a, h3 a, .headline a",
@@ -233,15 +223,6 @@
       "selector": "article h2 a, h3 a, .card-title a",
       "archive_selector": null,
       "base_url": "https://www.dn.pt",
-      "archive_pattern": null,
-      "lang": "pt"
-    },
-    {
-      "name": "Observador",
-      "url": "https://observador.pt/",
-      "selector": "article h2 a, h3 a, .headline a",
-      "archive_selector": null,
-      "base_url": "https://observador.pt",
       "archive_pattern": null,
       "lang": "pt"
     },
@@ -799,15 +780,6 @@
       "archive_selector": null,
       "base_url": "https://www.tovima.gr",
       "archive_pattern": "http://www.tovima.gr/feed/politics/",
-      "lang": "el"
-    },
-    {
-      "name": "Proto Thema",
-      "url": "https://www.protothema.gr/",
-      "selector": "article h2 a, h3 a, .headline a, .title a",
-      "archive_selector": null,
-      "base_url": "https://www.protothema.gr",
-      "archive_pattern": null,
       "lang": "el"
     },
     {
