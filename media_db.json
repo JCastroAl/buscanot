@@ -1492,16 +1492,6 @@
       "rss_fallback": "https://www.cronista.com/files/rss/news.xml"
     },
     {
-      "name": "La Politica Online",
-      "url": "https://www.lapoliticaonline.com/",
-      "selector": "article h2 a, h3 a, .headline a, .title a",
-      "archive_selector": null,
-      "base_url": "https://www.lapoliticaonline.com",
-      "archive_pattern": null,
-      "lang": "es",
-      "rss_fallback": "https://www.lapoliticaonline.com/files/rss/ultimasnoticias.xml"
-    },
-    {
       "name": "Ole",
       "url": "https://www.ole.com.ar/",
       "selector": "article h2 a, h3 a, .headline a, .title a",
