@@ -1492,26 +1492,6 @@
       "rss_fallback": "https://www.cronista.com/files/rss/news.xml"
     },
     {
-      "name": "El Economista",
-      "url": "https://eleconomista.com.ar/",
-      "selector": "article h2 a, h3 a, .headline a, .title a",
-      "archive_selector": null,
-      "base_url": "https://eleconomista.com.ar",
-      "archive_pattern": null,
-      "lang": "es",
-      "rss_fallback": "https://eleconomista.com.ar/ultimas-noticias/feed/"
-    },
-    {
-      "name": "Todo Agro",
-      "url": "https://www.todoagro.com.ar/",
-      "selector": "article h2 a, h3 a, .headline a, .title a",
-      "archive_selector": null,
-      "base_url": "https://www.todoagro.com.ar",
-      "archive_pattern": null,
-      "lang": "es",
-      "rss_fallback": "https://www.todoagro.com.ar/noticias/feed/"
-    },
-    {
       "name": "La Politica Online",
       "url": "https://www.lapoliticaonline.com/",
       "selector": "article h2 a, h3 a, .headline a, .title a",
