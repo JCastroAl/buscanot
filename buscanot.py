@@ -830,12 +830,44 @@ async def scrape_source_async(
     # =========================
     if past_days and not html_disabled:
         archive_pattern = source.get("archive_pattern")
+
+        # 🔍 Si el medio no tiene archive_pattern definido, lo intentamos descubrir
+        if not archive_pattern:
+            # 1) detector "inteligente" a partir de enlaces con fecha
+            detected = await smart_auto_detect_archive_pattern(
+                session=session,
+                source=source,
+                headers=headers,
+                timeout=timeout,
+                ttl_sec=ttl_sec,
+                neg_ttl_sec=neg_ttl_sec,
+                respect_robots=(respect_robots and not disable_robots),
+            )
+            if detected:
+                archive_pattern = detected
+                source["archive_pattern"] = detected
+            else:
+                # 2) fallback con patrones comunes (COMMON_ARCHIVE_PATTERNS)
+                detected_common = await auto_detect_archive_pattern_for_source(
+                    session=session,
+                    source=source,
+                    headers=headers,
+                    timeout=timeout,
+                    ttl_sec=ttl_sec,
+                    neg_ttl_sec=neg_ttl_sec,
+                    respect_robots=(respect_robots and not disable_robots),
+                )
+                if detected_common:
+                    archive_pattern = detected_common
+                    source["archive_pattern"] = detected_common
+
         archive_urls = []
 
         if is_date_based_pattern(archive_pattern):
             archive_urls = iter_archive_urls_for_dates(source, past_days)
         elif is_page_based_pattern(archive_pattern):
             archive_urls = iter_archive_urls_for_pages(source, max_pages=10)
+
 
         if archive_urls and selector_archive:
             for page in archive_urls:
