@@ -52,6 +52,250 @@ COMMON_ARCHIVE_PATTERNS = [
 ]
 
 # =========================
+# Descubridor automático de patrones de hemeroteca
+# =========================
+
+DATE_REGEXES = [
+    re.compile(r"(19|20)\d{2}[/-]\d{1,2}[/-]\d{1,2}"),
+    re.compile(r"/(19|20)\d{2}/\d{1,2}/\d{1,2}/"),
+]
+
+
+def is_same_domain(url: str, base_url: str) -> bool:
+    try:
+        u = urlparse(url)
+        b = urlparse(base_url)
+        # Permitimos paths relativos (netloc vacío) o mismo dominio
+        return u.netloc == "" or u.netloc == b.netloc
+    except Exception:
+        return False
+
+
+async def collect_candidate_date_urls(
+    session: aiohttp.ClientSession,
+    source: Dict[str, Any],
+    headers: Dict[str, str],
+    timeout: ClientTimeout,
+    ttl_sec: int,
+    neg_ttl_sec: int,
+    respect_robots: bool,
+) -> List[str]:
+    base_url = source.get("base_url") or source.get("url")
+    if not base_url:
+        return []
+
+    html = await fetch_html(
+        session,
+        base_url,
+        headers=headers,
+        timeout=timeout,
+        ttl_sec=ttl_sec,
+        neg_ttl_sec=neg_ttl_sec,
+        respect_robots=respect_robots,
+    )
+    if not html:
+        return []
+
+    soup = BeautifulSoup(html, "html.parser")
+    candidates: set[str] = set()
+
+    for a in soup.find_all("a", href=True):
+        href = (a["href"] or "").strip()
+        if not href:
+            continue
+
+        abs_url = urljoin(base_url, href)
+        if not is_same_domain(abs_url, base_url):
+            continue
+
+        path = urlparse(abs_url).path or "/"
+        if any(rx.search(path) for rx in DATE_REGEXES):
+            candidates.add(abs_url)
+
+    return list(candidates)
+
+
+def normalize_segment(seg: str) -> str:
+    # 4 dígitos -> candidato a año
+    if re.fullmatch(r"\d{4}", seg):
+        year = int(seg)
+        if 1900 <= year <= 2100:
+            return "{yyyy}"
+
+    # 1–2 dígitos -> mes o día
+    if re.fullmatch(r"\d{1,2}", seg):
+        n = int(seg)
+        if 1 <= n <= 12:
+            return "{mm}"
+        if 1 <= n <= 31:
+            return "{dd}"
+
+    return seg
+
+
+def make_path_template(path: str) -> str:
+    """
+    /archivo/2025/11/07/politica/foo.html
+    -> /archivo/{yyyy}/{mm}/{dd}/politica/foo.html
+    """
+    def replace_inline_dates(seg: str) -> str:
+        # Detecta 2025-11-07 o 2025/11/07 dentro del segmento
+        m = re.search(r"(19|20)\d{2}[-/]\d{1,2}[-/]\d{1,2}", seg)
+        if not m:
+            return seg
+        date_str = m.group(0)
+        parts = re.split("[-/]", date_str)
+        if len(parts) == 3:
+            yyyy, mm, dd = parts
+            normalized = "{yyyy}-{mm}-{dd}"
+            return seg.replace(date_str, normalized)
+        return seg
+
+    path = path or "/"
+    segments = path.strip("/").split("/")
+    new_segments: List[str] = []
+
+    for seg in segments:
+        seg = replace_inline_dates(seg)
+        if "{yyyy}" in seg:
+            # Ya se normalizó inline (caso 2025-11-07)
+            new_segments.append(seg)
+            continue
+        new_segments.append(normalize_segment(seg))
+
+    return "/" + "/".join(new_segments)
+
+
+def choose_best_archive_pattern(candidate_urls: List[str]) -> Optional[str]:
+    """
+    A partir de URLs con fechas, elige la plantilla más coherente y
+    devuelve un patrón de hemeroteca tipo "/archivo/{yyyy}/{mm}/{dd}/".
+    """
+    if not candidate_urls:
+        return None
+
+    groups: Dict[str, List[str]] = {}
+    for url in candidate_urls:
+        path = urlparse(url).path
+        template = make_path_template(path)
+        groups.setdefault(template, []).append(url)
+
+    def has_date_placeholders(t: str) -> bool:
+        return "{yyyy}" in t and "{mm}" in t and "{dd}" in t
+
+    scored: List[Tuple[int, str]] = []
+    for tmpl, urls in groups.items():
+        if not has_date_placeholders(tmpl):
+            continue
+
+        score = len(urls)  # cuántas URLs encajan en esta plantilla
+
+        # Bonus si la ruta contiene palabras típicas de archivo
+        if re.search(r"(archivo|hemeroteca|archive)", tmpl, re.IGNORECASE):
+            score += 5
+
+        scored.append((score, tmpl))
+
+    if not scored:
+        return None
+
+    scored.sort(reverse=True)
+    best_template = scored[0][1]
+
+    # Recortamos hasta el día: /archivo/{yyyy}/{mm}/{dd}/...
+    parts = best_template.split("{yyyy}")
+    prefix = parts[0]
+
+    archive_pattern = prefix + "{yyyy}/{mm}/{dd}/"
+    return archive_pattern
+
+
+async def smart_auto_detect_archive_pattern(
+    session: aiohttp.ClientSession,
+    source: Dict[str, Any],
+    headers: Dict[str, str],
+    timeout: ClientTimeout,
+    ttl_sec: int,
+    neg_ttl_sec: int,
+    respect_robots: bool,
+) -> Optional[str]:
+    """
+    Pipeline "listo": mira enlaces reales del sitio, detecta fechas en paths
+    y propone un archive_pattern date-based.
+    """
+    candidate_urls = await collect_candidate_date_urls(
+        session=session,
+        source=source,
+        headers=headers,
+        timeout=timeout,
+        ttl_sec=ttl_sec,
+        neg_ttl_sec=neg_ttl_sec,
+        respect_robots=respect_robots,
+    )
+
+    if not candidate_urls:
+        return None
+
+    archive_pattern = choose_best_archive_pattern(candidate_urls)
+    return archive_pattern
+
+
+async def auto_detect_archive_pattern_for_source(
+    session: aiohttp.ClientSession,
+    source: Dict[str, Any],
+    headers: Dict[str, str],
+    timeout: ClientTimeout,
+    ttl_sec: int,
+    neg_ttl_sec: int,
+    respect_robots: bool,
+) -> Optional[str]:
+    """
+    Fallback sencillo: prueba los COMMON_ARCHIVE_PATTERNS clásicos con archive_selector.
+    """
+    selector_archive = source.get("archive_selector")
+    if not selector_archive:
+        return None
+
+    base_url = source.get("base_url") or source.get("url")
+    if not base_url:
+        return None
+
+    today = date.today()
+
+    for patt in COMMON_ARCHIVE_PATTERNS:
+        test_url = urljoin(
+            base_url,
+            patt.format(
+                yyyy=today.strftime("%Y"),
+                mm=today.strftime("%m"),
+                dd=today.strftime("%d"),
+            ),
+        )
+
+        html = await fetch_html(
+            session,
+            test_url,
+            headers=headers,
+            timeout=timeout,
+            ttl_sec=ttl_sec,
+            neg_ttl_sec=neg_ttl_sec,
+            respect_robots=respect_robots,
+        )
+        if not html:
+            continue
+
+        try:
+            soup = BeautifulSoup(html, "html.parser")
+            elements = soup.select(selector_archive)
+        except Exception:
+            continue
+
+        if elements:
+            full_pattern = urljoin(base_url, patt)
+            return full_pattern
+
+    return None
+# =========================
 # Persistencia BD
 # =========================
 def save_db(db: Dict[str, List[Dict[str, Any]]]) -> None:
