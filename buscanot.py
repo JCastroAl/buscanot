@@ -656,12 +656,11 @@ async def scrape_source_async(
             rss_urls_to_try.append(rss_fallback)
         rss_urls_to_try.append(url)
 
-        # Contador para saber si el RSS ha aportado algo relevante
-        len_before_rss = len(rows)
-
+        got_rss = False
         for candidate in rss_urls_to_try:
             rss = await try_fetch_rss(session, candidate, headers, timeout)
             if rss:
+                got_rss = True
                 for title, href, dt in rss:
                     full_url = absolutize(href, base_url or candidate)
                     if not full_url or not title:
@@ -675,14 +674,10 @@ async def scrape_source_async(
                             "publicado": (dt.isoformat() if dt else None),
                             "fuente": "rss",
                         })
-                # Si hemos encontrado algún RSS válido, no probamos más candidatos
-                break
+                break  # no intentamos más RSS
 
-        # ¿El RSS añadió al menos una noticia relevante?
-        rss_added_any = len(rows) > len_before_rss
-
-        # b) HTML portada (si no está deshabilitado) SOLO si el RSS no aportó nada
-        if selector_home and not html_disabled and not rss_added_any:
+        # b) HTML portada (si no está deshabilitado)
+        if selector_home and not html_disabled:
             html = await fetch_html(
                 session,
                 url,
@@ -724,6 +719,8 @@ async def scrape_source_async(
                             })
                 except Exception as e:
                     st.session_state.setdefault("logs", []).append(f"❌ {name} (portada): {e}")
+
+    return rows
 
 # =========================
 # Paralelización
