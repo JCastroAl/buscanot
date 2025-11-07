@@ -1411,16 +1411,6 @@
       "lang": "fr",
       "rss_fallback": "http://www.tsa-algerie.com/feed/"
     },
-    {
-      "name": "dzFoot.com",
-      "url": "http://www.dzfoot.com/",
-      "selector": "article h2 a, h3 a, .headline a, .title a",
-      "archive_selector": null,
-      "base_url": "http://www.dzfoot.com",
-      "archive_pattern": null,
-      "lang": "fr",
-      "rss_fallback": "http://www.dzfoot.com/feed"
-    }
   ],
   "Argentina": [
     {
@@ -1464,56 +1454,6 @@
       "rss_fallback": "https://www.cronista.com/files/rss/news.xml"
     },
     {
-      "name": "Ole",
-      "url": "https://www.ole.com.ar/",
-      "selector": "article h2 a, h3 a, .headline a, .title a",
-      "archive_selector": null,
-      "base_url": "https://www.ole.com.ar",
-      "archive_pattern": null,
-      "lang": "es",
-      "rss_fallback": "https://www.ole.com.ar/rss/ultimas-noticias"
-    },
-    {
-      "name": "La Gaceta",
-      "url": "http://www.lagaceta.com.ar/",
-      "selector": "article h2 a, h3 a, .headline a, .title a",
-      "archive_selector": null,
-      "base_url": "http://www.lagaceta.com.ar",
-      "archive_pattern": null,
-      "lang": "es",
-      "rss_fallback": "https://feeds.feedburner.com/LaGaceta-General"
-    },
-    {
-      "name": "La Voz del Interior",
-      "url": "https://www.lavoz.com.ar/",
-      "selector": "article h2 a, h3 a, .headline a, .title a",
-      "archive_selector": null,
-      "base_url": "https://www.lavoz.com.ar",
-      "archive_pattern": null,
-      "lang": "es",
-      "rss_fallback": "https://www.lavoz.com.ar/arc/outboundfeeds/feeds/rss/?outputType=xml"
-    },
-    {
-      "name": "El dia",
-      "url": "https://www.eldia.com/",
-      "selector": "article h2 a, h3 a, .headline a, .title a",
-      "archive_selector": null,
-      "base_url": "https://www.eldia.com",
-      "archive_pattern": null,
-      "lang": "es",
-      "rss_fallback": "https://www.eldia.com/.rss"
-    },
-    {
-      "name": "El intransigente",
-      "url": "https://elintransigente.com/",
-      "selector": "article h2 a, h3 a, .headline a, .title a",
-      "archive_selector": null,
-      "base_url": "https://elintransigente.com",
-      "archive_pattern": null,
-      "lang": "es",
-      "rss_fallback": "https://elintransigente.com/feed/"
-    },
-    {
       "name": "Buenos Aires Times",
       "url": "https://www.batimes.com.ar/",
       "selector": "article h2 a, h3 a, .headline a, .title a",
@@ -1523,16 +1463,6 @@
       "lang": "en",
       "rss_fallback": "https://www.batimes.com.ar/feed"
     },
-    {
-      "name": "Buenos Aires Herald",
-      "url": "https://buenosairesherald.com/",
-      "selector": "article h2 a, h3 a, .headline a, .title a",
-      "archive_selector": null,
-      "base_url": "https://buenosairesherald.com",
-      "archive_pattern": null,
-      "lang": "en",
-      "rss_fallback": "https://buenosairesherald.com/feed/atom"
-    }
   ],
   "Armenia": [
     {
