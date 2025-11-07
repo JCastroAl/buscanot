@@ -1622,16 +1622,6 @@
       "archive_pattern": null,
       "lang": "en",
       "rss_fallback": "http://bahamaspress.com/feed/"
-    },
-    {
-      "name": "Bahamas local",
-      "url": "http://bahamaslocal.com/",
-      "selector": "article h2 a, h3 a, .headline a, .title a",
-      "archive_selector": null,
-      "base_url": "http://bahamaslocal.com",
-      "archive_pattern": null,
-      "lang": "en",
-      "rss_fallback": "http://bahamaspress.com/category/news/feed/"
     }
   ],
     "Guam": [
