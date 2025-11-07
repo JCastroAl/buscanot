@@ -846,6 +846,7 @@ async def scrape_source_async(
             if detected:
                 archive_pattern = detected
                 source["archive_pattern"] = detected
+                st.session_state["db_modified"] = True
             else:
                 # 2) fallback con patrones comunes (COMMON_ARCHIVE_PATTERNS)
                 detected_common = await auto_detect_archive_pattern_for_source(
@@ -860,6 +861,7 @@ async def scrape_source_async(
                 if detected_common:
                     archive_pattern = detected_common
                     source["archive_pattern"] = detected_common
+                    st.session_state["db_modified"] = True
 
         archive_urls = []
 
