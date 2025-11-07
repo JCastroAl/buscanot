@@ -171,10 +171,6 @@ def is_latin_lang(lang: str) -> bool:
     return (lang or "").lower() in {"es","fr","pt","de","en","it","ca","gl"}
 
 def split_terms(terms: str) -> List[Tuple[str, bool]]:
-    """
-    Devuelve lista de (texto, exacto?). Exacto=True si venía entre comillas.
-    Separa por comas/; /\n pero respeta fragmentos entre "..." o '...'.
-    """
     if not terms:
         return []
     # Captura frases entre comillas
@@ -192,10 +188,6 @@ def split_terms(terms: str) -> List[Tuple[str, bool]]:
     return out
 
 def build_regex_from_terms(terms: List[Tuple[str,bool]], whole_words: bool, ignore_case: bool) -> Optional[re.Pattern]:
-    """
-    Construye un patrón con OR. Para exactos => subcadena literal.
-    Para no exactos => palabra completa si whole_words, si no subcadena.
-    """
     if not terms:
         return None
     parts: List[str] = []
