@@ -5598,14 +5598,14 @@
       ],
       "Zambia": [
         {
-          "name": "Post",
-          "url": "http://postzambia.com/",
+          "name": "Zambia Daily Mail",
+          "url": "https://www.daily-mail.co.zm/",
           "selector": "article h2 a, h3 a, .headline a, .title a",
           "archive_selector": null,
-          "base_url": "http://postzambia.com",
+          "base_url": "https://www.daily-mail.co.zm/",
           "archive_pattern": null,
           "lang": "en",
-          "rss_fallback": "http://nypost.com/feed/"
+          "rss_fallback": null,
         }
       ],
       "Zimbabue": [
