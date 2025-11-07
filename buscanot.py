@@ -1494,6 +1494,13 @@ if st.button("🔍 Buscar en país seleccionado", type="primary"):
             st.success(f"✅ {len(df)} noticias encontradas en {search_country} (en {elapsed:.1f}s).")
             st.dataframe(df, use_container_width=True, hide_index=True)
 
+            # 💾 OPCIONAL: guardar patrones de hemeroteca detectados automáticamente
+            if st.session_state.get("db_modified"):
+                save_db(st.session_state.db)
+                st.session_state["db_modified"] = False
+                st.success("Patrones de hemeroteca nuevos guardados automáticamente ✅")
+
+
             st.write("### Resultados")
             for _, row in df.iterrows():
                 fuente = row.get("fuente") or "-"
