@@ -1451,7 +1451,8 @@
       "base_url": "https://www.cronista.com",
       "archive_pattern": null,
       "lang": "es",
-      "rss_fallback": "https://www.cronista.com/files/rss/news.xml"
+      "rss_fallback": "https://www.cronista.com/files/rss/news.xml",
+      "html_disabled": true
     }
   ],
   "Armenia": [
