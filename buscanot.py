@@ -819,10 +819,17 @@ async def scrape_source_async(
     today = date.today()
     past_days: List[date] = []
     include_today = False
+
     if use_date_filter and date_field.startswith("Fecha de publicación"):
         for d in daterange(start_date, end_date):
-            past_days.append(d)
+            if d < today:
+                past_days.append(d)
+        # Si el rango incluye hoy, lo marcamos
+        if start_date <= today <= end_date:
+            include_today = True
     else:
+        # Sin filtro de fechas, o filtrando por fecha de extracción:
+        # siempre miramos HOY
         include_today = True
 
     # =========================
