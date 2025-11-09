@@ -922,7 +922,23 @@ async def scrape_source_async(
 
         got_rss = False
         for candidate in rss_urls_to_try:
-            rss = await try_fetch_rss(session, candidate, headers, timeout)
+            if rss_fallback and candidate == rss_fallback:
+                # Usamos explícitamente el RSS de fallback
+                rss = await try_fetch_rss(
+                    session=session,
+                    page_url=url,        
+                    headers=headers,
+                    timeout=timeout,
+                    rss_url=rss_fallback, 
+                )
+            else:
+                rss = await try_fetch_rss(
+                    session=session,
+                    page_url=candidate,
+                    headers=headers,
+                    timeout=timeout,
+                )
+
             if rss:
                 got_rss = True
                 for title, href, dt in rss:
@@ -938,9 +954,9 @@ async def scrape_source_async(
                             "publicado": (dt.isoformat() if dt else None),
                             "fuente": "rss",
                         })
-                break  # no intentamos más RSS
+                break  
 
-        # b) HTML portada (si no está deshabilitado)
+        # b) HTML portada
         if selector_home and not html_disabled:
             html = await fetch_html(
                 session,
