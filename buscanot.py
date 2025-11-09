@@ -1043,8 +1043,45 @@ async def scrape_source_async(
                 except Exception as e:
                     st.session_state.setdefault("logs", []).append(f"❌ {name} (portada): {e}")
 
-    return rows
+        # c) GOOGLE NEWS (refuerzo, mismo medio, noticias recientes)
+        if include_terms_raw and include_terms_raw.strip():
+            try:
+                gn_items = await fetch_google_news_rss_for_source(
+                    session=session,
+                    source=source,
+                    include_terms_raw=include_terms_raw,
+                    headers=headers,
+                    timeout=timeout,
+                    recent_window_days=7,  # puedes ajustar esta ventana si quieres
+                )
+            except Exception as e:
+                gn_items = None
+                st.session_state.setdefault("logs", []).append(
+                    f"⚠️ {name}: fallo al consultar Google News RSS ({e})"
+                )
 
+            if gn_items:
+                base_for_domain = base_url or url
+                for title, href, dt in gn_items:
+                    full_url = (href or "").strip()
+                    if not full_url or not title:
+                        continue
+                    # Seguridad extra: nos aseguramos de que el link final sea del mismo dominio
+                    if base_for_domain and not is_same_domain(full_url, base_for_domain):
+                        continue
+                    if not is_relevant(title):
+                        continue
+                    rows.append({
+                        "medio": name,
+                        "título": title,
+                        "url": full_url,
+                        "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                        "publicado": (dt.isoformat() if dt else None),
+                        "fuente": "gn-rss",
+                    })
+
+    return rows
+    
 # =========================
 # Paralelización
 # =========================
