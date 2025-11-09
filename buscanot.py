@@ -661,9 +661,8 @@ async def fetch_html(
                 resp.raise_for_status()
                 html = await resp.text()
 
-                # Guarda en ambas cachés
+                # Guarda en caché
                 cache_put(url, html)
-                fetch_html_cached(url, str(sorted(headers.items())), respect_robots)
 
                 return html
 
