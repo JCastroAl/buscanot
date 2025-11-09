@@ -694,8 +694,6 @@ async def fetch_google_news_rss_for_source(
     if not domain:
         return None
 
-    # Construimos la query de Google News: términos + site:dominio + ventana temporal
-    # Google News RSS usa AND implícito entre términos y soporta "site:" y "when:" en q. :contentReference[oaicite:4]{index=4}
     query = f"{include_terms_raw.strip()} site:{domain} when:{recent_window_days}d"
     q_param = quote_plus(query)
 
