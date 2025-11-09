@@ -4227,18 +4227,6 @@
           "rss_fallback": "https://tass.ru/rss/all.xml"
         }
       ],
-      "Santa Elena": [
-        {
-          "name": "St Helena Independent",
-          "url": "http://www.saint.fm/Independent/index.htm",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "http://www.saint.fm",
-          "archive_pattern": null,
-          "lang": "en",
-          "rss_fallback": "http://sthelenaonline.org/tag/safeguarding/feed/"
-        }
-      ],
       "Samoa": [
         {
           "name": "Samoa News",
