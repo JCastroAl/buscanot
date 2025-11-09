@@ -34,7 +34,7 @@
       "name": "La Vanguardia",
       "url": "https://www.lavanguardia.com/",
       "selector": "article h2 a, h3 a, .headline a",
-      "archive_selector": "a",
+      "archive_selector": null,
       "base_url": "https://www.lavanguardia.com",
       "archive_pattern": null,
       "lang": "es",
