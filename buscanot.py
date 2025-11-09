@@ -674,6 +674,49 @@ async def fetch_html(
 
             await asyncio.sleep((2 ** (attempt - 1)) + random.random())
 
+async def fetch_google_news_rss_for_source(
+    session: aiohttp.ClientSession,
+    source: Dict[str, Any],
+    include_terms_raw: str,
+    headers: Dict[str, str],
+    timeout: ClientTimeout,
+    recent_window_days: int = 7,
+) -> Optional[List[Tuple[str, str, Optional[datetime]]]]:
+    base = source.get("base_url") or source.get("url")
+    if not base:
+        return None
+
+    if not include_terms_raw or not include_terms_raw.strip():
+        return None
+
+    parsed = urlparse(base)
+    domain = parsed.netloc
+    if not domain:
+        return None
+
+    # Construimos la query de Google News: términos + site:dominio + ventana temporal
+    # Google News RSS usa AND implícito entre términos y soporta "site:" y "when:" en q. :contentReference[oaicite:4]{index=4}
+    query = f"{include_terms_raw.strip()} site:{domain} when:{recent_window_days}d"
+    q_param = quote_plus(query)
+
+    feed_url = f"https://news.google.com/rss/search?q={q_param}"
+
+    # Reutilizamos el parser genérico de RSS que ya tienes
+    try:
+        rss = await try_fetch_rss(
+            session=session,
+            page_url=feed_url,
+            headers=headers,
+            timeout=timeout,
+            rss_url=feed_url,
+        )
+        return rss
+    except Exception as e:
+        st.session_state.setdefault("logs", []).append(
+            f"⚠️ {source.get('name','¿medio?')}: fallo al consultar Google News RSS ({e})"
+        )
+        return None
+        
 async def try_fetch_rss(
     session: aiohttp.ClientSession,
     page_url: str,
