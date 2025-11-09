@@ -876,7 +876,8 @@ async def scrape_source_async(
             archive_urls = iter_archive_urls_for_dates(source, past_days)
         elif is_page_based_pattern(archive_pattern):
             archive_urls = iter_archive_urls_for_pages(source, max_pages=10)
-
+        elif archive_pattern:
+            archive_urls = [archive_pattern]
 
         if archive_urls and selector_archive:
             for page in archive_urls:
