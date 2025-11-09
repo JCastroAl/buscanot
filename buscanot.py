@@ -637,23 +637,15 @@ async def fetch_html(
     neg_ttl_sec: int,
     respect_robots: bool,
 ) -> str:
-    # ✅ 1) Cache LRU en memoria (ultrarrápida)
-    cache_key = (url, str(sorted(headers.items())), respect_robots)
-    cached_html = fetch_html_cached(*cache_key)
-    if cached_html:
-        return cached_html
-
-    # ✅ 2) Cache tradicional (disco o memoria persistente)
+    # ✅ 1) Cache tradicional (disco o memoria persistente)
     if neg_cache_hit(url, neg_ttl_sec):
         return ""
 
     cached = cache_get(url, ttl_sec)
     if cached is not None:
-        # También almacenamos en LRU para futuras peticiones rápidas
-        fetch_html_cached(url, str(sorted(headers.items())), respect_robots)
         return cached
 
-    # ✅ 3) Respeto a robots.txt (si aplica)
+    # ✅ 2) Respeto a robots.txt (si aplica)
     if respect_robots:
         parsed = urlparse(url)
         if not await is_allowed(session, headers, f"{parsed.scheme}://{parsed.netloc}", parsed.path):
@@ -661,7 +653,7 @@ async def fetch_html(
             neg_cache_put(url)
             return ""
 
-    # ✅ 4) Intentos de descarga con reintentos exponenciales
+    # ✅ 3) Intentos de descarga con reintentos exponenciales
     tries = 3
     for attempt in range(1, tries + 1):
         try:
