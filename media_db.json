@@ -36,8 +36,9 @@
       "selector": "article h2 a, h3 a, .headline a",
       "archive_selector": "a",
       "base_url": "https://www.lavanguardia.com",
-      "archive_pattern": "https://hemeroteca.lavanguardia.es/edition.html?bd={dd}&bm={mm}&by={yyyy}",
-      "lang": "es"
+      "archive_pattern": null,
+      "lang": "es",
+      "rss_fallback": "https://www.lavanguardia.com/rss/home.xml"
     },
     {
       "name": "RTVE",
