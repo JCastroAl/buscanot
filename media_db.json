@@ -2504,16 +2504,6 @@
           "rss_fallback": "https://www.eluniverso.com/arc/outboundfeeds/rss-subsection/noticias/ecuador?outputType=xml"
         },
         {
-          "name": "GK City",
-          "url": "https://gk.city/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://gk.city",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://gk.city/feed/"
-        },
-        {
           "name": "Expreso",
           "url": "https://expreso.ec/",
           "selector": "article h2 a, h3 a, .headline a, .title a",
@@ -2524,107 +2514,7 @@
           "rss_fallback": "https://www.expreso.ec/rss/"
         },
         {
-          "name": "El Mercurio",
-          "url": "https://elmercurio.com.ec/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://elmercurio.com.ec",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://elmercurio.com.ec/feed/"
-        },
-        {
-          "name": "La Prensa",
-          "url": "https://www.laprensa.com.ec/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://www.laprensa.com.ec",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://www.laprensa.com.ec/feed/"
-        },
-        {
-          "name": "Los Andes",
-          "url": "https://www.diariolosandes.com.ec/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://www.diariolosandes.com.ec",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://www.diariolosandes.com.ec/feed/"
-        },
-        {
-          "name": "La Republica",
-          "url": "https://larepublica.ec/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://larepublica.ec",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://www.larepublica.ec/feed/"
-        },
-        {
-          "name": "El Heraldo",
-          "url": "https://www.elheraldo.com.ec/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://www.elheraldo.com.ec",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://www.elheraldo.com.ec/feed/"
-        },
-        {
-          "name": "Crónica",
-          "url": "https://cronica.com.ec/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://cronica.com.ec",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://cronica.com.ec/feed/"
-        },
-        {
-          "name": "Manabí Noticias",
-          "url": "https://manabinoticias.com/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://manabinoticias.com",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://manabinoticias.com/feed/"
-        },
-        {
-          "name": "Noti Amazonía",
-          "url": "https://www.notiamazonia.com/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://www.notiamazonia.com",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://www.notiamazonia.com/feed/"
-        },
-        {
-          "name": "El Amazónico",
-          "url": "https://www.elamazonico.com/portal/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://www.elamazonico.com",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://www.elamazonico.com/portal/feed/"
-        },
-        {
-          "name": "Qué!",
-          "url": "https://quenoticias.com/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://quenoticias.com",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://quenoticias.com/feed/"
-        },
-        {
-          "name": "ecuavisa",
+          "name": "Ecuavisa",
           "url": "https://ecuavisa.com/",
           "selector": "article h2 a, h3 a, .headline a, .title a",
           "archive_selector": null,
@@ -2632,46 +2522,6 @@
           "archive_pattern": null,
           "lang": "es",
           "rss_fallback": "https://www.ecuavisa.com/rss/noticias"
-        },
-        {
-          "name": "Diario El Mercurio",
-          "url": "https://elmercurio.com.ec/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://elmercurio.com.ec",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://elmercurio.com.ec/feed/"
-        },
-        {
-          "name": "Ecuador en vivo",
-          "url": "https://ecuadorenvivo.com/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://ecuadorenvivo.com",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://ecuadorenvivo.com/feed/"
-        },
-        {
-          "name": "futbolecuador.com",
-          "url": "https://futbolecuador.com/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://futbolecuador.com",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://www.futbolecuador.com/stories/rss"
-        },
-        {
-          "name": "StudioFútbol",
-          "url": "https://studiofutbol.com.ec/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "https://studiofutbol.com.ec",
-          "archive_pattern": null,
-          "lang": "es",
-          "rss_fallback": "https://studiofutbol.com.ec/feed/"
         }
       ],
       "Egipto": [
