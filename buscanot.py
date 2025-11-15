@@ -451,6 +451,28 @@ def build_regex_from_terms(terms: List[Tuple[str,bool]], whole_words: bool, igno
         st.error(f"Error en la expresión regular: {e}")
         return None
 
+def compute_relevance_score_from_terms(
+    title: str,
+    include_terms: List[Tuple[str, bool]],
+    exclude_terms: List[Tuple[str, bool]],
+) -> int:
+    if not title:
+        return 0
+    text = norm_text(title)
+    score = 0
+
+    for term, _ in include_terms:
+        t = norm_text(term)
+        if t and t in text:
+            score += 1
+
+    for term, _ in exclude_terms:
+        t = norm_text(term)
+        if t and t in text:
+            score -= 2
+
+    return score
+
 # =========================
 # Traducción (Google Translate endpoint público)
 # =========================
