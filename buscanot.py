@@ -1007,7 +1007,6 @@ async def scrape_source_async(
     # 3) HOY (RSS + portada)
     # =========================
     if include_today:
-        # a) RSS prioritario: si el medio define rss_fallback lo usamos
         rss_urls_to_try = []
         if rss_fallback:
             rss_urls_to_try.append(rss_fallback)
@@ -1019,10 +1018,10 @@ async def scrape_source_async(
                 # Usamos explícitamente el RSS de fallback
                 rss = await try_fetch_rss(
                     session=session,
-                    page_url=url,        
+                    page_url=url,
                     headers=headers,
                     timeout=timeout,
-                    rss_url=rss_fallback, 
+                    rss_url=rss_fallback,
                 )
             else:
                 rss = await try_fetch_rss(
@@ -1039,11 +1038,18 @@ async def scrape_source_async(
                     if not full_url or not title:
                         continue
 
+                    # 🔎 relevancia
                     relevance = get_relevance(title)
                     if relevance < 0:
                         continue
                     if include_re is not None and relevance == 0:
                         continue
+
+                    # 🗓️ filtro temporal a nivel de scraper SI filtramos por publicación
+                    if use_date_filter and date_field.startswith("Fecha de publicación") and dt is not None:
+                        pub_date = dt.date()
+                        if not (start_date <= pub_date <= end_date):
+                            continue
 
                     rows.append({
                         "medio": name,
@@ -1054,6 +1060,7 @@ async def scrape_source_async(
                         "fuente": "rss",
                         "score": relevance,
                     })
+                break
 
         # b) HTML portada
         if selector_home and not html_disabled:
@@ -1116,12 +1123,12 @@ async def scrape_source_async(
                     st.session_state.setdefault("logs", []).append(f"❌ {name} (portada): {e}")
 
         # c) GOOGLE NEWS (refuerzo, mismo medio, noticias recientes)
-        if include_terms_raw and include_terms_raw.strip():
+        if google_query_terms and google_query_terms.strip():
             try:
                 gn_items = await fetch_google_news_rss_for_source(
                     session=session,
                     source=source,
-                    include_terms_raw=google_query_terms,
+                    include_terms_raw=google_query_terms,  # 👈 usamos los términos ya adaptados al idioma
                     headers=headers,
                     timeout=timeout,
                     recent_window_days=7,
@@ -1138,14 +1145,23 @@ async def scrape_source_async(
                     full_url = (href or "").strip()
                     if not full_url or not title:
                         continue
+
                     # Seguridad extra: nos aseguramos de que el link final sea del mismo dominio
                     if base_for_domain and not is_same_domain(full_url, base_for_domain):
                         continue
+
+                    # 🔎 relevancia
                     relevance = get_relevance(title)
                     if relevance < 0:
                         continue
                     if include_re is not None and relevance == 0:
                         continue
+
+                    # 🗓️ filtro temporal a nivel de scraper SI filtramos por publicación
+                    if use_date_filter and date_field.startswith("Fecha de publicación") and dt is not None:
+                        pub_date = dt.date()
+                        if not (start_date <= pub_date <= end_date):
+                            continue
 
                     rows.append({
                         "medio": name,
@@ -1156,7 +1172,6 @@ async def scrape_source_async(
                         "fuente": "gn-rss",
                         "score": relevance,
                     })
-
     return rows
     
 # =========================
