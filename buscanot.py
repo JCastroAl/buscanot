@@ -1651,7 +1651,23 @@ if st.button("🔍 Buscar en país seleccionado", type="primary"):
                 df["_dt"] = pd.to_datetime(df["publicado"], utc=True, errors="coerce")
             else:
                 df["_dt"] = pd.NaT
-            df = df.sort_values(["_dt", "fecha_extraccion"], ascending=[False, False]).drop(columns=["_dt"], errors="ignore")
+            if "publicado" in df.columns:
+                df["_dt"] = pd.to_datetime(df["publicado"], utc=True, errors="coerce")
+            else:
+                df["_dt"] = pd.NaT
+            
+            if "score" in df.columns:
+                df = df.sort_values(
+                    ["score", "_dt", "fecha_extraccion"],
+                    ascending=[False, False, False],
+                )
+            else:
+                df = df.sort_values(
+                    ["_dt", "fecha_extraccion"],
+                    ascending=[False, False],
+                )
+            
+            df = df.drop(columns=["_dt"], errors="ignore")
 
             st.success(f"✅ {len(df)} noticias encontradas en {search_country} (en {elapsed:.1f}s).")
             st.dataframe(df, use_container_width=True, hide_index=True)
