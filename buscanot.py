@@ -853,7 +853,7 @@ async def scrape_source_async(
         return []
 
     # =========================
-    # 1) términos ya preparados por idioma
+    # 1) Términos ya preparados por idioma
     # =========================
     lang_terms = terms_by_lang.get(lang) or {}
 
@@ -867,15 +867,12 @@ async def scrape_source_async(
         if not title:
             return 0
 
-        # Primero, exclusiones duras
         if exclude_re is not None and exclude_re.search(title):
             return -999
 
-        # Si hay include_re y no matchea, no nos interesa
         if include_re is not None and not include_re.search(title):
             return 0
 
-        # Si pasa los filtros, calculamos score fino
         return compute_relevance_score_from_terms(
             title,
             include_terms_list,
@@ -884,7 +881,6 @@ async def scrape_source_async(
 
     rows: List[Dict[str, Any]] = []
 
-    # Particiona rango en pasados y hoy cuando se filtra por publicación
     today = date.today()
     past_days: List[date] = []
     include_today = False
@@ -897,8 +893,6 @@ async def scrape_source_async(
         if start_date <= today <= end_date:
             include_today = True
     else:
-        # Sin filtro de fechas, o filtrando por fecha de extracción:
-        # siempre miramos HOY
         include_today = True
 
     # =========================
@@ -939,7 +933,7 @@ async def scrape_source_async(
                     source["archive_pattern"] = detected_common
                     st.session_state["db_modified"] = True
 
-        archive_urls = []
+        archive_urls: List[str] = []
 
         if is_date_based_pattern(archive_pattern):
             archive_urls = iter_archive_urls_for_dates(source, past_days)
@@ -969,27 +963,43 @@ async def scrape_source_async(
                         href = el.get("href")
                         if not href or not title:
                             continue
+
                         full_url = absolutize(href, base_url or page)
                         if not full_url:
                             continue
-                        if is_relevant(title):
-                            raw_dt = extract_time_candidate(el)
-                            pub_iso = None
-                            if raw_dt:
-                                try:
-                                    dt = pd.to_datetime(raw_dt, utc=True, errors="coerce")
-                                    if pd.notnull(dt):
-                                        pub_iso = dt.isoformat()
-                                except Exception:
-                                    pub_iso = None
-                            rows.append({
-                                "medio": name,
-                                "título": title,
-                                "url": full_url,
-                                "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
-                                "publicado": pub_iso,
-                                "fuente": "html-archivo",
-                            })
+
+                        # 🔎 relevancia por términos
+                        relevance = get_relevance(title)
+                        if relevance < 0:
+                            continue
+                        # si hay include_re definido, ignoramos score 0 (no aporta nada)
+                        if include_re is not None and relevance == 0:
+                            continue
+
+                        raw_dt = extract_time_candidate(el)
+                        pub_iso = None
+                        if raw_dt:
+                            try:
+                                dt = pd.to_datetime(raw_dt, utc=True, errors="coerce")
+                                if pd.notnull(dt):
+                                    # 🗓️ filtro de fechas a nivel de scraper (por publicación)
+                                    if use_date_filter and date_field.startswith("Fecha de publicación"):
+                                        pub_date = dt.date()
+                                        if not (start_date <= pub_date <= end_date):
+                                            continue
+                                    pub_iso = dt.isoformat()
+                            except Exception:
+                                pub_iso = None
+
+                        rows.append({
+                            "medio": name,
+                            "título": title,
+                            "url": full_url,
+                            "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                            "publicado": pub_iso,
+                            "fuente": "html-archivo",
+                            "score": relevance,
+                        })
                 except Exception as e:
                     st.session_state.setdefault("logs", []).append(f"❌ {name} ({page}): {e}")
 
