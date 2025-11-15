@@ -1021,16 +1021,22 @@ async def scrape_source_async(
                     full_url = absolutize(href, base_url or candidate)
                     if not full_url or not title:
                         continue
-                    if is_relevant(title):
-                        rows.append({
-                            "medio": name,
-                            "título": title,
-                            "url": full_url,
-                            "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
-                            "publicado": (dt.isoformat() if dt else None),
-                            "fuente": "rss",
-                        })
-                break  
+
+                    relevance = get_relevance(title)
+                    if relevance < 0:
+                        continue
+                    if include_re is not None and relevance == 0:
+                        continue
+
+                    rows.append({
+                        "medio": name,
+                        "título": title,
+                        "url": full_url,
+                        "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                        "publicado": (dt.isoformat() if dt else None),
+                        "fuente": "rss",
+                        "score": relevance,
+                    })
 
         # b) HTML portada
         if selector_home and not html_disabled:
