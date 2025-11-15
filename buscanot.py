@@ -1058,12 +1058,16 @@ async def scrape_source_async(
                         href = el.get("href")
                         if not href or not title:
                             continue
+
                         full_url = absolutize(href, base_url or url)
                         if not full_url:
                             continue
+
+                        # 🔎 relevancia por términos
                         relevance = get_relevance(title)
                         if relevance < 0:
                             continue
+                        # Si el usuario ha definido términos de inclusión, ignoramos score 0
                         if include_re is not None and relevance == 0:
                             continue
 
@@ -1073,6 +1077,11 @@ async def scrape_source_async(
                             try:
                                 dt = pd.to_datetime(raw_dt, utc=True, errors="coerce")
                                 if pd.notnull(dt):
+                                    # 🗓️ filtro de fechas ya en el scraper (si aplica por publicación)
+                                    if use_date_filter and date_field.startswith("Fecha de publicación"):
+                                        pub_date = dt.date()
+                                        if not (start_date <= pub_date <= end_date):
+                                            continue
                                     pub_iso = dt.isoformat()
                             except Exception:
                                 pub_iso = None
@@ -1083,7 +1092,7 @@ async def scrape_source_async(
                             "url": full_url,
                             "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
                             "publicado": pub_iso,
-                            "fuente": "html-archivo",
+                            "fuente": "html",   # 👈 portada, NO "html-archivo"
                             "score": relevance,
                         })
                 except Exception as e:
