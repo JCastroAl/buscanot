@@ -1055,24 +1055,32 @@ async def scrape_source_async(
                         full_url = absolutize(href, base_url or url)
                         if not full_url:
                             continue
-                        if is_relevant(title):
-                            raw_dt = extract_time_candidate(el)
-                            pub_iso = None
-                            if raw_dt:
-                                try:
-                                    dt = pd.to_datetime(raw_dt, utc=True, errors="coerce")
-                                    if pd.notnull(dt):
-                                        pub_iso = dt.isoformat()
-                                except Exception:
-                                    pub_iso = None
-                            rows.append({
-                                "medio": name,
-                                "título": title,
-                                "url": full_url,
-                                "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
-                                "publicado": pub_iso,
-                                "fuente": "html",
-                            })
+                        relevance = get_relevance(title)
+                        if relevance < 0:
+                            continue
+                        # Si el usuario ha definido términos de inclusión, no tiene sentido quedarnos con score 0
+                        if include_re is not None and relevance == 0:
+                            continue
+
+                        raw_dt = extract_time_candidate(el)
+                        pub_iso = None
+                        if raw_dt:
+                            try:
+                                dt = pd.to_datetime(raw_dt, utc=True, errors="coerce")
+                                if pd.notnull(dt):
+                                    pub_iso = dt.isoformat()
+                            except Exception:
+                                pub_iso = None
+
+                        rows.append({
+                            "medio": name,
+                            "título": title,
+                            "url": full_url,
+                            "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
+                            "publicado": pub_iso,
+                            "fuente": "html-archivo",
+                            "score": relevance,
+                        })
                 except Exception as e:
                     st.session_state.setdefault("logs", []).append(f"❌ {name} (portada): {e}")
 
