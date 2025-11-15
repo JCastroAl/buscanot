@@ -861,14 +861,9 @@ async def scrape_source_async(
     exclude_re = lang_terms.get("exclude_re")
     include_terms_list = lang_terms.get("include_terms", [])
     exclude_terms_list = lang_terms.get("exclude_terms", [])
+    google_query_terms = terms_to_query_string(include_terms_list) if include_terms_list else include_terms_raw
 
     def get_relevance(title: str) -> int:
-        """
-        Score de relevancia:
-        - <0  => descartado (por exclusión)
-        -  0  => neutro (no hay términos o no matchea include_terms)
-        - >0  => relevante (más alto = mejor)
-        """
         if not title:
             return 0
 
