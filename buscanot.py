@@ -1124,8 +1124,12 @@ async def scrape_source_async(
                     # Seguridad extra: nos aseguramos de que el link final sea del mismo dominio
                     if base_for_domain and not is_same_domain(full_url, base_for_domain):
                         continue
-                    if not is_relevant(title):
+                    relevance = get_relevance(title)
+                    if relevance < 0:
                         continue
+                    if include_re is not None and relevance == 0:
+                        continue
+
                     rows.append({
                         "medio": name,
                         "título": title,
@@ -1133,6 +1137,7 @@ async def scrape_source_async(
                         "fecha_extraccion": datetime.now().strftime("%Y-%m-%d"),
                         "publicado": (dt.isoformat() if dt else None),
                         "fuente": "gn-rss",
+                        "score": relevance,
                     })
 
     return rows
