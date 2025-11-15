@@ -661,8 +661,6 @@ def iter_archive_urls_for_pages(source: Dict[str, Any], max_pages: int = 10) -> 
 # =========================
 # Networking asíncrono + RSS/HTML
 # =========================
-from functools import lru_cache
-
 async def fetch_html(
     session: aiohttp.ClientSession,
     url: str,
