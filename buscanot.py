@@ -1064,7 +1064,6 @@ async def scrape_source_async(
                         relevance = get_relevance(title)
                         if relevance < 0:
                             continue
-                        # Si el usuario ha definido términos de inclusión, no tiene sentido quedarnos con score 0
                         if include_re is not None and relevance == 0:
                             continue
 
