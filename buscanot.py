@@ -1243,7 +1243,6 @@ def dedupe_news(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     for r in uniq:
         t = norm_text(r.get("título", ""))
 
-        # Score base de relevancia
         score = 0
         if r.get("score") is not None:
             try:
@@ -1251,7 +1250,6 @@ def dedupe_news(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             except (TypeError, ValueError):
                 pass
 
-        # Bonus: preferimos RSS y noticias con fecha conocida
         fuente = (r.get("fuente", "") or "")
         if fuente.startswith("rss"):
             score += 1
