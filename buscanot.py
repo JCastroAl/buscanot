@@ -843,25 +843,37 @@ async def scrape_source_async(
     # =========================
     # 1) términos ya preparados por idioma
     # =========================
-    lang_terms = terms_by_lang.get(lang)
-    if not lang_terms:
-        # si por lo que sea no tenemos ese idioma, usamos los originales en bruto (sin regex)
-        lang_terms = {
-            "include_re": None,
-            "exclude_re": None,
-        }
+    lang_terms = terms_by_lang.get(lang) or {}
 
     include_re = lang_terms.get("include_re")
     exclude_re = lang_terms.get("exclude_re")
+    include_terms_list = lang_terms.get("include_terms", [])
+    exclude_terms_list = lang_terms.get("exclude_terms", [])
 
-    def is_relevant(title: str) -> bool:
-        if include_re is None and exclude_re is None:
-            return True
-        if include_re is not None and not include_re.search(title or ""):
-            return False
-        if exclude_re is not None and exclude_re.search(title or ""):
-            return False
-        return True
+    def get_relevance(title: str) -> int:
+        """
+        Score de relevancia:
+        - <0  => descartado (por exclusión)
+        -  0  => neutro (no hay términos o no matchea include_terms)
+        - >0  => relevante (más alto = mejor)
+        """
+        if not title:
+            return 0
+
+        # Primero, exclusiones duras
+        if exclude_re is not None and exclude_re.search(title):
+            return -999
+
+        # Si hay include_re y no matchea, no nos interesa
+        if include_re is not None and not include_re.search(title):
+            return 0
+
+        # Si pasa los filtros, calculamos score fino
+        return compute_relevance_score_from_terms(
+            title,
+            include_terms_list,
+            exclude_terms_list,
+        )
 
     rows: List[Dict[str, Any]] = []
 
