@@ -504,6 +504,7 @@ async def prepare_terms_per_language(
     languages: List[str],
     user_whole_words: bool,
     ignore_case: bool,
+    enable_translation: bool,
 ) -> Dict[str, Dict[str, Any]]:
 
     base_inc = split_terms(include_terms_raw)
