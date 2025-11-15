@@ -1683,10 +1683,6 @@ if st.button("🔍 Buscar en país seleccionado", type="primary"):
                 df["_dt"] = pd.to_datetime(df["publicado"], utc=True, errors="coerce")
             else:
                 df["_dt"] = pd.NaT
-            if "publicado" in df.columns:
-                df["_dt"] = pd.to_datetime(df["publicado"], utc=True, errors="coerce")
-            else:
-                df["_dt"] = pd.NaT
             
             if "score" in df.columns:
                 df = df.sort_values(
