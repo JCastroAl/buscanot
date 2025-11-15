@@ -1210,10 +1210,21 @@ def dedupe_news(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     by_title: Dict[str, Tuple[int, Dict[str, Any]]] = {}
     for r in uniq:
         t = norm_text(r.get("título", ""))
-        score = (1 if (r.get("fuente","") or "").startswith("rss") else 0) + (1 if r.get("publicado") else 0)
+
+        score = 0
+        if r.get("score") is not None:
+            try:
+                score += int(r["score"])
+            except (TypeError, ValueError):
+                pass
+
+        score += (1 if (r.get("fuente", "") or "").startswith("rss") else 0)
+        score += (1 if r.get("publicado") else 0)
+
         cur = by_title.get(t)
         if (not cur) or (score > cur[0]):
             by_title[t] = (score, r)
+
     return [v[1] for v in by_title.values()]
 
 # =========================
