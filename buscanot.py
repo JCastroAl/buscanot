@@ -38,6 +38,7 @@ BASE_HEADERS = {
 DEFAULT_TIMEOUT = ClientTimeout(total=20, connect=10, sock_connect=10, sock_read=15)
 ALLOWED_SCHEMES = {"http", "https"}
 TRACKING_PARAMS = {"utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid", "mc_cid", "mc_eid"}
+DEFAULT_MAX_AGE_DAYS = 1
 
 # =========================
 # Patrones comunes para descubrir hemeroteca (si no se define)
