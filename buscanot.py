@@ -1111,10 +1111,10 @@ async def scrape_source_async(
                 gn_items = await fetch_google_news_rss_for_source(
                     session=session,
                     source=source,
-                    include_terms_raw=include_terms_raw,
+                    include_terms_raw=google_query_terms,
                     headers=headers,
                     timeout=timeout,
-                    recent_window_days=7,  # puedes ajustar esta ventana si quieres
+                    recent_window_days=7,
                 )
             except Exception as e:
                 gn_items = None
