@@ -1523,6 +1523,7 @@ if st.button("🔍 Buscar en país seleccionado", type="primary"):
                         languages=needed_langs,
                         user_whole_words=whole_words,
                         ignore_case=ignore_case,
+                        enable_translation=translate_per_source,
                     )
                     # 2b) lanzar scrapers en paralelo
                     rows_all = await run_parallel(
