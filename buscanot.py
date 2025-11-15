@@ -1043,10 +1043,17 @@ async def scrape_source_async(
                     if include_re is not None and relevance == 0:
                         continue
 
-                    # 🗓️ filtro temporal a nivel de scraper SI filtramos por publicación
+                    # 🗓️ filtro temporal cuando SÍ hay filtro de fechas por publicación
                     if use_date_filter and date_field.startswith("Fecha de publicación") and dt is not None:
                         pub_date = dt.date()
                         if not (start_date <= pub_date <= end_date):
+                            continue
+
+                    # 🗓️ límite de antigüedad por defecto cuando NO hay filtro de fechas
+                    if (not use_date_filter) and dt is not None:
+                        pub_date = dt.date()
+                        # hoy lo puedes tomar de date.today() o pasarlo como parámetro
+                        if (date.today() - pub_date).days > DEFAULT_MAX_AGE_DAYS:
                             continue
 
                     rows.append({
@@ -1058,6 +1065,7 @@ async def scrape_source_async(
                         "fuente": "rss",
                         "score": relevance,
                     })
+
                 break
 
         # b) HTML portada
