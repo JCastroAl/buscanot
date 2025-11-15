@@ -520,7 +520,7 @@ async def prepare_terms_per_language(
         exc_terms = list(base_exc)
 
         # si el idioma no es "sin traducir", intentamos traducir
-        if lang not in {"", "es"}:
+        if enable_translation and lang not in {"", "es"}:
             inc_trans = await translate_terms_list(session, base_inc, lang)
             exc_trans = await translate_terms_list(session, base_exc, lang)
 
