@@ -430,6 +430,18 @@ def split_terms(terms: str) -> List[Tuple[str, bool]]:
     out += [(t, False) for t in others]
     return out
 
+def terms_to_query_string(terms: List[Tuple[str, bool]]) -> str:
+    parts = []
+    for text, is_exact in terms:
+        text = (text or "").strip()
+        if not text:
+            continue
+        if is_exact:
+            parts.append(f'"{text}"')
+        else:
+            parts.append(text)
+    return " ".join(parts)
+
 def build_regex_from_terms(terms: List[Tuple[str,bool]], whole_words: bool, ignore_case: bool) -> Optional[re.Pattern]:
     if not terms:
         return None
