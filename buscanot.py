@@ -1169,6 +1169,12 @@ async def scrape_source_async(
                         if not (start_date <= pub_date <= end_date):
                             continue
 
+                    # 🗓️ límite de antigüedad por defecto cuando NO hay filtro de fechas
+                    if (not use_date_filter) and dt is not None:
+                        pub_date = dt.date()
+                        if (date.today() - pub_date).days > DEFAULT_MAX_AGE_DAYS:
+                            continue
+
                     rows.append({
                         "medio": name,
                         "título": title,
