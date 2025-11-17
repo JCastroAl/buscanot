@@ -3644,18 +3644,6 @@
           "rss_fallback": "http://www.dailytimes.com.pk/rss_feeds"
         }
       ],
-      "Palestina": [
-        {
-          "name": "nablus TV",
-          "url": "http://nablustv.net/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "http://nablustv.net",
-          "archive_pattern": null,
-          "lang": "ar",
-          "rss_fallback": "http://www.nablustv.net/xml.asp"
-        }
-      ],
       "Panamá": [
         {
           "name": "Central America Data",
