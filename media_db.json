@@ -997,7 +997,8 @@
       "archive_selector": "article h2 a, h3 a, .promo-title, .story-title a",
       "base_url": "https://www.latimes.com",
       "archive_pattern": "https://www.latimes.com/archives",
-      "lang": "en"
+      "lang": "en",
+      "rss_fallback": "http://www.latimes.com/rss2.0.xml"
     },
     {
       "name": "USA TODAY",
@@ -1015,7 +1016,8 @@
       "archive_selector": "a",
       "base_url": "https://www.nytimes.com",
       "archive_pattern": "https://www.nytimes.com/sitemap/{yyyy}/{mm}/{dd}/",
-      "lang": "en"
+      "lang": "en",
+      "rss_fallback": "http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
     },
     {
       "name": "NPR",
@@ -1024,7 +1026,8 @@
       "archive_selector": "article h2 a, h3 a, .title a, .story-text a",
       "base_url": "https://www.npr.org",
       "archive_pattern": "https://www.npr.org/sections/news/archive?date={yyyy}-{mm}-{dd}",
-      "lang": "en"
+      "lang": "en",
+      "rss_fallback": "http://www.npr.org/rss/rss.php?id=1004"
     },
     {
       "name": "The Washington Post",
@@ -1055,7 +1058,8 @@
       "archive_selector": null,
       "base_url": "https://abcnews.go.com",
       "archive_pattern": null,
-      "lang": "en"
+      "lang": "en",
+      "rss_fallback": "http://abcnews.go.com/xmldata/rss?id=4380645"
     },
     {
       "name": "CNN",
@@ -1074,6 +1078,16 @@
       "base_url": "https://www.cbsnews.com",
       "archive_pattern": null,
       "lang": "en"
+    },
+    {
+      "name": "New York Post",
+      "url": "http://nypost.com/",
+      "selector": "article h2 a, h3 a, .headline a, .title a",
+      "archive_selector": null,
+      "base_url": "http://nypost.com",
+      "archive_pattern": null,
+      "lang": "en",
+      "rss_fallback": "http://nypost.com/news/feed/"
     }
   ],
   "Israel": [
