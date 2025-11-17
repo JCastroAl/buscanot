@@ -681,7 +681,8 @@
       "archive_selector": null,
       "base_url": "https://www.delo.si",
       "archive_pattern": null,
-      "lang": "sl"
+      "lang": "sl",
+      "rss_fallback": "http://www.delo.si/rss/"
     },
     {
       "name": "Dnevnik",
@@ -700,6 +701,26 @@
       "base_url": "https://www.vecer.com",
       "archive_pattern": null,
       "lang": "sl"
+    },
+    {
+      "name": "Slovenske novice",
+      "url": "http://slovenskenovice.si/",
+      "selector": "article h2 a, h3 a, .headline a, .title a",
+      "archive_selector": null,
+      "base_url": "http://slovenskenovice.si",
+      "archive_pattern": null,
+      "lang": "sl",
+      "rss_fallback": "http://www.slovenskenovice.si/rss"
+    },
+    {
+      "name": "RTVSlovenija",
+      "url": "http://rtvslo.si/",
+      "selector": "article h2 a, h3 a, .headline a, .title a",
+      "archive_selector": null,
+      "base_url": "http://rtvslo.si",
+      "archive_pattern": null,
+      "lang": "sl",
+      "rss_fallback": "http://www.rtvslo.si/feeds/01.xml"
     }
   ],
   "Estonia": [
