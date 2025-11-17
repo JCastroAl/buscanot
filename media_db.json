@@ -4047,48 +4047,6 @@
           "rss_fallback": "https://n1info.rs/feed/"
         }
       ],
-      "Eslovenia": [
-        {
-          "name": "Planet Siol.net",
-          "url": "http://siol.net/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "http://siol.net",
-          "archive_pattern": null,
-          "lang": "sl",
-          "rss_fallback": "http://www.siol.net/rss.aspx?path=SiOL.Net"
-        },
-        {
-          "name": "MMC RTV Slovenija",
-          "url": "http://rtvslo.si/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "http://rtvslo.si",
-          "archive_pattern": null,
-          "lang": "sl",
-          "rss_fallback": "http://www.rtvslo.si/feeds/01.xml"
-        },
-        {
-          "name": "Delo",
-          "url": "http://delo.si/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "http://delo.si",
-          "archive_pattern": null,
-          "lang": "sl",
-          "rss_fallback": "http://www.delo.si/rss/"
-        },
-        {
-          "name": "Slovenske novice",
-          "url": "http://slovenskenovice.si/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "http://slovenskenovice.si",
-          "archive_pattern": null,
-          "lang": "sl",
-          "rss_fallback": "http://www.slovenskenovice.si/rss"
-        }
-      ],
       "Somalia": [
         {
           "name": "Jowhar.com",
