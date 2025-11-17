@@ -216,7 +216,8 @@
       "archive_selector": null,
       "base_url": "https://www.publico.pt",
       "archive_pattern": null,
-      "lang": "pt"
+      "lang": "pt",
+      "rss_fallback": "https://feeds.feedburner.com/PublicoRSS"
     },
     {
       "name": "Diário de Notícias",
@@ -234,7 +235,8 @@
       "archive_selector": null,
       "base_url": "https://www.cmjornal.pt",
       "archive_pattern": null,
-      "lang": "pt"
+      "lang": "pt",
+      "rss_fallback": "https://www.cmjornal.pt/rss"
     },
     {
       "name": "Jornal de Notícias",
