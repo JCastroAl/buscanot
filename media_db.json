@@ -3291,48 +3291,6 @@
           "rss_fallback": "https://barinfo.me/feed/"
         }
       ],
-      "Marruecos": [
-        {
-          "name": "Hespress",
-          "url": "http://www.hespress.com/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "http://www.hespress.com",
-          "archive_pattern": null,
-          "lang": "ar",
-          "rss_fallback": "http://www.hespress.com/feed/index.rss"
-        },
-        {
-          "name": "yabiladi.com",
-          "url": "http://www.yabiladi.com/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "http://www.yabiladi.com",
-          "archive_pattern": null,
-          "lang": "fr",
-          "rss_fallback": "http://www.yabiladi.com/rss/?url=rubrik/"
-        },
-        {
-          "name": "Elbotola.com",
-          "url": "http://www.elbotola.com/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "http://www.elbotola.com",
-          "archive_pattern": null,
-          "lang": "ar",
-          "rss_fallback": "http://www.elbotola.com/feeds/"
-        },
-        {
-          "name": "hihi2",
-          "url": "http://www.hihi2.com/",
-          "selector": "article h2 a, h3 a, .headline a, .title a",
-          "archive_selector": null,
-          "base_url": "http://www.hihi2.com",
-          "archive_pattern": null,
-          "lang": "ar",
-          "rss_fallback": "http://hihi2.com/feed"
-        }
-      ],
       "Namibia": [
         {
           "name": "NBC",
