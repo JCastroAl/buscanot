@@ -649,7 +649,8 @@
       "archive_selector": null,
       "base_url": "https://www.pravda.sk",
       "archive_pattern": null,
-      "lang": "sk"
+      "lang": "sk",
+      "rss_fallback": "http://servis.pravda.sk/rss.asp"
     },
     {
       "name": "Hospodárske noviny",
@@ -658,8 +659,19 @@
       "archive_selector": null,
       "base_url": "https://www.hnonline.sk",
       "archive_pattern": null,
-      "lang": "sk"
-    }
+      "lang": "sk",
+      "rss_fallback": "https://hnonline.sk/feed"
+    },
+    {
+      "name": "Aktuality",
+      "url": "http://aktuality.sk/",
+      "selector": "article h2 a, h3 a, .headline a, .title a",
+      "archive_selector": null,
+      "base_url": "http://aktuality.sk",
+      "archive_pattern": null,
+      "lang": "sk",
+      "rss_fallback": "http://www.aktuality.sk/rss/"
+     },
   ],
   "Eslovenia": [
     {
