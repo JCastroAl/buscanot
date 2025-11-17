@@ -1636,6 +1636,15 @@
       "archive_pattern": null,
       "lang": "en",
       "rss_fallback": "http://www.kuam.com/Global/category.asp?C=164100&clienttype=rss"
+    },
+    {
+      "name": "Pacific Daily News",
+      "url": "https://www.guampdn.com/",
+      "selector": "article h2 a, h3 a, .headline a, .title a",
+      "archive_selector": null,
+      "base_url": "https://www.guampdn.com",
+      "archive_pattern": null,
+      "lang": "en"
     }
   ],
     "Guatemala": [
